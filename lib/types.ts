@@ -16,8 +16,15 @@ export interface Question {
   snippet?: string;
   /** For fill/recall/trace: an exact-match answer (lowercased+trimmed compared). */
   answer?: string;
-  /** Acceptable alternates for non-code answers. */
+  /** Acceptable alternates. For non-code: 4-5 paraphrases. For code: 2-3 reference solutions. */
   acceptable?: string[];
+  /**
+   * For "code" questions: literal tokens/keywords/patterns that must appear
+   * (case-insensitive, whitespace-normalized) in any correct answer.
+   * Example: ["for", "i <", "cout"]. The local grader uses this to avoid
+   * an AI roundtrip when the student's snippet hits all required pieces.
+   */
+  rubric?: string[];
   /** Short explanation shown after the player answers. */
   explanation: string;
   /** Concept tag — used later for spaced repetition. */

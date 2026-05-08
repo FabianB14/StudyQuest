@@ -1,20 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClient, MODEL_GRADE } from "@/lib/anthropic";
 import { GradeResult, Question } from "@/lib/types";
-import { gradeLocal } from "@/lib/grade-local";
+import { gradeCodeLocal, gradeLocal } from "@/lib/grade-local";
 
 export const runtime = "nodejs";
 
 const SYSTEM = `You are a fair, encouraging grader for StudyQuest study questions.
 
-You will get a question, the expected/canonical answer (if any), and the student's answer. Decide if the student's answer demonstrates understanding.
+CORE PRINCIPLE: grade for UNDERSTANDING, not word-for-word matching.
+- Accept synonyms, different phrasings, different word orders, and shorter or longer versions of the canonical answer.
+- A student who writes "endl flushes" should get full credit when the canonical answer is "endl flushes the output buffer".
+- A student who writes "off by one — should be i < 10" should get full credit when the canonical answer is "off-by-one".
+- Only mark "correct": false when the underlying concept is genuinely wrong or missing.
 
-Be GENEROUS on partial credit for "code" type questions:
-- If the student's snippet would work or only has minor syntax issues, mark "correct": true.
-- If the logic is mostly right but has one bug, mark "partial": true with score 0.5-0.7.
-- If they got the concept but not the code, give partial credit and explain.
-
-Be STRICT on "trace" questions — wrong output is wrong.
+Per question type:
+- "recall" / "fill" / "bug": be GENEROUS. Any phrasing that demonstrates the concept = correct.
+- "trace": be STRICT on the actual output value. "6 5" and "6, 5" are both fine, but "6 6" is wrong.
+- "code": be GENEROUS on style.
+  * If the snippet would work or only has minor syntax issues → "correct": true.
+  * Logic mostly right with one bug → "partial": true, score 0.5-0.7.
+  * Got the concept but messy code → partial credit and a kind explanation.
 
 Reply ONLY with JSON: { "correct": boolean, "partial": boolean, "score": number (0..1), "feedback": string (1-2 sentences, friendly, teaches) }
 No prose, no markdown.`;
@@ -27,13 +32,21 @@ interface GradeBody {
 export async function POST(req: NextRequest) {
   const { question, userAnswer }: GradeBody = await req.json();
 
-  // For non-code questions with a known answer, local grading is faster + free.
-  if (question.type !== "code" && question.answer) {
+  // Free local fast-path. Exact / paraphrase matches return instantly with no
+  // API call. Borderline answers fall through to AI grading.
+  if (question.type === "code") {
+    const localCode = gradeCodeLocal(question, userAnswer);
+    if (localCode?.correct) {
+      return NextResponse.json({ ...localCode, feedback: question.explanation });
+    }
+    if (localCode && !getClient()) {
+      return NextResponse.json(localCode);
+    }
+  } else if (question.answer || (question.acceptable && question.acceptable.length)) {
     const local = gradeLocal(question, userAnswer);
     if (local.correct) {
       return NextResponse.json({ ...local, feedback: question.explanation });
     }
-    // Fall through to AI grading only if a key is set; otherwise return local result.
     if (!getClient()) {
       return NextResponse.json(local);
     }
@@ -41,7 +54,6 @@ export async function POST(req: NextRequest) {
 
   const client = getClient();
   if (!client) {
-    // Best-effort local grading for code without a key.
     const local: GradeResult = {
       correct: false,
       score: 0,

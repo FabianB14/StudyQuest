@@ -14,7 +14,7 @@ export const SEED_CS_QUESTIONS: Question[] = [
     snippet:
       'int x = 5;\nint y = x++;\nstd::cout << x << " " << y;',
     answer: "6 5",
-    acceptable: ["6 5", "6, 5"],
+    acceptable: ["6 5", "6, 5", "6  5", "x=6 y=5", "6 then 5"],
     explanation:
       "Post-increment assigns y = 5 first, then increments x to 6. So output is `6 5`.",
     tag: "operators",
@@ -26,7 +26,13 @@ export const SEED_CS_QUESTIONS: Question[] = [
     prompt:
       "Which header do you need to include to use std::string in C++?",
     answer: "<string>",
-    acceptable: ["<string>", "string", "#include <string>"],
+    acceptable: [
+      "<string>",
+      "string",
+      "#include <string>",
+      "the string header",
+      "string.h",
+    ],
     explanation:
       "`#include <string>` brings in the std::string class. <iostream> is for I/O, not strings.",
     tag: "headers",
@@ -80,16 +86,21 @@ export const SEED_CS_QUESTIONS: Question[] = [
     tag: "strings",
   },
   {
-    id: "seed-fill-2",
-    type: "fill",
-    difficulty: "easy",
+    id: "seed-code-1",
+    type: "code",
+    difficulty: "medium",
     prompt:
-      "What keyword do you use to prevent a member function from modifying the object?",
-    answer: "const",
-    acceptable: ["const"],
+      "Write a C++ for-loop that prints 1 through 5 on separate lines using std::cout.",
+    answer:
+      'for (int i = 1; i <= 5; i++) {\n  std::cout << i << "\\n";\n}',
+    acceptable: [
+      'for (int i = 1; i <= 5; ++i) std::cout << i << std::endl;',
+      'for (int i = 1; i < 6; i++) {\n  std::cout << i << \'\\n\';\n}',
+    ],
+    rubric: ["for", "cout", "<<", "5"],
     explanation:
-      "Marking a member function `const` (e.g. `int size() const;`) tells the compiler it won't mutate the object, and lets it be called on const instances.",
-    tag: "const-correctness",
+      "Any working loop that starts at 1 and prints up through 5 with newlines counts. `i++` and `++i` are equivalent here. `\\n`, `endl`, and `'\\n'` all print a newline.",
+    tag: "loops",
   },
   {
     id: "seed-recall-2",
