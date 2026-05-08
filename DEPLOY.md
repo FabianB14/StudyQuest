@@ -94,6 +94,16 @@ populated for the correct environment, then redeploy.
 You've hit Anthropic's free tier limits. Add billing credit on console.anthropic.com.
 Long-term: cache generated question packs by guide hash so repeat runs are free.
 
+**PDF upload says "No text found"**
+The PDF is image-based (a scan or photo). OCR isn't supported yet — copy/paste
+the content into the textarea instead, or save as a text-based PDF first.
+
+**PDF worker fails to load on a strict CSP**
+The PDF parser pulls its worker from `cdn.jsdelivr.net`. If you've added a
+Content-Security-Policy that blocks third-party scripts, either allowlist
+jsdelivr or copy `node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to
+`public/` and change `lib/parse.ts` to point at `/pdf.worker.min.mjs`.
+
 **"AI grading unavailable" in feedback**
 Same root cause — the server can't reach Anthropic. Either the key is missing or
 the network blocked the request. Check Vercel function logs:

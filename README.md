@@ -4,11 +4,13 @@
 
 An ADHD-first study app that turns any study guide into a one-question-at-a-time game with instant feedback, XP, streaks, levels, and boss fights.
 
-This repo is the **V0 prototype** as scoped in the founding doc:
+This repo is the **V0 prototype** as scoped in the founding doc, plus early V1 file upload:
 
 - Web app, no auth, no database — progress lives in `localStorage`.
-- Paste-in study guide as plain text (no file upload yet).
-- AI generates 10 mixed-type questions per run (trace, fill, bug, recall, code).
+- Upload a **PDF, DOCX, TXT, or Markdown** file, or paste plain text.
+  Files are parsed in the browser — they never touch the server.
+- AI generates 10 mixed-type questions per run (trace, fill, bug, recall, code),
+  with multiple acceptable phrasings per question to avoid word-for-word grading.
 - XP / streak / level mechanics with level-up animation.
 - Seed CS question pack ships as a fallback so the app works with zero setup.
 
@@ -20,6 +22,8 @@ This repo is the **V0 prototype** as scoped in the founding doc:
   - `claude-haiku-4-5-20251001` for question generation (cheap)
   - `claude-sonnet-4-6` for free-text / partial-credit grading (accurate)
   - Prompt caching is enabled on both system prompts to keep costs down
+- **`pdfjs-dist`** + **`mammoth`** for in-browser PDF and DOCX parsing
+  (lazy-loaded so the initial bundle stays small)
 - **localStorage** for progress persistence
 
 ## Getting started
@@ -60,6 +64,7 @@ lib/
   types.ts                   # Question, Progress, GradeResult types
   xp.ts                      # Level curve, streak multipliers, applyAnswer reducer
   storage.ts                 # localStorage I/O
+  parse.ts                   # Browser-side PDF / DOCX / TXT extraction
   grade-local.ts             # Free, deterministic grading for short-answer questions
   seed-questions.ts          # 10-question CS warm-up fallback pack
   anthropic.ts               # Lazy SDK client + model name constants
@@ -70,7 +75,7 @@ lib/
 Per the founding doc, V0 is *intentionally* small. Things saved for V1+:
 
 - Auth + database (Supabase planned)
-- File upload (PDF, docx, OCR for images)
+- OCR for image-based PDFs and image uploads (Tesseract.js is ~10 MB — V2)
 - Spaced repetition scheduler (the `missed[]` array is already collected)
 - Class-mode / leaderboards
 - Mobile app
