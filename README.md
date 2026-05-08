@@ -9,10 +9,15 @@ This repo is the **V0 prototype** as scoped in the founding doc, plus early V1 f
 - Web app, no auth, no database — progress lives in `localStorage`.
 - Upload a **PDF, DOCX, TXT, or Markdown** file, or paste plain text.
   Files are parsed in the browser — they never touch the server.
+- **Language detection** picks one of C++, Python, Java, JS/TS, or C# from the guide;
+  all `code`/`trace`/`bug` questions are generated in that language. Manual override
+  available. (Founding-doc Principle 2.)
 - AI generates 10 mixed-type questions per run (trace, fill, bug, recall, code),
   with multiple acceptable phrasings per question to avoid word-for-word grading.
 - XP / streak / level mechanics with level-up animation.
 - Seed CS question pack ships as a fallback so the app works with zero setup.
+- **Solo Mode is the default and always will be.** A "Party Up" placeholder is
+  shown but disabled — multiplayer is V2 territory per the founding doc.
 
 ## Stack
 
@@ -62,11 +67,12 @@ components/
   StatusBar.tsx              # Persistent XP / level / streak header
 lib/
   types.ts                   # Question, Progress, GradeResult types
+  language.ts                # Language type, detection heuristics, Claude prompt hints
   xp.ts                      # Level curve, streak multipliers, applyAnswer reducer
-  storage.ts                 # localStorage I/O
+  storage.ts                 # localStorage I/O (progress, last guide, language override)
   parse.ts                   # Browser-side PDF / DOCX / TXT extraction
   grade-local.ts             # Free, deterministic grading for short-answer questions
-  seed-questions.ts          # 10-question CS warm-up fallback pack
+  seed-questions.ts          # 10-question C++ warm-up fallback pack
   anthropic.ts               # Lazy SDK client + model name constants
 ```
 

@@ -1,17 +1,25 @@
 "use client";
 
+import {
+  Language,
+  LANGUAGES,
+  LANGUAGE_LABELS,
+  detectLanguage,
+} from "@/lib/language";
 import { ParseError, parseFile } from "@/lib/parse";
 import { Progress } from "@/lib/types";
 import { rankTitle } from "@/lib/xp";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface SetupScreenProps {
   progress: Progress;
   initialGuide: string;
+  initialLanguageOverride: Language | null;
   loading: boolean;
-  onStart: (guide: string) => void;
+  onStart: (guide: string, language: Language) => void;
   onStartSeed: () => void;
   onResetProgress: () => void;
+  onLanguageOverrideChange: (override: Language | null) => void;
 }
 
 const MAX_GUIDE_CHARS = 30_000;
@@ -19,17 +27,29 @@ const MAX_GUIDE_CHARS = 30_000;
 export function SetupScreen({
   progress,
   initialGuide,
+  initialLanguageOverride,
   loading,
   onStart,
   onStartSeed,
   onResetProgress,
+  onLanguageOverrideChange,
 }: SetupScreenProps) {
   const [guide, setGuide] = useState(initialGuide);
+  const [override, setOverride] = useState<Language | null>(
+    initialLanguageOverride
+  );
   const [parsing, setParsing] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
   const [parseInfo, setParseInfo] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const detection = useMemo(() => detectLanguage(guide), [guide]);
+  const effectiveLanguage: Language = override ?? detection.language;
+
+  useEffect(() => {
+    onLanguageOverrideChange(override);
+  }, [override, onLanguageOverrideChange]);
 
   async function handleFile(file: File) {
     setParseError(null);
@@ -75,6 +95,12 @@ export function SetupScreen({
     if (file) void handleFile(file);
   }
 
+  function onLanguagePick(value: string) {
+    if (value === "auto") setOverride(null);
+    else if ((LANGUAGES as readonly string[]).includes(value))
+      setOverride(value as Language);
+  }
+
   return (
     <div className="space-y-6">
       <div className="panel p-6 sm:p-8">
@@ -85,7 +111,8 @@ export function SetupScreen({
           </span>
         </h1>
         <p className="mt-2 text-sq-muted max-w-prose">
-          Upload your study guide. AI turns it into a game. Beat levels. Earn XP.
+          Solo study, gamified. Upload a study guide, and the AI generates a
+          run of 10 questions in your language. Earn XP. Build streaks.
           Actually remember things.
         </p>
 
@@ -158,20 +185,53 @@ export function SetupScreen({
           </div>
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-4 flex items-center gap-3 flex-wrap">
+          <label htmlFor="language" className="text-sm text-sq-muted">
+            🧪 Language for code questions
+          </label>
+          <select
+            id="language"
+            value={override ?? "auto"}
+            onChange={(e) => onLanguagePick(e.target.value)}
+            className="bg-sq-panel2 border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-sq-accent/70"
+          >
+            <option value="auto">
+              Auto{detection.detected ? ` · detected ${LANGUAGE_LABELS[detection.language]}` : ""}
+            </option>
+            {LANGUAGES.map((l) => (
+              <option key={l} value={l}>
+                {LANGUAGE_LABELS[l]}
+              </option>
+            ))}
+          </select>
+          <span className="chip text-[11px]">
+            using {LANGUAGE_LABELS[effectiveLanguage]}
+            {override === null && detection.detected && " (auto)"}
+          </span>
+        </div>
+
+        <div className="mt-5 flex items-center gap-3 flex-wrap">
           <button
             className="btn-primary"
             disabled={loading || parsing || guide.trim().length < 20}
-            onClick={() => onStart(guide)}
+            onClick={() => onStart(guide, effectiveLanguage)}
           >
-            {loading ? "Generating…" : "🎮 Start the quest"}
+            {loading ? "Generating…" : "🎮 Start solo session"}
           </button>
           <button
             className="btn-ghost"
             onClick={onStartSeed}
             disabled={loading || parsing}
           >
-            ⚡ Try a CS warm-up
+            ⚡ Try a C++ warm-up
+          </button>
+          <button
+            className="btn-ghost opacity-50 cursor-not-allowed"
+            disabled
+            title="Multiplayer Party Mode is planned for V2 — see the founding doc."
+          >
+            👥 Party Up
+            <span className="text-[10px] ml-1 chip">V2</span>
           </button>
         </div>
       </div>
@@ -211,6 +271,10 @@ export function SetupScreen({
         <p className="font-semibold text-sq-ink mb-2">How it works</p>
         <ul className="list-disc list-inside space-y-1">
           <li>Drop in a PDF, Word doc, or paste any study guide.</li>
+          <li>
+            Code questions auto-match your guide&apos;s language — C++, Python, Java,
+            JS/TS, or C#. Override anytime.
+          </li>
           <li>AI generates 10 questions: trace output, fill blanks, spot bugs, recall, write code.</li>
           <li>One question at a time. Instant feedback. Earn XP. Build streaks.</li>
           <li>Missed questions get flagged for review next session.</li>

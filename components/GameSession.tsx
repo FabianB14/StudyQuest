@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import { Progress, Question } from "@/lib/types";
 import { applyAnswer, emptyProgress, rankTitle } from "@/lib/xp";
 import {
+  loadLanguageOverride,
   loadLastGuide,
   loadProgress,
   resetProgress,
+  saveLanguageOverride,
   saveLastGuide,
   saveProgress,
 } from "@/lib/storage";
+import { Language } from "@/lib/language";
 import { SEED_CS_QUESTIONS } from "@/lib/seed-questions";
 import { StatusBar } from "./StatusBar";
 import { QuestionCard } from "./QuestionCard";
@@ -21,34 +24,37 @@ export function GameSession() {
   const [hydrated, setHydrated] = useState(false);
   const [progress, setProgress] = useState<Progress>(emptyProgress());
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [runLanguage, setRunLanguage] = useState<Language>("cpp");
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("setup");
   const [loading, setLoading] = useState(false);
   const [sourceNote, setSourceNote] = useState<string | null>(null);
   const [runStats, setRunStats] = useState({ correct: 0, total: 0, xp: 0 });
   const [initialGuide, setInitialGuide] = useState("");
+  const [initialLanguageOverride, setInitialLanguageOverride] =
+    useState<Language | null>(null);
 
-  // Hydrate from localStorage after mount.
   useEffect(() => {
     setProgress(loadProgress());
     setInitialGuide(loadLastGuide());
+    setInitialLanguageOverride(loadLanguageOverride());
     setHydrated(true);
   }, []);
 
-  // Persist progress whenever it changes.
   useEffect(() => {
     if (hydrated) saveProgress(progress);
   }, [progress, hydrated]);
 
-  async function startRun(guide: string) {
+  async function startRun(guide: string, language: Language) {
     setLoading(true);
     setSourceNote(null);
     saveLastGuide(guide);
+    setRunLanguage(language);
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ guide }),
+        body: JSON.stringify({ guide, language }),
       });
       const data = await res.json();
       const qs: Question[] = (data.questions || []).slice(0, 10);
@@ -59,10 +65,11 @@ export function GameSession() {
       setPhase("playing");
       if (data.note) setSourceNote(data.note);
       else if (data.source === "seed")
-        setSourceNote("Using built-in CS warm-up pack.");
+        setSourceNote("Using built-in C++ warm-up pack.");
     } catch {
-      setSourceNote("Couldn't reach the API — using the built-in warm-up.");
+      setSourceNote("Couldn't reach the API — using the built-in C++ warm-up.");
       setQuestions(SEED_CS_QUESTIONS.slice(0, 10));
+      setRunLanguage("cpp");
       setIndex(0);
       setRunStats({ correct: 0, total: 0, xp: 0 });
       setPhase("playing");
@@ -73,8 +80,9 @@ export function GameSession() {
 
   function startSeed() {
     setQuestions(SEED_CS_QUESTIONS.slice(0, 10));
+    setRunLanguage("cpp");
     setIndex(0);
-    setSourceNote("Built-in CS warm-up — 10 questions on C++ basics.");
+    setSourceNote("Built-in C++ warm-up — 10 questions on C++ basics.");
     setRunStats({ correct: 0, total: 0, xp: 0 });
     setPhase("playing");
   }
@@ -121,6 +129,11 @@ export function GameSession() {
     setProgress(emptyProgress());
   }
 
+  function handleLanguageOverrideChange(override: Language | null) {
+    saveLanguageOverride(override);
+    setInitialLanguageOverride(override);
+  }
+
   if (!hydrated) {
     return (
       <div className="panel p-6 text-sq-muted text-sm">Loading your save…</div>
@@ -135,10 +148,12 @@ export function GameSession() {
         <SetupScreen
           progress={progress}
           initialGuide={initialGuide}
+          initialLanguageOverride={initialLanguageOverride}
           loading={loading}
           onStart={startRun}
           onStartSeed={startSeed}
           onResetProgress={handleReset}
+          onLanguageOverrideChange={handleLanguageOverrideChange}
         />
       )}
 
@@ -150,6 +165,7 @@ export function GameSession() {
           <QuestionCard
             key={questions[index].id}
             question={questions[index]}
+            language={runLanguage}
             index={index}
             total={questions.length}
             onSubmit={handleSubmit}
@@ -175,7 +191,7 @@ export function GameSession() {
             earned <span className="text-sq-gold font-bold">+{runStats.xp} XP</span>.
           </p>
           <p className="mb-6 text-sm">
-            You're now {rankTitle(progress.level)} · Level {progress.level} ·{" "}
+            You&apos;re now {rankTitle(progress.level)} · Level {progress.level} ·{" "}
             {progress.xp} XP.
           </p>
           <div className="flex gap-3 justify-center flex-wrap">

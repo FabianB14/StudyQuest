@@ -1,5 +1,6 @@
 "use client";
 
+import { Language, LANGUAGE_SHORT } from "@/lib/language";
 import { GradeResult, Question } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,13 +21,14 @@ const DIFF_STYLE: Record<Question["difficulty"], string> = {
 
 export interface QuestionCardProps {
   question: Question;
+  language: Language;
   index: number;
   total: number;
   onSubmit: (answer: string) => Promise<{ grade: GradeResult; xpGained: number; leveledUp: boolean }>;
   onNext: () => void;
 }
 
-export function QuestionCard({ question, index, total, onSubmit, onNext }: QuestionCardProps) {
+export function QuestionCard({ question, language, index, total, onSubmit, onNext }: QuestionCardProps) {
   const [answer, setAnswer] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [grade, setGrade] = useState<GradeResult | null>(null);
@@ -76,11 +78,18 @@ export function QuestionCard({ question, index, total, onSubmit, onNext }: Quest
   return (
     <div className={`panel p-5 sm:p-7 ${shake ? "animate-shake" : "animate-rise"}`}>
       <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="chip">{TYPE_LABEL[question.type]}</span>
           <span className={`chip border ${DIFF_STYLE[question.difficulty]}`}>
             {isBoss ? "👑 BOSS" : question.difficulty.toUpperCase()}
           </span>
+          {(question.type === "trace" ||
+            question.type === "bug" ||
+            question.type === "code") && (
+            <span className="chip text-sq-accent2 border-sq-accent2/30">
+              {LANGUAGE_SHORT[language]}
+            </span>
+          )}
           {question.tag && <span className="chip text-sq-muted">#{question.tag}</span>}
         </div>
         <div className="text-xs text-sq-muted">

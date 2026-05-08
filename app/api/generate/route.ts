@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getClient, MODEL_GEN } from "@/lib/anthropic";
 import { Question } from "@/lib/types";
+import {
+  Language,
+  LANGUAGES,
+  LANGUAGE_LABELS,
+  LANGUAGE_PROMPT_HINTS,
+} from "@/lib/language";
 import { SEED_CS_QUESTIONS } from "@/lib/seed-questions";
 
 export const runtime = "nodejs";
@@ -67,9 +73,16 @@ function tryParse(text: string): Question[] | null {
   }
 }
 
+function isLanguage(value: unknown): value is Language {
+  return (
+    typeof value === "string" && (LANGUAGES as readonly string[]).includes(value)
+  );
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const guide: string = (body.guide || "").toString().slice(0, 30_000);
+  const language: Language = isLanguage(body.language) ? body.language : "cpp";
 
   if (!guide.trim()) {
     return NextResponse.json({ questions: fallbackQuestions(), source: "seed" });
@@ -98,7 +111,15 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: "user",
-          content: `STUDY GUIDE:\n\n${guide}\n\nReturn the JSON now.`,
+          content: `LANGUAGE: ${LANGUAGE_LABELS[language]} — ${LANGUAGE_PROMPT_HINTS[language]}
+
+ALL "code", "trace", and "bug" questions MUST use ${LANGUAGE_LABELS[language]} syntax. Do NOT mix in other languages even if the study guide mentions them in passing. "fill" and "recall" questions can be language-agnostic when the concept is universal, but should otherwise also default to ${LANGUAGE_LABELS[language]}.
+
+STUDY GUIDE:
+
+${guide}
+
+Return the JSON now.`,
         },
       ],
     });
