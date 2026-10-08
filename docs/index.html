@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Study guide and XP game for Psych 4110 Exam 1 (psychopharmacology, Weeks 1–2).">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0} img{max-width:100%} [hidden]{display:none!important}
+</style>
+<title>Psych 4110 Dose Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one 760px column like a pharmacy label sheet; a capsule XP bar is the signature element; one question on screen at a time. */
+:root{
+  --paper:#eef3f2; --card:#ffffff; --sunk:#e3ebe9; --ink:#122e2d; --muted:#557170; --line:#cfdcda;
+  --accent:#0d6b65; --accent-ink:#ffffff; --cap-a:#d9533a; --cap-b:#efbd45;
+  --good:#1d8657; --good-bg:#e2f3ea; --close:#a86b12; --close-bg:#fbf0dc; --bad:#bd3a31; --bad-bg:#f8e3e1;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0d1918; --card:#132322; --sunk:#0f1e1d; --ink:#e2eeec; --muted:#8fa9a6; --line:#25403e;
+  --accent:#4cc2b6; --accent-ink:#06201e; --cap-a:#ff7b5e; --cap-b:#f5cf63;
+  --good:#52c78f; --good-bg:#12302a; --close:#e8b154; --close-bg:#30281a; --bad:#ff7066; --bad-bg:#3a1d1b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0d1918; --card:#132322; --sunk:#0f1e1d; --ink:#e2eeec; --muted:#8fa9a6; --line:#25403e;
+  --accent:#4cc2b6; --accent-ink:#06201e; --cap-a:#ff7b5e; --cap-b:#f5cf63;
+  --good:#52c78f; --good-bg:#12302a; --close:#e8b154; --close-bg:#30281a; --bad:#ff7066; --bad-bg:#3a1d1b; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:12px 64px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.bar-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:-.01em;margin-right:auto}
+.brand small{font-family:var(--f-mono);font-weight:400;font-size:12px;color:var(--muted);margin-left:6px}
+.lvl{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 260px}
+.lvl-num{font-family:var(--f-mono);font-weight:600;font-size:13px;white-space:nowrap}
+.capsule{position:relative;height:18px;flex:1;min-width:120px;border-radius:999px;background:var(--sunk);border:1.5px solid var(--line);overflow:hidden}
+.capsule::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:1.5px;background:var(--line)}
+.capsule i{position:absolute;inset:0 auto 0 0;border-radius:999px;background:linear-gradient(90deg,var(--cap-a) 0 50%,var(--cap-b) 50% 100%);background-size:var(--fullw,100%) 100%;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1.5px solid var(--line);font-size:13px;font-family:var(--f-mono);white-space:nowrap;background:var(--card)}
+.chip.hot{border-color:var(--cap-a);color:var(--cap-a)}
+.tabs{display:flex;gap:4px;margin-top:10px}
+.tab{border:0;background:none;padding:6px 12px;border-radius:999px;font-weight:700;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.icon-btn{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:3px 10px;font-size:13px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-size:16px;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn-main{background:var(--accent);color:var(--accent-ink)}
+.btn-line{background:transparent;border:2px solid var(--line);color:var(--ink)}
+.btn-quiet{background:transparent;color:var(--muted);padding:8px 12px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* home */
+.hero{display:grid;gap:14px;margin-bottom:22px}
+.hero h1{font-size:clamp(30px,6vw,44px);font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0;max-width:60ch}
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.plan{grid-template-columns:1fr}}
+.plan-box{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.plan-box ol{margin:6px 0 0;padding-left:20px}
+.plan-box li{margin:3px 0}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-block:18px 26px}
+@media (max-width:480px){.modes{grid-template-columns:1fr}}
+.mode{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:2px}
+.mode:hover{border-color:var(--accent)}
+.mode b{font-family:var(--f-display);font-size:19px}
+.mode span{color:var(--muted);font-size:14px}
+.mode.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.mode.primary span{color:inherit;opacity:.85}
+.resume{background:var(--close-bg);border:2px solid var(--close);border-radius:var(--r);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.units{display:grid;gap:8px}
+.unit{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:12px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px 10px 16px}
+@media (max-width:480px){.unit{grid-template-columns:minmax(0,1fr) auto}.unit .capsule{display:none}}
+.unit-name{font-weight:700;min-width:0}
+.unit-name small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.unit .capsule{height:12px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:14px;color:var(--muted)}
+.stats b{color:var(--ink);font-family:var(--f-mono)}
+
+/* play */
+.pips{display:flex;gap:5px;margin-bottom:14px}
+.pip{flex:1;height:7px;border-radius:999px;background:var(--line)}
+.pip.now{background:var(--muted)}
+.pip.right{background:var(--good)}.pip.close{background:var(--close)}.pip.miss{background:var(--bad)}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:22px clamp(16px,4vw,28px)}
+.card.boss{border:2.5px solid var(--cap-a);box-shadow:0 0 0 5px color-mix(in srgb,var(--cap-a) 14%,transparent)}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tag{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.tag.d3{background:var(--close-bg);color:var(--close)}
+.tag.boss{background:var(--cap-a);color:#fff}
+.prompt{font-family:var(--f-display);font-weight:700;font-size:clamp(21px,3.6vw,26px);line-height:1.25;margin:0 0 16px;text-wrap:pretty}
+.answer{width:100%;font:inherit;font-size:18px;padding:13px 16px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.answer:focus{outline:none;border-color:var(--accent)}
+textarea.answer{min-height:190px;resize:vertical;line-height:1.5}
+.choices{display:grid;gap:8px}
+.choice{text-align:left;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--paper);font-size:17px}
+.choice:hover:not([disabled]){border-color:var(--accent)}
+.choice kbd{font-family:var(--f-mono);font-size:12px;border:1.5px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--muted);margin-top:2px}
+.choice.is-right{border-color:var(--good);background:var(--good-bg)}
+.choice.is-wrong{border-color:var(--bad);background:var(--bad-bg)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.hint{margin-top:12px;padding:10px 14px;border-radius:10px;background:var(--sunk);font-size:15px}
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;border:2px solid}
+.fb.right{background:var(--good-bg);border-color:var(--good)}
+.fb.close{background:var(--close-bg);border-color:var(--close)}
+.fb.miss{background:var(--bad-bg);border-color:var(--bad)}
+.fb-head{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:20px;margin-bottom:4px}
+.xp-pop{margin-left:auto;font-family:var(--f-mono);font-size:15px;background:var(--cap-b);color:#3a2a00;border-radius:999px;padding:2px 10px;animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+.fb p{margin:6px 0 0}
+.fb .model{font-size:15px;color:var(--muted)}
+.shake{animation:shake .35s}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:var(--muted)}
+.chart-wrap{overflow-x:auto;margin:-4px 0 14px;background:var(--paper);border-radius:12px;border:1.5px solid var(--line);padding:6px}
+.chart{display:block;width:100%;max-width:520px;height:auto;margin:0 auto}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .mid{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4}
+.chart .ax{fill:var(--muted);font:11px var(--f-mono)}
+.chart .title{fill:var(--muted);font:12px var(--f-body)}
+.chart .c-eff{stroke:var(--accent);fill:none;stroke-width:2.5}
+.chart .c-let{stroke:var(--cap-a);fill:none;stroke-width:2.5}
+.chart .d-eff{fill:var(--accent)} .chart .d-let{fill:var(--cap-a)}
+.chart .lg{font:12px var(--f-body);fill:var(--ink)}
+.check{display:grid;gap:6px;margin-top:12px}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:var(--paper);border:1.5px solid var(--line);font-size:15px}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--good);flex:none}
+.check label.found{border-color:var(--good)}
+.end{text-align:center;display:grid;gap:12px;justify-items:center}
+.end .big{font-family:var(--f-display);font-weight:800;font-size:48px;letter-spacing:-.02em}
+
+/* guide */
+.guide{display:grid;gap:12px}
+.guide details{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:4px 18px}
+.guide summary{cursor:pointer;padding-block:12px;font-family:var(--f-display);font-weight:700;font-size:20px;list-style:none;display:flex;gap:10px;align-items:baseline}
+.guide summary::-webkit-details-marker{display:none}
+.guide summary::before{content:"+";font-family:var(--f-mono);color:var(--accent);width:14px}
+.guide details[open] summary::before{content:"–"}
+.guide ul{margin:0 0 10px;padding-left:20px}
+.guide li{margin:5px 0;max-width:68ch}
+.guide h3{font-size:14px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px;font-family:var(--f-body)}
+.exam{border-left:4px solid var(--cap-a);background:var(--sunk);padding:10px 14px;border-radius:0 10px 10px 0;margin:8px 0 14px;font-size:15.5px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:520px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.ht td,.ht th{text-align:center;font-family:var(--f-mono)}
+.inline-confirm{display:inline-flex;gap:8px;align-items:center}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 80px);transform:translateX(-50%);z-index:20;background:var(--ink);color:var(--paper);border-radius:18px;padding:16px 26px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.25);animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+.toast b{display:block;font-family:var(--f-display);font-size:26px}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:19;width:100%;height:100%}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header class="bar">
+    <div class="bar-row">
+      <div class="brand">Dose Quest<small>PSYCH 4110 · EXAM 1</small></div>
+      <button class="icon-btn" id="soundBtn" type="button" aria-pressed="false">Sound off</button>
+    </div>
+    <div class="bar-row" style="margin-top:8px">
+      <div class="lvl">
+        <span class="lvl-num" id="lvlNum">Lv 1</span>
+        <div class="capsule" aria-hidden="true"><i id="xpFill" style="width:0%"></i></div>
+        <span class="lvl-num muted" id="xpText">0 / 100</span>
+      </div>
+      <span class="chip" id="streakChip">streak 0</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-home" aria-selected="true" type="button">Quest</button>
+      <button class="tab" role="tab" id="tab-guide" aria-selected="false" type="button">Study guide</button>
+    </nav>
+  </header>
+  <main id="app"></main>
+</div>
+
+<template id="guideTpl">
+<div class="guide">
+  <div class="exam"><b>How Exam 1 works.</b> Short essay. Dr. Baker asks a big general question you can answer several ways and grades on completeness. Back every claim with an example from class. Expect an ED50 or therapeutic-index reading from a dose-response graph. Units cancel in ratios, so 60 mg ÷ 20 mg is 3, not 3 mg.</div>
+
+  <details open><summary>Drugs, medicine &amp; policy</summary>
+    <ul>
+      <li>Every medicine is a drug. “Drug” vs “medicine” mostly reflects connotation and context, not chemistry. Even food alters mood.</li>
+      <li><b>DEA schedules</b> run I (most restricted) to V (least). Schedule I means no accepted medical use plus high abuse potential.</li>
+      <li>Cannabis is Schedule I because of history (Reefer Madness), not safety. That status blocks research.</li>
+      <li>Alcohol isn't scheduled at all. In the UK harm study, alcohol caused the most harm to others. Heroin edged it out for harm to the user.</li>
+      <li>Labeling shapes perception. Wellbutrin and Zyban are the same drug, bupropion, sold for ADHD/depression and for quitting smoking. Its effects list matches other stimulants'.</li>
+      <li>Three policy approaches: legalize (often regulated), decriminalize, prohibit. Portugal decriminalized and expanded treatment. Oregon tried decriminalization. US alcohol Prohibition shows the costs of criminalizing a once-legal drug.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Getting in: routes &amp; absorption</summary>
+    <ul>
+      <li><b>Enteral</b>: through the alimentary canal (GI tract), like a swallowed pill. <b>Parenteral</b>: everything else.</li>
+      <li>Parenteral routes: injection (IV, IM, subcutaneous), pulmonary, topical, sublingual, intranasal, cutaneous.</li>
+      <li><b>Absorption</b> is the time for a population of drug to enter the blood. The bloodstream matters because once a drug is there, it reaches the whole body.</li>
+      <li>Oral drugs take about 20–30 minutes to near peak blood levels. Edibles are unpredictable because GI absorption varies with food.</li>
+      <li>Intranasal and sublingual are fast because capillaries sit right under the surface. Skin patches give slow, steady absorption.</li>
+      <li>Gas anesthetics beat pills for surgery because they're fast and the dose is controllable.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Distribution &amp; the blood-brain barrier</summary>
+    <ul>
+      <li><b>Simple diffusion</b> moves drugs from high to low concentration. The blood connects every compartment: lungs, muscle, fat, brain, heart.</li>
+      <li>Drugs leave the blood at <b>capillaries</b>, which have gaps between cells. Arteries and veins are sealed highways.</li>
+      <li><b>Fat</b> matters. Lipid-soluble drugs store there and leak back into blood when blood levels fall, so they linger and have long half-lives. A blood test can miss drug still acting from tissue.</li>
+      <li>Getting into a cell means crossing a lipid bilayer, so the drug needs lipid solubility unless a transporter exists. Albumin carries fat-soluble molecules through blood.</li>
+      <li>SSRIs: about 5× more serotonin in the gut than the brain, so the main effect is GI distress. Prof: an SSRI is a gut drug that also acts on the brain, which is why nobody misuses them.</li>
+      <li>Large peptides (collagen supplements) get chopped into amino acids. You're paying for soy sauce.</li>
+      <li><b>Blood-brain barrier</b> = brain capillaries with tight gaps + glial cells. A molecule crosses <b>4 membranes</b>: 2 through the capillary cell, 2 through the glial cell.</li>
+      <li>Why it exists: neurons are lost daily and not replaced, so toxins must stay out. But the brain is energy- and oxygen-hungry, so nutrients must get in.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Getting out: liver, kidneys, half-life</summary>
+    <ul>
+      <li>Elimination is a liver–kidney team. Kidneys filter waste into urine, but urine is water, so lipid-soluble drugs don't go easily.</li>
+      <li>The liver's <b>biotransformation</b> makes drugs less lipid-soluble so the kidneys can excrete them.</li>
+      <li><b>Active metabolites</b> still affect the brain. Heroin breaks down into morphine.</li>
+      <li><b>Cytochrome P450 (CYP)</b> enzymes: 90% of drugs are metabolized by six of them. Poor ~10%, intermediate ~10%, extensive ~78%, ultra-rapid ~2%.</li>
+      <li>Other exits: lungs (gas anesthetics), bile, sweat and breast milk.</li>
+      <li><b>MAOIs</b> block monoamine oxidase, which breaks down serotonin, dopamine and norepinephrine. Food monoamines then build up (“cheese reaction”): racing heart, dangerous blood pressure.</li>
+      <li><b>Half-life</b> is the time to clear half of a dose from the blood. 4 half-lives clear about 94%. With daily doses, slow clearance means accumulation.</li>
+    </ul>
+    <div class="tbl"><table class="ht"><thead><tr><th>Half-lives</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead><tbody><tr><th>% left</th><td>100</td><td>50</td><td>25</td><td>12.5</td><td>6.2</td><td>3.1</td><td>1.6</td></tr></tbody></table></div>
+  </details>
+
+  <details open><summary>Receptors &amp; effects</summary>
+    <ul>
+      <li>A drug receptor must meet two criteria: the drug binds to it, and binding alters a normal physiological event.</li>
+      <li>Three receptor types: neurotransmitter receptors, enzymes, membrane transporters (like serotonin or dopamine reuptake).</li>
+      <li><b>Agonist</b> mimics or enhances (a hairpin that opens the lock). <b>Antagonist</b> blocks. Narcan is an opioid antagonist that knocks opioids off their receptors.</li>
+      <li>A drug binds every receptor it can, inside and outside the brain. “Side effects are just effects.”</li>
+      <li>A drug never has a single effect, even at one receptor. Dopamine in the nucleus accumbens drives motivation, dopamine in motor circuits drives movement, so antipsychotics cause motor and facial side effects.</li>
+      <li>Opioid pain relief and breathing suppression (brainstem) share receptors, so they can't be separated.</li>
+      <li>“The only clean drugs are new drugs.” We just haven't found the other targets yet. Report strange effects, since that's how warnings and even tainted generics get caught.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Dose-response &amp; therapeutic index</summary>
+    <ul>
+      <li>More dose means more receptors bound and more effect, until a plateau, because receptors (or the behavior) max out.</li>
+      <li>Population curves: the frequency distribution shows how many respond at each dose. The <b>cumulative</b> plot climbs to 100% and is the one for reading ED values.</li>
+      <li><b>ED50</b> is the dose at which 50% of subjects show the effect. To read it, go across from 50%, hit the curve, drop to the x-axis.</li>
+      <li><b>LD50</b> is the dose lethal to 50%, found through animal research.</li>
+      <li><b>Therapeutic index = LD50 ÷ ED50.</b> Bigger is safer. Lecture example: 130 ÷ 30 ≈ 4.</li>
+      <li>Every effect has its own curve, so a drug can have several TIs (an ADHD med has one for heart palpitations).</li>
+      <li>People differ: sensitive people need little, resistant people need a lot, and some get the unwanted effect first. Prescribing is partly an “art”.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Brain systems &amp; transmitters</summary>
+    <p class="muted" style="margin:0 0 6px;font-size:15px">Built from the Week 2 slides plus standard textbook facts. Add your own notes from the Day 4 lecture.</p>
+    <ul>
+      <li>Developmental divisions: forebrain (telencephalon, diencephalon), midbrain (mesencephalon), hindbrain (metencephalon, myelencephalon).</li>
+      <li><b>Limbic system</b>: interconnected nuclei that regulate emotion.</li>
+      <li><b>Nigrostriatal</b>: substantia nigra (midbrain) to basal ganglia; coordinates behavior and choices.</li>
+      <li><b>Medial forebrain bundle</b>: axons projecting throughout the brain; arousal and reinforcement.</li>
+      <li><b>VTA → nucleus accumbens</b>: once seen as the reinforcement center, now the locus of “craving”, “liking” and “wanting”. It sits in a larger limbic circuit using dopamine, GABA, glutamate, ACh and endogenous opioids.</li>
+      <li>At the <b>synapse</b>, a neuron releases neurotransmitter onto postsynaptic receptors, which excite or inhibit the target.</li>
+      <li>Transmitter classes: acetylcholine (arousal, learning, memory, attention); monoamines (dopamine, norepinephrine, serotonin); amino acids (glutamate excites, GABA inhibits); peptides (endorphins); endocannabinoids.</li>
+      <li>Dependence is never a “one area, one transmitter” thing.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Tolerance</summary>
+    <ul>
+      <li>Tolerance is the whole system compensating for a drug to get back to equilibrium, so you need more for the same effect.</li>
+      <li><b>Metabolic</b>: the liver makes more enzymes and clears the drug faster.</li>
+      <li><b>Pharmacodynamic</b>: the brain changes receptor numbers at the synapse.</li>
+      <li><b>Behavioral</b>: rats that practiced the treadmill while drunk got better at running drunk. Rats given alcohol after practice didn't. Same alcohol, so it isn't metabolic.</li>
+      <li><b>Learned</b>: environmental cues trigger the compensatory response in advance. Rats given morphine in their usual morphine room showed less sedation than rats given the same dose in the saline room. Chemo patients feel nauseous from treatment-room cues.</li>
+      <li>Why it matters: a familiar dose hits much harder in an unfamiliar context, which is a known factor in opioid overdose.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Withdrawal &amp; dependence</summary>
+    <ul>
+      <li>Withdrawal is the leftover compensatory response after stopping a chronic drug. Symptoms are the opposite of the drug's effects: stop a sedative like alcohol and you get overactivation.</li>
+      <li><b>Abstinence syndrome</b> is the medical term.</li>
+      <li><b>Physical dependence</b> is a retrospective observation: you only know it once stopping produces an abstinence syndrome. Prof drinks lots of caffeine, feels nothing on stopping, so isn't dependent by this definition.</li>
+      <li><b>Psychological dependence</b> is ill-defined: intense drug seeking from a keen desire. Cannabis is the example.</li>
+      <li>Abstinence syndromes are increasingly recognized for ADHD meds, antidepressants and anxiolytics. Physical vs psychological is less separate than it sounds.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Addiction &amp; substance use disorder</summary>
+    <ul>
+      <li>DSM-5 defines a separate use disorder per substance. Caffeine can't be diagnosed.</li>
+      <li>At least 2 symptoms: 2–3 mild, 4–5 moderate, 6+ severe. DSM-IV split “abuse” and “dependence”.</li>
+      <li>Prof's critique: the criteria are almost all social and psychological, with almost no biology.</li>
+      <li>Definition 1: a behavioral pattern of compulsive use or over-involvement with a tendency to relapse.</li>
+      <li>Definition 2: a primary chronic neurobiologic disease (genetic, psychosocial, environmental) marked by impaired control, compulsive use, use despite harm and craving.</li>
+      <li>“Addiction” carries moral judgment, but it's broader: gambling counts.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Sensitization, set, setting &amp; placebo</summary>
+    <ul>
+      <li><b>Sensitization</b>: repeated amphetamine or cocaine increases the effect. Rats given methylphenidate daily run around more. It lasts a year or more, so it isn't the same mechanism as tolerance, and it helps explain cue sensitivity and relapse.</li>
+      <li><b>Set</b> = the user's expectations. <b>Setting</b> = the environment. A stimulant before class helps focus; before a party it helps people have fun.</li>
+      <li>Placebo is traditionally “no physiological effect” or a deception. Prof: the effects are robust, so it isn't inert, and it can be used ethically.</li>
+      <li>1950s “Surgery as Placebo”: expectation drove recovery from heart surgery. Sham knee and back surgeries match real ones.</li>
+      <li>1990s antidepressant FDA trials: only 14% beat placebo on every measure. Paxil needed 9 trials to get 2 positive.</li>
+      <li><b>Number needed to treat</b>: patients who must take a drug for one to benefit beyond placebo. High for psychiatric meds.</li>
+      <li>Mechanism: frontal cortex projects to the reinforcement circuit (VTA, accumbens) and down to pain-modulating pathways.</li>
+      <li>Double-blind placebo-controlled trials are how we know a drug works.</li>
+    </ul>
+  </details>
+
+  <details open><summary>Evidence bank for essays</summary>
+    <div class="tbl"><table>
+      <thead><tr><th>If the question is about…</th><th>Use this evidence</th></tr></thead>
+      <tbody>
+        <tr><td>Pharmacology can't explain everything</td><td>Treadmill rats, morphine rooms, chemo rooms, stimulant in class vs party, Surgery as Placebo, sensitization lasting a year</td></tr>
+        <tr><td>Drugs have many effects</td><td>SSRIs and gut serotonin, antipsychotic motor effects, opioid breathing, “only clean drugs are new drugs”, multiple TIs</td></tr>
+        <tr><td>Individual differences</td><td>CYP metabolizer types, sensitive vs resistant on the curve, palpitations before focus on ADHD meds</td></tr>
+        <tr><td>How drugs move</td><td>Diffusion, leaky capillaries, fat storage, 4 membranes of the BBB, edible unpredictability, gas anesthetics</td></tr>
+        <tr><td>Labels and policy</td><td>Schedule I cannabis, unscheduled alcohol, UK harm study, Wellbutrin/Zyban, Portugal</td></tr>
+        <tr><td>Defining addiction</td><td>DSM-5 counts, caffeine exclusion, missing biology, two definitions, gambling</td></tr>
+      </tbody>
+    </table></div>
+  </details>
+</div>
+</template>
+
+<script>
+const UNITS=[
+ {id:"pol",name:"Drugs, medicine & policy",sub:"Schedules, harm, Zyban, Portugal"},
+ {id:"in",name:"Getting in",sub:"Routes and absorption"},
+ {id:"move",name:"Distribution & the BBB",sub:"Diffusion, fat, 4 membranes"},
+ {id:"out",name:"Getting out",sub:"Liver, kidneys, CYP450, half-life"},
+ {id:"rec",name:"Receptors & effects",sub:"Agonists, antagonists, clean drugs"},
+ {id:"dose",name:"Dose-response & TI",sub:"ED50, LD50, therapeutic index"},
+ {id:"brain",name:"Brain systems & transmitters",sub:"Circuits and NT classes"},
+ {id:"tol",name:"Tolerance",sub:"Metabolic, pharmacodynamic, behavioral, learned"},
+ {id:"wd",name:"Withdrawal & dependence",sub:"Abstinence syndrome, physical vs psychological"},
+ {id:"add",name:"Addiction & SUD",sub:"DSM-5 and two definitions"},
+ {id:"plac",name:"Sensitization, set & placebo",sub:"Expectation is real"}
+];
+
+const Q=[
+// policy
+{id:"pol1",u:"pol",t:"pick",d:1,q:"Which DEA schedule is for drugs with no accepted medical use and high abuse potential?",c:["Schedule I","Schedule II","Schedule III","Schedule V"],ok:"Schedule I",x:"Schedules run from I (most restricted) to V (least). Schedule I means no accepted medical use plus high abuse potential."},
+{id:"pol2",u:"pol",t:"pick",d:1,q:"Where does alcohol sit on the DEA schedules?",c:["It isn’t scheduled","Schedule I","Schedule III","Schedule V"],ok:"It isn’t scheduled",x:"Alcohol isn’t scheduled, even though it tops the UK study for harm to others. Scheduling reflects history and familiarity, not only harm."},
+{id:"pol3",u:"pol",t:"pick",d:2,q:"In the UK harm study from lecture, which drug did the most harm to OTHERS?",c:["Alcohol","Heroin","Cannabis","LSD"],ok:"Alcohol",x:"Alcohol led on harm to others. Heroin slightly outpaced it on harm to the user."},
+{id:"pol4",u:"pol",t:"type",d:2,q:"According to lecture, why is cannabis Schedule I?",k:[["history","reefer","politic","propaganda","not safety","stigma","culture"]],x:"Its status traces to history and propaganda like Reefer Madness, not a safety finding. Schedule I status also makes it very hard to research."},
+{id:"pol5",u:"pol",t:"type",d:1,q:"Wellbutrin (bupropion) is also sold for quitting smoking under what brand name?",a:["zyban"],x:"Zyban. Same molecule, two names, two uses. Its side-effect list looks like any other stimulant’s, which shows how labeling shapes perception."},
+{id:"pol6",u:"pol",t:"pick",d:2,q:"Which country is the classic example of decriminalizing possession and expanding treatment?",c:["Portugal","Netherlands","Japan","Canada"],ok:"Portugal",x:"Portugal decriminalized possession and made treatment accessible. Oregon tried decriminalization in the US."},
+{id:"pol7",u:"pol",t:"type",d:2,q:"Name the three broad approaches to drug policy discussed in class.",k:[["legaliz","legal"],["decriminaliz"],["prohibit","criminaliz","illegal","ban","war on drugs"]],x:"Legalize (often regulated), decriminalize, or prohibit. US alcohol Prohibition is the case study for criminalizing a once-legal drug."},
+{id:"pol8",u:"pol",t:"type",d:3,q:"Why is it hard to define “drug” versus “medicine”?",k:[["overlap","same","connotation","context","depends","all medicines","every medicine","use","perception"]],x:"Every medicine is a drug. The label mostly reflects connotation and context of use (helpful vs harmful), not chemistry. Even food alters mood."},
+// in
+{id:"in1",u:"in",t:"type",d:1,q:"What are the two general paths for getting a drug into the body?",k:[["enteral"],["parenteral"]],x:"Enteral goes through the alimentary canal (GI tract). Parenteral is every other route."},
+{id:"in2",u:"in",t:"type",d:1,q:"Enteral administration goes through the ___.",k:[["alimentary","gi","gastro","digestive","gut","stomach","intestin"]],x:"The alimentary canal, meaning the GI tract. A swallowed pill is the classic example."},
+{id:"in3",u:"in",t:"pick",d:1,q:"Which of these is NOT a parenteral route?",c:["Swallowing a pill","Intravenous","Sublingual","Intranasal"],ok:"Swallowing a pill",x:"Oral is enteral. Parenteral includes IV, IM, subcutaneous, pulmonary, topical, sublingual, intranasal and cutaneous."},
+{id:"in4",u:"in",t:"type",d:2,q:"Why does intranasal absorption work so well?",k:[["capillar","blood vessel","vascular"]],x:"Nasal passages and sinuses are full of capillaries near the surface, so the drug reaches blood quickly."},
+{id:"in5",u:"in",t:"type",d:1,q:"Sublingual means the drug goes where?",k:[["tongue"]],x:"Under the tongue, where lots of blood vessels sit close to the surface."},
+{id:"in6",u:"in",t:"type",d:1,q:"Define absorption.",k:[["time","rate","how long","speed","how fast"],["blood"]],x:"The time it takes for a population of drug to enter the blood after administration."},
+{id:"in7",u:"in",t:"type",d:1,q:"Why is reaching the bloodstream the key step?",k:[["whole body","entire body","everywhere","all over","circulat","every","throughout","all compartments"]],x:"Once it’s in the blood, it reaches the whole body."},
+{id:"in8",u:"in",t:"pick",d:1,q:"Roughly how long do most oral drugs take to approach peak blood concentration?",c:["20–30 minutes","2–3 minutes","4–6 hours","24 hours"],ok:"20–30 minutes",x:"About 20–30 minutes, and some take longer."},
+{id:"in9",u:"in",t:"type",d:2,q:"Why are edibles so unpredictable?",k:[["food","stomach","digest","absorb","absorption","gi","gut","meal"]],x:"Oral absorption of complex cannabinoid molecules varies a lot, especially with how much food is in the stomach."},
+{id:"in10",u:"in",t:"type",d:3,q:"Why are gas anesthetics safer than pills for putting someone under for surgery?",k:[["fast","quick","rapid","speed"],["control","dose","predict","absorption","vary"]],x:"Inhaled drugs reach the brain fast and the dose stays controllable. Pill absorption varies, which makes the dose hard to control when the goal is very deep unconsciousness. Ketamine is an injectable exception with a wide safety margin."},
+{id:"in11",u:"in",t:"type",d:2,q:"Skin patches use which route, and what’s the advantage?",k:[["skin","transderm","cutaneous","topical"],["steady","slow","constant","even","stable","consistent"]],x:"Cutaneous (through the skin). Absorption is slow and steady."},
+// move
+{id:"move1",u:"move",t:"type",d:1,q:"What is the primary force moving drugs through the body?",k:[["diffusion"]],x:"Simple diffusion: molecules spread from high to low concentration. Blood flow stirs, diffusion moves drug into tissue."},
+{id:"move2",u:"move",t:"pick",d:1,q:"Drugs diffuse from areas of ___ concentration to areas of ___ concentration.",c:["high → low","low → high","any direction equally","fat → blood only"],ok:"high → low",x:"High to low. When tissue levels exceed blood levels, the flow reverses and drug leaks back into blood."},
+{id:"move3",u:"move",t:"type",d:1,q:"Where in the circulatory system do drugs leave the blood?",k:[["capillar"]],x:"Capillaries. They have gaps between cells. Arteries and veins are sealed highways."},
+{id:"move4",u:"move",t:"type",d:2,q:"Why is fat an important compartment in psychopharmacology?",k:[["lipid","fat soluble","lipophilic"],["store","hold","linger","long","half","slow","leak","reservoir","stay"]],x:"Lipid-soluble drugs build up in fat and leak back into blood as blood levels fall. That lengthens their half-life."},
+{id:"move5",u:"move",t:"type",d:3,q:"Why might a blood test not show whether a drug is still having an effect?",k:[["tissue","fat","stored","compartment"]],x:"Drug can linger in tissues like fat and slowly diffuse back into blood, so blood levels understate what’s still on board."},
+{id:"move6",u:"move",t:"type",d:2,q:"To get INSIDE a cell, what must a drug cross, and what property helps?",k:[["lipid","membrane","bilayer","fat"],["solub","lipophilic","dissolve"]],x:"A lipid bilayer. Unless a specific transporter exists (uncommon), the drug needs lipid solubility."},
+{id:"move7",u:"move",t:"type",d:2,q:"Which blood protein carries fat-soluble molecules through the bloodstream?",a:["albumin"],x:"Albumin. Drugs bind it, travel, then hopefully let go at the right time."},
+{id:"move8",u:"move",t:"type",d:2,q:"What’s the most common side effect of SSRIs, and why?",k:[["gi","gut","gastro","stomach","nausea","digest"],["serotonin","5 times","five times","receptor"]],x:"GI distress. There’s about 5× more serotonin in the gut than in the brain, so much of the binding happens there. An SSRI is mainly a gut drug that also acts on the brain."},
+{id:"move9",u:"move",t:"pick",d:2,q:"Collagen and other peptide supplements are poorly absorbed intact because they are:",c:["Too large, so the body breaks them into amino acids","Too lipid soluble","Blocked by the BBB","Exhaled by the lungs"],ok:"Too large, so the body breaks them into amino acids",x:"They’re big chains that get chopped into amino acids. The prof’s line: you could drink soy sauce."},
+{id:"move10",u:"move",t:"type",d:1,q:"Name the two components of the blood-brain barrier.",k:[["tight","capillar"],["glia","astrocyte"]],x:"Brain capillaries with tight gaps, and glial cells wrapped around them."},
+{id:"move11",u:"move",t:"pick",d:2,q:"How many membranes does a molecule cross to get from blood into the brain?",c:["4","2","1","6"],ok:"4",x:"Four. Two through the capillary cell (in and out) and two through the glial cell."},
+{id:"move12",u:"move",t:"type",d:2,q:"Why does the brain need a blood-brain barrier?",k:[["neuron","toxin","protect","replace","loss"]],x:"Neurons are lost daily and not replaced, so the brain must be shielded from toxins. It’s also energy- and oxygen-hungry, so nutrients still need a way in."},
+// out
+{id:"out1",u:"out",t:"type",d:1,q:"Which two organs are mainly responsible for getting drugs out of the body?",k:[["liver","hepat"],["kidney","renal"]],x:"The liver and kidneys working together."},
+{id:"out2",u:"out",t:"type",d:2,q:"Why can’t the kidneys easily excrete highly lipid-soluble drugs?",k:[["urine","water","liquid"]],x:"Urine is water-based, so it doesn’t readily carry lipid-soluble molecules."},
+{id:"out3",u:"out",t:"type",d:2,q:"What does the liver do to make a drug excretable?",k:[["transform","metaboli","break","convert","biotransform","change"],["water","less lipid","less fat","soluble"]],x:"Biotransformation: it converts lipid-soluble drugs into less lipid-soluble forms the kidneys can excrete."},
+{id:"out4",u:"out",t:"type",d:1,q:"A breakdown product that still affects the brain is called an ___.",a:["active metabolite"],x:"An active metabolite."},
+{id:"out5",u:"out",t:"pick",d:2,q:"Heroin breaks down into which active metabolite?",c:["Morphine","Fentanyl","Naloxone","Dopamine"],ok:"Morphine",x:"Morphine, so effects can continue after the heroin itself is gone."},
+{id:"out6",u:"out",t:"type",d:1,q:"Which family of liver enzymes metabolizes most drugs?",k:[["p450","p 450","cyp","cytochrome"]],x:"Cytochrome P450 (CYP). About 90% of drugs are handled by six of these enzymes."},
+{id:"out7",u:"out",t:"pick",d:2,q:"About what percent of people are “extensive” (typical) CYP metabolizers?",c:["78%","10%","2%","50%"],ok:"78%",x:"Poor ~10%, intermediate ~10%, extensive ~78%, ultra-rapid ~2%. Same dose, very different blood levels."},
+{id:"out8",u:"out",t:"type",d:2,q:"Name the four CYP metabolizer categories.",k:[["poor"],["intermediate"],["extensive"],["ultra","rapid"]],x:"Poor, intermediate, extensive, ultra-rapid."},
+{id:"out9",u:"out",t:"type",d:3,q:"Besides the liver and kidneys, name the three other ways drugs leave the body.",k:[["lung","breath","exhal"],["bile"],["sweat","milk","breast"]],x:"Lungs (gas anesthetics), bile (into the intestines), and fluids like sweat and breast milk."},
+{id:"out10",u:"out",t:"type",d:1,q:"Define half-life.",k:[["half"],["time","how long"]],x:"The time it takes to clear half of an initial dose from the blood."},
+{id:"out11",u:"out",t:"pick",d:1,q:"About how many half-lives clear ~94% of a drug?",c:["4","2","10","1"],ok:"4",x:"Four: 100 → 50 → 25 → 12.5 → 6.2% left."},
+{id:"out12",u:"out",t:"type",d:3,q:"What does an MAOI do, and what is the “cheese reaction”?",k:[["break","monoamine oxidase","enzyme","block","inhibit","prevent"],["cheese","food","tyramine","heart","blood pressure","too much","build"]],x:"Monoamine oxidase breaks down serotonin, dopamine and norepinephrine. MAOIs block it, which is how they work as antidepressants. Gut MAO also clears monoamines from food, so on an MAOI those build up after foods like aged cheese, spiking heart rate and blood pressure."},
+{id:"out13",u:"out",t:"type",d:3,q:"Why does half-life matter for a drug taken every day?",k:[["accumul","build","left over","leftover","remain","stack","toxic"]],x:"If the last dose isn’t cleared, drug accumulates. Sometimes that’s used on purpose to ramp up; sometimes it causes accidental toxicity."},
+// rec
+{id:"rec1",u:"rec",t:"type",d:2,q:"What two criteria make a protein a drug receptor?",k:[["bind"],["alter","change","physiolog","effect","event"]],x:"The drug binds to it, and the bound drug alters a normally occurring physiological event."},
+{id:"rec2",u:"rec",t:"type",d:2,q:"Name the three common types of drug receptors.",k:[["neurotransmitter"],["enzyme"],["transport","reuptake"]],x:"Neurotransmitter receptors, enzymes, and membrane transport mechanisms like reuptake transporters."},
+{id:"rec3",u:"rec",t:"pick",d:1,q:"A drug that mimics or enhances a neurotransmitter’s normal action is an:",c:["Agonist","Antagonist","Enzyme","Metabolite"],ok:"Agonist",x:"Agonist: a hairpin that also opens the lock. An antagonist blocks the lock."},
+{id:"rec4",u:"rec",t:"pick",d:1,q:"Narcan (naloxone) reverses an opioid overdose. What kind of drug is it?",c:["Opioid receptor antagonist","Opioid agonist","Reuptake inhibitor","MAO inhibitor"],ok:"Opioid receptor antagonist",x:"An antagonist that outcompetes opioids for the receptor and knocks them off."},
+{id:"rec5",u:"rec",t:"type",d:1,q:"Finish the prof’s line: “Side effects are just ___.”",a:["effects"],x:"Effects. The molecule binds whatever it can; we just label the unwanted results “side” effects."},
+{id:"rec6",u:"rec",t:"type",d:2,q:"“The only clean drugs are ___ drugs.” Fill the blank.",a:["new"],x:"New. A drug only looks clean until we discover everything else it binds to."},
+{id:"rec7",u:"rec",t:"type",d:3,q:"Why do antipsychotics often cause motor side effects?",k:[["dopamine"],["motor","movement","nigro","basal","striat","face","facial"]],x:"Dopamine receptors drive motivation in the nucleus accumbens but also control movement in motor circuits. A dopamine drug hits both. A drug never has a single effect, even at one receptor type."},
+{id:"rec8",u:"rec",t:"type",d:3,q:"Why can’t we make an opioid that relieves pain without slowing breathing?",k:[["same","both","share"],["receptor","brainstem","respirat","breath"]],x:"The same receptors handle pain relief and respiration in the brainstem. It’s all one brain compartment, and the molecule binds wherever it can."},
+{id:"rec9",u:"rec",t:"type",d:2,q:"Why should patients report odd drug effects to their doctor?",k:[["unknown","discover","warning","nobody","no one","manufactur","new","report"]],x:"No one knows every effect of every drug. Reports surface new effects and even manufacturing problems like tainted generics."},
+// dose
+{id:"dose1",u:"dose",t:"pick",d:1,q:"As dose increases, what happens on a dose-response curve?",c:["Effect rises, then plateaus","Effect rises forever","Effect stays flat","Effect drops right away"],ok:"Effect rises, then plateaus",x:"More molecules bind more receptors until receptors or the behavior max out."},
+{id:"dose2",u:"dose",t:"type",d:2,q:"Why does a dose-response curve plateau?",k:[["receptor","limit","max","bound","all","ceiling"]],x:"There’s a limited number of receptors, and the behavior itself has a ceiling (a rat can only run so fast)."},
+{id:"dose3",u:"dose",t:"type",d:1,q:"What does ED50 mean?",k:[["dose"],["50","half"]],x:"The effective dose at which 50% of the population shows the effect."},
+{id:"dose4",u:"dose",t:"pick",d:2,q:"ED95 is the dose at which:",c:["95% of subjects show the effect","One person reaches 95% of max effect","95% of subjects die","95% of the drug is cleared"],ok:"95% of subjects show the effect",x:"The subscript is the percent of subjects showing that effect."},
+{id:"dose5",u:"dose",t:"pick",d:1,q:"Which formula gives the therapeutic index?",c:["LD50 ÷ ED50","ED50 ÷ LD50","LD50 − ED50","LD50 × ED50"],ok:"LD50 ÷ ED50",x:"TI = LD50 ÷ ED50. A bigger number means a safer drug."},
+{id:"dose6",u:"dose",t:"pick",d:1,q:"Drug A has a TI of 4. Drug B has a TI of 100. Which is safer?",c:["Drug B","Drug A","They’re equally safe","Can’t tell"],ok:"Drug B",x:"Higher TI means a wider gap between the effective and lethal doses."},
+{id:"dose7",u:"dose",t:"type",d:3,q:"Why can a drug have more than one therapeutic index?",k:[["effect","curve"]],x:"Every effect has its own dose-response curve. An ADHD med has a TI for heart palpitations as well as for death."},
+{id:"dose8",u:"dose",t:"type",d:2,q:"How are lethal dose curves usually determined?",k:[["animal","rat","mice","mouse"]],x:"Animal research. The prof’s point: every approved drug relies on it."},
+{id:"dose9",u:"dose",t:"pick",d:2,q:"Which plot did the prof call more useful for reading ED values?",c:["Cumulative percent of subjects","Frequency distribution","Half-life decay curve","Bar chart of side effects"],ok:"Cumulative percent of subjects",x:"The cumulative plot climbs to 100%, so you read across from 50% and down to the dose."},
+{id:"dose10",u:"dose",t:"type",d:3,q:"Why is choosing a dose called an “art” as much as a science?",k:[["individual","differ","sensitive","resistant","variab","experience","people","everyone"]],x:"People differ in sensitivity and metabolism. Some get unwanted effects before the wanted one. Prescribers lean on experience, which can be good or bad."},
+// brain
+{id:"brain1",u:"brain",t:"type",d:2,q:"Name the three developmental divisions of the brain.",k:[["forebrain","prosencephalon","telencephalon"],["midbrain","mesencephalon"],["hindbrain","rhombencephalon","metencephalon","myelencephalon"]],x:"Forebrain (telencephalon, diencephalon), midbrain (mesencephalon), hindbrain (metencephalon, myelencephalon)."},
+{id:"brain2",u:"brain",t:"pick",d:1,q:"Which system is most associated with regulating emotion?",c:["Limbic system","Nigrostriatal system","Medial forebrain bundle","Cerebellum"],ok:"Limbic system",x:"The limbic system, a set of interconnected nuclei. It isn’t strictly one circuit."},
+{id:"brain3",u:"brain",t:"type",d:2,q:"The nigrostriatal system connects the substantia nigra to the ___.",k:[["basal ganglia","striatum"]],x:"The basal ganglia. It helps coordinate behavior and choices."},
+{id:"brain4",u:"brain",t:"pick",d:2,q:"The medial forebrain bundle is responsible for:",c:["Arousal and reinforcement","Breathing rhythm","Visual processing","Hearing"],ok:"Arousal and reinforcement",x:"It’s a big axon bundle rising from the mid/hindbrain and projecting throughout the brain."},
+{id:"brain5",u:"brain",t:"type",d:2,q:"The VTA → nucleus accumbens pathway is now thought to be the locus of what?",k:[["crav","want","liking","like"]],x:"“Craving”, “liking” and “wanting” drugs. It was originally thought to be the reinforcement center."},
+{id:"brain6",u:"brain",t:"type",d:1,q:"What happens at a synapse?",k:[["neurotransmitter","release","communicat","signal"]],x:"A neuron releases neurotransmitter onto receptors of its target, which excites or inhibits that cell."},
+{id:"brain7",u:"brain",t:"pick",d:1,q:"Acetylcholine’s key roles include:",c:["Arousal, learning, memory and attention","Pain relief only","Inhibiting all neurons","Storing fat"],ok:"Arousal, learning, memory and attention",x:"ACh: arousal, learning and memory, sustained attention."},
+{id:"brain8",u:"brain",t:"type",d:1,q:"Name the three monoamines.",k:[["dopamine"],["serotonin","5 ht","5ht"],["norepinephrine","noradrenaline","epinephrine"]],x:"Dopamine, norepinephrine, serotonin."},
+{id:"brain9",u:"brain",t:"pick",d:1,q:"The main excitatory and inhibitory amino acid transmitters are:",c:["Glutamate excites, GABA inhibits","GABA excites, glutamate inhibits","Dopamine and serotonin","ACh and endorphin"],ok:"Glutamate excites, GABA inhibits",x:"Glutamate is the main excitatory transmitter; GABA is the main inhibitory one."},
+{id:"brain10",u:"brain",t:"type",d:2,q:"Name the five neurotransmitter classes from lecture.",k:[["acetylcholine","ach"],["monoamine"],["amino"],["peptide"],["cannabinoid"]],x:"Acetylcholine, monoamines, amino acids, peptides, endocannabinoids."},
+{id:"brain11",u:"brain",t:"type",d:3,q:"Why isn’t substance dependence a “one area, one transmitter” thing?",k:[["circuit","many","network","whole","multiple","dopamine","gaba","glutamate","limbic"]],x:"The VTA–accumbens pathway sits in a big limbic circuit (frontal cortex, hippocampus, amygdala, thalamus) using dopamine, GABA, glutamate, ACh and endogenous opioids."},
+// tol
+{id:"tol1",u:"tol",t:"type",d:1,q:"In one line, what is tolerance?",k:[["less","reduced","decrease","more","higher","same effect","compensat","weaker"]],x:"A reduced effect with repeated use, so more drug is needed for the same effect. The system is compensating to restore equilibrium."},
+{id:"tol2",u:"tol",t:"type",d:2,q:"Where does metabolic tolerance happen, and how?",k:[["liver"],["enzyme","faster","more","break"]],x:"The liver ramps up its enzymes, so the drug is broken down faster."},
+{id:"tol3",u:"tol",t:"type",d:2,q:"What changes in pharmacodynamic tolerance?",k:[["receptor","synapse","brain","sensitiv"]],x:"The brain adjusts, for example changing the number of receptors available at the synapse."},
+{id:"tol4",u:"tol",t:"type",d:2,q:"Describe the treadmill experiment for behavioral tolerance.",k:[["practic","train","during","while"],["drunk","alcohol","intoxicat","booze"]],x:"Rats that practiced on the treadmill while drunk got better at it while drunk. Rats given alcohol after practice didn’t. Same alcohol exposure, so it isn’t metabolic: practice under the drug is what matters."},
+{id:"tol5",u:"tol",t:"type",d:2,q:"Define learned tolerance.",k:[["cue","environment","context","setting","room","place"]],x:"Compensatory responses set off by environmental cues that predict the drug."},
+{id:"tol6",u:"tol",t:"pick",d:3,q:"Rats got morphine in Room A and saline in Room B on alternating days. On test day, which showed the MOST sedation?",c:["Morphine given in Room B","Morphine given in Room A","Saline given in Room A","Both morphine groups equally"],ok:"Morphine given in Room B",x:"In the familiar morphine room the body braced for the drug, so sedation was smaller. In the saline room there was no anticipatory compensation, so the same dose hit harder. This is why context matters for overdose risk."},
+{id:"tol7",u:"tol",t:"type",d:2,q:"What medical example of learned tolerance did the prof give?",k:[["chemo"]],x:"Chemotherapy. Patients react to treatment-room cues, so clinics make those rooms pleasant with gardens and windows."},
+{id:"tol8",u:"tol",t:"type",d:3,q:"Why does the body build tolerance at all?",k:[["equilibrium","homeostasis","balance","compensat","normal"]],x:"The body constantly seeks equilibrium. It doesn’t know you want the drug’s effect, only that something knocked it off balance."},
+// wd
+{id:"wd1",u:"wd",t:"type",d:2,q:"Why are withdrawal symptoms usually the opposite of the drug’s effects?",k:[["equilibrium","compensat","adapt","homeostasis","balance"]],x:"Chronic use builds a compensatory response and a new equilibrium. Remove the drug and the compensation is left unopposed, so you swing the other way."},
+{id:"wd2",u:"wd",t:"pick",d:1,q:"Alcohol is a sedative. Alcohol withdrawal is therefore marked by:",c:["Overactivation","More sedation","No change","Calm euphoria"],ok:"Overactivation",x:"The body was pushing activation up to offset the sedative. Without the sedative, it overshoots."},
+{id:"wd3",u:"wd",t:"type",d:1,q:"What is the more medical term for withdrawal?",a:["abstinence syndrome"],x:"Abstinence syndrome: a constellation of responses opposite to the drug’s effects."},
+{id:"wd4",u:"wd",t:"type",d:2,q:"Why is physical dependence called a “retrospective observation”?",k:[["stop","halt","after","abstinen","withdraw","take away","remove","quit"]],x:"You only know someone was physically dependent after the drug stops and an abstinence syndrome appears."},
+{id:"wd5",u:"wd",t:"type",d:2,q:"What is psychological dependence, and which drug is the classic example?",k:[["crav","desire","seek","want"],["cannabis","marijuana","weed"]],x:"An ill-defined term for intense drug seeking from a keen desire for the drug. Cannabis: strong cravings, unclear physical abstinence syndrome."},
+{id:"wd6",u:"wd",t:"pick",d:2,q:"By the lecture’s definition, is the prof physically dependent on caffeine?",c:["No, stopping causes them no withdrawal","Yes, they drink a lot","Yes, caffeine always causes dependence","It can’t be determined"],ok:"No, stopping causes them no withdrawal",x:"Dependence is defined by what happens when you stop, not by how much you use."},
+{id:"wd7",u:"wd",t:"type",d:3,q:"Which commonly prescribed drug classes are increasingly recognized to have an abstinence syndrome?",k:[["adhd","stimul"],["antidepress","ssri"],["anxi","benzo"]],x:"ADHD medications, antidepressants and anxiolytics, among others."},
+// add
+{id:"add1",u:"add",t:"type",d:1,q:"Which substance can’t be diagnosed as a substance use disorder in DSM-5?",a:["caffeine","coffee"],x:"Caffeine."},
+{id:"add2",u:"add",t:"pick",d:2,q:"What’s the minimum number of symptoms for a DSM-5 substance use disorder?",c:["2","1","4","6"],ok:"2",x:"2–3 mild, 4–5 moderate, 6 or more severe."},
+{id:"add3",u:"add",t:"pick",d:2,q:"Four or five DSM-5 symptoms means the disorder is:",c:["Moderate","Mild","Severe","Not a disorder"],ok:"Moderate",x:"2–3 mild, 4–5 moderate, 6+ severe."},
+{id:"add4",u:"add",t:"type",d:2,q:"How did DSM-IV differ from DSM-5 for alcohol?",k:[["abuse"],["dependen"]],x:"DSM-IV split alcohol abuse from alcohol dependence. DSM-5 merged them into one use disorder rated mild, moderate or severe."},
+{id:"add5",u:"add",t:"type",d:3,q:"What did the prof say is conspicuously missing from the DSM criteria?",k:[["biolog","physiolog","brain"]],x:"Biology. The criteria are almost all social and psychological."},
+{id:"add6",u:"add",t:"type",d:2,q:"Why might someone prefer “substance use disorder” to “addiction”?",k:[["moral","judg","stigma","negative"]],x:"“Addiction” carries moral judgment. It is broader, though: you can be addicted to gambling."},
+{id:"add7",u:"add",t:"type",d:3,q:"Give the two lecture definitions of addiction.",k:[["behavior","pattern","compulsive"],["disease","neurobiolog","chronic"]],x:"1) A behavioral pattern of compulsive use or over-involvement, with a tendency to relapse. 2) A primary chronic neurobiologic disease with genetic, psychosocial and environmental factors."},
+{id:"add8",u:"add",t:"type",d:2,q:"List the four behaviors in the “disease” definition of addiction.",k:[["control"],["compulsive"],["harm","despite"],["crav"]],x:"Impaired control, compulsive use, continued use despite harm, craving."},
+// plac
+{id:"plac1",u:"plac",t:"type",d:1,q:"Define “set” and “setting”.",k:[["expect","mindset","belief"],["environment","place","surround","context"]],x:"Set is the user’s expectations. Setting is the immediate environment."},
+{id:"plac2",u:"plac",t:"type",d:2,q:"Give the prof’s stimulant example of set and setting.",k:[["class","study","focus","school"],["party","fun","social"]],x:"Before class a stimulant helps focus. Before a party it helps people have a good time. Same drug, different expectation and environment."},
+{id:"plac3",u:"plac",t:"type",d:2,q:"What is drug sensitization?",k:[["increas","greater","more","stronger","bigger"]],x:"Repeated exposure (amphetamine, cocaine) makes the drug’s effect bigger over time."},
+{id:"plac4",u:"plac",t:"pick",d:2,q:"How long can sensitization last?",c:["A year or more","A few hours","One day","Exactly one week"],ok:"A year or more",x:"That duration means its mechanism differs from short-lived tolerance and withdrawal."},
+{id:"plac5",u:"plac",t:"type",d:3,q:"Why does sensitization matter for relapse?",k:[["cue","trigger","crav","sensitiv"]],x:"Long-lasting sensitization helps explain heightened reactions to drug-related cues, which drives craving and relapse."},
+{id:"plac6",u:"plac",t:"type",d:3,q:"Can someone have tolerance and sensitization to the same drug?",k:[["yes","both","some effects","different"]],x:"Yes. With stimulants you can grow tolerant to some effects and sensitized to others."},
+{id:"plac7",u:"plac",t:"type",d:2,q:"What’s the traditional definition of a placebo, and why does the prof push back?",k:[["no","inert","sugar","decept","lie","fake"],["robust","real","effect","work","not inert"]],x:"Traditionally a substance with no physiological effect, given to placate a patient. But placebo effects are robust, so it can’t be inert, and it can be used ethically."},
+{id:"plac8",u:"plac",t:"type",d:2,q:"What did the 1950s “Surgery as Placebo” heart study find?",k:[["expect","believ"],["recover","improv","heal","work","better"]],x:"Patients’ expectation of success drove their recovery from heart surgery."},
+{id:"plac9",u:"plac",t:"pick",d:3,q:"In 1990s FDA trials for five antidepressants, what share found the drug beat placebo on ALL depression measures?",c:["14%","50%","80%","95%"],ok:"14%",x:"Only 14%. Paxil needed nine trials to get two showing a difference."},
+{id:"plac10",u:"plac",t:"type",d:2,q:"What is the number needed to treat (NNT)?",k:[["number","how many"],["patient","people"]],x:"How many patients must take a drug for one to benefit beyond the placebo effect. It’s high for psychiatric meds."},
+{id:"plac11",u:"plac",t:"type",d:3,q:"Which brain region is common to both placebo pathways, and what are the two pathways?",k:[["frontal"],["reward","reinforce","vta","accumbens","dopamine"],["pain"]],x:"Frontal cortex. It projects to the reinforcement circuit (VTA, nucleus accumbens) and down to pain-modulating structures."},
+{id:"plac12",u:"plac",t:"type",d:2,q:"What study design controls for placebo effects?",k:[["double blind","blind"],["placebo","control"]],x:"Double-blind, placebo-controlled trials."},
+// essay bosses
+{id:"e1",u:"out",t:"essay",d:4,q:"Trace an oral pill from swallowing to excretion. How does it get to the brain, and how does it leave?",pts:[
+ {p:"Enteral route through the alimentary canal",k:["enteral","alimentary","gi","stomach","gut"]},
+ {p:"Absorption into blood takes ~20–30 min and varies (food)",k:["absor","20","30","minute"]},
+ {p:"Diffusion moves drug high → low concentration",k:["diffus","concentration"]},
+ {p:"Leaves blood through leaky capillaries into compartments",k:["capillar","compartment","tissue"]},
+ {p:"Lipid-soluble drug stores in fat, lengthening half-life",k:["fat","lipid"]},
+ {p:"BBB: tight capillaries + glial cells, 4 membranes",k:["blood brain","bbb","glia","tight","membrane"]},
+ {p:"Liver biotransforms via CYP450; active metabolites possible",k:["liver","cyp","p450","metabol","biotransform"]},
+ {p:"Kidneys excrete the now water-soluble form in urine",k:["kidney","urine"]},
+ {p:"Half-life: 4 half-lives clear ~94%",k:["half","94"]}]},
+{id:"e2",u:"rec",t:"essay",d:4,q:"Why does a drug never have just one effect? Use examples.",pts:[
+ {p:"A drug binds every receptor that recognizes it",k:["bind","every","all receptor","wherever"]},
+ {p:"Receptors exist inside and outside the CNS",k:["outside","inside","cns","body"]},
+ {p:"SSRIs: ~5× more serotonin in the gut, so GI effects",k:["ssri","gut","gi","serotonin"]},
+ {p:"Same receptor in different circuits: dopamine motivation vs motor",k:["dopamine","motor","accumbens","antipsych"]},
+ {p:"Opioids: pain relief plus breathing suppression",k:["opioid","opiate","breath","respirat"]},
+ {p:"“Side effects are just effects”",k:["side effect","just effect"]},
+ {p:"Only clean drugs are new drugs",k:["clean","new drug"]},
+ {p:"Each effect has its own dose-response curve and TI",k:["curve","index","ti"]}]},
+{id:"e3",u:"plac",t:"essay",d:4,q:"Using evidence from class, argue that pharmacology alone can’t explain a drug’s behavioral effects.",pts:[
+ {p:"Behavioral tolerance: treadmill rats practicing while drunk",k:["treadmill","behavioral toler","practic"]},
+ {p:"Learned tolerance: morphine room vs saline room",k:["room","learned","context","cue"]},
+ {p:"Chemo-room cues trigger responses",k:["chemo"]},
+ {p:"Set & setting: stimulant in class vs at a party",k:["set","setting","party","class"]},
+ {p:"Placebo surgery (Surgery as Placebo; knee/back)",k:["placebo","surgery","sham"]},
+ {p:"Antidepressant trials: 14%; Paxil 9 trials for 2",k:["14","paxil","trial"]},
+ {p:"Sensitization lasts a year or more",k:["sensiti"]},
+ {p:"Closing point: expectation and context are real, physical effects",k:["expect","real","context"]}]},
+{id:"e4",u:"tol",t:"essay",d:4,q:"Compare the four types of tolerance, with an example of each.",pts:[
+ {p:"Metabolic: liver makes more enzymes, faster clearance",k:["metabolic","liver","enzyme"]},
+ {p:"Pharmacodynamic: receptor changes at the synapse",k:["pharmacodynamic","receptor","synapse"]},
+ {p:"Behavioral: practice under the drug (treadmill)",k:["behavioral","treadmill","practic"]},
+ {p:"Learned: cues trigger compensation (morphine rooms)",k:["learned","cue","room","context"]},
+ {p:"All are compensation to restore equilibrium",k:["equilibrium","compensat","homeostasis"]},
+ {p:"Consequence: dose escalation, or a familiar dose hits harder in a new context",k:["escalat","higher dose","more drug","overdose","new context"]}]},
+{id:"e5",u:"wd",t:"essay",d:4,q:"What is withdrawal, and why are its symptoms usually the opposite of the drug’s effects?",pts:[
+ {p:"Repeated use builds a compensatory response",k:["compensat","repeat","chronic"]},
+ {p:"The body sets a new equilibrium",k:["equilibrium","homeostasis"]},
+ {p:"Stopping leaves the compensation unopposed → opposite effects",k:["opposite","stop","unopposed","overshoot"]},
+ {p:"Example: alcohol (sedative) withdrawal = overactivation",k:["alcohol","sedat","overactiv"]},
+ {p:"“Abstinence syndrome” is the medical term",k:["abstinence"]},
+ {p:"Physical dependence is retrospective",k:["retrospect","physical depend"]},
+ {p:"Psychological dependence is ill-defined (cannabis)",k:["psychological","cannabis","crav"]},
+ {p:"Seen with ADHD meds, antidepressants, anxiolytics",k:["adhd","antidepress","anxi"]}]},
+{id:"e6",u:"add",t:"essay",d:4,q:"What is addiction? Discuss the DSM-5 and the two definitions from class.",pts:[
+ {p:"DSM-5: a separate use disorder per substance",k:["dsm","use disorder"]},
+ {p:"Caffeine can’t be diagnosed",k:["caffeine"]},
+ {p:"≥2 symptoms; 2–3 mild, 4–5 moderate, 6+ severe",k:["mild","moderate","severe"]},
+ {p:"DSM-IV split abuse vs dependence",k:["dsm iv","dsm 4","abuse"]},
+ {p:"Criteria are mostly social/psychological, little biology",k:["biolog","social"]},
+ {p:"Behavioral-pattern definition with relapse",k:["pattern","relapse","compulsive"]},
+ {p:"Chronic neurobiologic disease definition",k:["disease","neurobiolog","chronic"]},
+ {p:"“Addiction” is broader and carries moral judgment (gambling)",k:["gambl","moral","stigma"]}]},
+{id:"e7",u:"plac",t:"essay",d:4,q:"Is a placebo a “lie”? Discuss the evidence.",pts:[
+ {p:"Traditional definition: inert, given to placate",k:["inert","placate","decept","sugar"]},
+ {p:"Set (expectation) and setting drive real effects",k:["set","setting","expect"]},
+ {p:"Surgery as Placebo (1950s heart surgery)",k:["surgery","heart","angina"]},
+ {p:"Sham knee/back surgeries match real ones",k:["knee","back","sham"]},
+ {p:"Antidepressant trials: 14% beat placebo on all measures",k:["14","antidepress","paxil"]},
+ {p:"NNT is high for psychiatric meds",k:["nnt","number needed"]},
+ {p:"Mechanism: frontal cortex → reward and pain pathways",k:["frontal","pain","reward","vta","accumbens"]},
+ {p:"Conclusion: robust, so not inert; can be ethical",k:["robust","ethical","not inert","real"]}]},
+{id:"e8",u:"dose",t:"essay",d:4,q:"Explain the therapeutic index and why one drug can have more than one.",pts:[
+ {p:"Dose-response: effect rises then plateaus (limited receptors)",k:["plateau","receptor","dose response"]},
+ {p:"Cumulative population curve; ED50 = dose for 50% of subjects",k:["ed50","ed 50","50%","cumulative"]},
+ {p:"LD50 from animal research",k:["ld50","ld 50","lethal","animal"]},
+ {p:"TI = LD50 ÷ ED50; bigger is safer",k:["ld50/ed50","ld50 ed50","divid","safer","bigger"]},
+ {p:"Worked example (130 ÷ 30 ≈ 4)",k:["130","4"]},
+ {p:"Every effect has its own curve, so multiple TIs (palpitations)",k:["palpitation","each effect","multiple"]},
+ {p:"Individual differences: sensitive vs resistant, CYP types",k:["sensitive","resistant","cyp","individual"]}]},
+{id:"e9",u:"pol",t:"essay",d:4,q:"Do drug schedules reflect actual harm? Argue with evidence.",pts:[
+ {p:"Schedules I–V; I = no medical use + high abuse potential",k:["schedule","medical use"]},
+ {p:"Cannabis is Schedule I due to history, not safety",k:["cannabis","reefer","history"]},
+ {p:"Schedule I status blocks research",k:["research"]},
+ {p:"Alcohol is unscheduled yet most harmful to others",k:["alcohol","unscheduled","not scheduled"]},
+ {p:"UK harm study: heroin top for user harm",k:["uk","heroin","harm"]},
+ {p:"Labels shape perception: Wellbutrin vs Zyban",k:["zyban","wellbutrin","bupropion","label"]},
+ {p:"Policy options: legalize, decriminalize, prohibit (Portugal)",k:["portugal","decriminal","legaliz","prohibit"]}]}
+];
+const QBY=Object.fromEntries(Q.map(q=>[q.id,q]));
+
+/* ---------- state ---------- */
+const KEY="psych4110-dosequest-v1";
+const blank=()=>({xp:0,streak:0,best:0,answered:0,right:0,box:{},run:null,sound:false});
+function load(){try{const r=localStorage.getItem(KEY);return r?Object.assign(blank(),JSON.parse(r)):blank()}catch(e){return blank()}}
+let S=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let view="home", confirmReset=false;
+
+const RANKS=["Placebo","Microdose","Threshold","ED10","ED50","ED95","Steady State","Therapeutic Index","Half-Life Master","Psychopharmacologist"];
+const need=l=>50*l*(l-1);
+function lvlFor(xp){let l=1;while(need(l+1)<=xp)l++;return l}
+const rank=l=>RANKS[Math.min(l-1,RANKS.length-1)];
+const DAY=864e5, GAPS=[0,0,1,2,4,7];
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function norm(s){return String(s||"").toLowerCase().replace(/[’'`]/g,"").replace(/[–—-]/g," ").replace(/[^a-z0-9%.÷/\s]/g," ").replace(/\s+/g," ").trim()}
+function hasTerm(n,w){w=norm(w);if(!w)return false;if(w.length<=3)return(" "+n+" ").includes(" "+w+" ");return n.includes(w)}
+function gradeText(q,input){
+  const n=norm(input); if(!n) return "miss";
+  if(q.a && q.a.some(a=>hasTerm(n,a))) return "right";
+  if(q.k){const hits=q.k.filter(g=>g.some(w=>hasTerm(n,w))).length;
+    if(hits===q.k.length) return "right"; if(hits>0 && hits>=q.k.length/2) return "close";}
+  return "miss";
+}
+function autoHint(q){
+  if(q.h) return q.h;
+  if(q.a) return "Starts with “"+q.a[0][0].toUpperCase()+"” · "+q.a[0].length+" letters";
+  if(q.k) return "Mention "+q.k.length+" idea"+(q.k.length>1?"s":"")+": "+q.k.map(g=>g[0].slice(0,4)+"…").join(", ");
+  return "";
+}
+function mastery(uid){const qs=Q.filter(q=>q.u===uid&&q.t!=="essay");const tot=qs.reduce((s,q)=>s+((S.box[q.id]&&S.box[q.id].b)||0),0);return tot/(qs.length*5)}
+function prio(q){const b=S.box[q.id];if(!b)return 1+Math.random()*0.8;return b.b+(b.due<=Date.now()?-1.5:1)+Math.random()*0.8}
+function reviewPool(){return Q.filter(q=>{const b=S.box[q.id];return b&&(b.b<=2||b.due<=Date.now())})}
+
+/* ---------- generated problems ---------- */
+const logi=(d,ed,s)=>100/(1+Math.exp(-(d-ed)/s));
+function chartSVG(curves,label){
+  const W=380,H=258,L=50,R=366,T=26,B=208,x=d=>L+(d/100)*(R-L),y=p=>B-(p/100)*(B-T);
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
+  for(let d=0;d<=100;d+=10){s+=`<line class="grid" x1="${x(d)}" y1="${T}" x2="${x(d)}" y2="${B}"/><text class="ax" x="${x(d)}" y="${B+16}" text-anchor="middle">${d}</text>`}
+  for(const p of [0,25,50,75,100]){s+=`<line class="${p===50?"mid":"grid"}" x1="${L}" y1="${y(p)}" x2="${R}" y2="${y(p)}"/><text class="ax" x="${L-6}" y="${y(p)+4}" text-anchor="end">${p}%</text>`}
+  s+=`<text class="title" x="${(L+R)/2}" y="${H-6}" text-anchor="middle">Dose (mg)</text>`;
+  s+=`<text class="title" transform="translate(13 ${(T+B)/2}) rotate(-90)" text-anchor="middle">% of subjects</text>`;
+  curves.forEach((c,ci)=>{
+    let p="";for(let d=0;d<=100;d+=2)p+=(d?"L":"M")+x(d).toFixed(1)+" "+y(logi(d,c.ed,c.s)).toFixed(1);
+    s+=`<path class="${c.cls}" d="${p}"/>`;
+    for(let d=0;d<=100;d+=10)s+=`<circle class="${c.cls==="c-eff"?"d-eff":"d-let"}" cx="${x(d)}" cy="${y(logi(d,c.ed,c.s)).toFixed(1)}" r="3.2"/>`;
+    s+=`<rect class="${c.cls==="c-eff"?"d-eff":"d-let"}" x="${L+8+ci*130}" y="7" width="14" height="5" rx="2"/><text class="lg" x="${L+28+ci*130}" y="13">${esc(c.name)}</text>`;
+  });
+  return s+"</svg>";
+}
+function genProblem(kind){
+  kind=kind||pick(["ed","ld","ti","tinum","hl1","hl2","hl3"]);
+  if(kind==="ed"){const ed=pick([20,30,40,50,60]);return{gen:1,u:"dose",t:"num",d:2,q:"Read the graph. What is the ED50 of this anti-anxiety drug?",svg:chartSVG([{ed,s:6,cls:"c-eff",name:"Anxiety relief"}],"Cumulative dose-response curve"),ans:ed,tol:0.5,unit:"mg",x:`Go across from 50%, hit the curve, drop straight down: ${ed} mg.`}}
+  if(kind==="ld"){const ed=pick([10,20,30]),ld=pick([60,70,80]);return{gen:1,u:"dose",t:"num",d:2,q:"Read the graph. What is the LD50?",svg:chartSVG([{ed,s:5,cls:"c-eff",name:"Effect"},{ed:ld,s:5,cls:"c-let",name:"Lethal"}],"Effect and lethal dose curves"),ans:ld,tol:0.5,unit:"mg",x:`Use the lethal curve: across from 50%, down to ${ld} mg. (The effect curve’s ED50 is ${ed} mg.)`}}
+  if(kind==="ti"){const [ed,ld]=pick([[20,60],[20,80],[30,60],[30,90],[10,80],[10,60]]);return{gen:1,u:"dose",t:"num",d:3,q:"Using both curves, what is this drug’s therapeutic index?",svg:chartSVG([{ed,s:5,cls:"c-eff",name:"Effect"},{ed:ld,s:5,cls:"c-let",name:"Lethal"}],"Effect and lethal dose curves"),ans:ld/ed,tol:0.05,x:`ED50 = ${ed}, LD50 = ${ld}. TI = LD50 ÷ ED50 = ${ld} ÷ ${ed} = ${+(ld/ed).toFixed(2)}. Units cancel.`}}
+  if(kind==="tinum"){const [ld,ed,tol]=pick([[130,30,0.4],[200,20,0.05],[150,50,0.05],[90,30,0.05],[400,40,0.05],[60,20,0.05],[300,25,0.05]]);return{gen:1,u:"dose",t:"num",d:2,q:`A drug has an LD50 of ${ld} mg and an ED50 of ${ed} mg. What is its therapeutic index?`,ans:ld/ed,tol,x:`TI = ${ld} ÷ ${ed} = ${+(ld/ed).toFixed(2)}. No units: mg ÷ mg cancel.`}}
+  const t=pick([2,3,4,6,8]),n=pick([1,2,3,4]);
+  if(kind==="hl1"){const dose=pick([80,160,200,400,800]);const a=dose/2**n;return{gen:1,u:"out",t:"num",d:2,q:`A drug’s half-life is ${t} hours. You take ${dose} mg. How many mg remain in the blood after ${t*n} hours?`,ans:a,tol:0.6,unit:"mg",x:`${t*n} h is ${n} half-li${n>1?"ves":"fe"}: ${dose}${" → ".repeat(0)}${Array.from({length:n},(_,i)=>" → "+dose/2**(i+1)).join("")} mg.`}}
+  if(kind==="hl2"){const a=100/2**n;return{gen:1,u:"out",t:"num",d:2,q:`A drug’s half-life is ${t} hours. What percent of the dose remains after ${t*n} hours?`,ans:a,tol:0.1,unit:"%",x:`${n} half-li${n>1?"ves":"fe"}: 100 → ${Array.from({length:n},(_,i)=>100/2**(i+1)).join(" → ")}%.`}}
+  return{gen:1,u:"out",t:"num",d:2,q:`A drug’s half-life is ${t} hours. About how many hours until ~94% of it is cleared?`,ans:4*t,tol:0.5,unit:"h",x:`About 4 half-lives clear 94%: 4 × ${t} = ${4*t} hours.`};
+}
+
+/* ---------- runs ---------- */
+function startRun(mode,unit){
+  let items=[];
+  const nonEssay=Q.filter(q=>q.t!=="essay");
+  if(mode==="quick"){const sorted=nonEssay.slice().sort((a,b)=>prio(a)-prio(b));const used=new Set(),out=[];
+    for(const q of sorted){if(out.length>=7)break;if(used.has(q.u)&&out.length<5)continue;used.add(q.u);out.push({id:q.id})}
+    items=shuffle(out);items.splice(1+Math.floor(Math.random()*5),0,{gen:genProblem()});}
+  else if(mode==="unit"){items=shuffle(nonEssay.filter(q=>q.u===unit).sort((a,b)=>prio(a)-prio(b)).slice(0,8).map(q=>({id:q.id})));
+    if(unit==="dose")items.push({gen:genProblem("ed")},{gen:genProblem(pick(["ti","tinum"]))});
+    if(unit==="out")items.push({gen:genProblem(pick(["hl1","hl2","hl3"]))});
+    const boss=Q.find(q=>q.t==="essay"&&q.u===unit);if(boss)items.push({id:boss.id});}
+  else if(mode==="boss"){items=Q.filter(q=>q.t==="essay").sort((a,b)=>prio(a)-prio(b)).slice(0,3).map(q=>({id:q.id}))}
+  else if(mode==="review"){items=shuffle(reviewPool()).slice(0,10).map(q=>({id:q.id}))}
+  else if(mode==="lab"){items=["ed","ti","hl1","tinum","ld","hl2"].map(k=>({gen:genProblem(k)}))}
+  if(!items.length)return;
+  S.run={mode,unit:unit||null,items,i:0,res:[],xp:0};save();view="play";render();
+}
+const curQ=()=>{const it=S.run.items[S.run.i];return it.gen||QBY[it.id]};
+
+/* ---------- scoring ---------- */
+function award(q,result){
+  const base=q.t==="essay"?0:({1:10,2:20,3:35}[q.d]||20);
+  const prevStreak=S.streak;let xp=0;
+  if(result==="right"){S.streak++;xp=Math.round(base*(1+Math.min(1,Math.floor((S.streak-1)/3)*0.25)))}
+  else if(result==="close"){xp=Math.round(base*0.5)}
+  else{S.streak=0}
+  S.best=Math.max(S.best,S.streak);S.answered++;if(result==="right")S.right++;
+  if(!q.gen){const b=S.box[q.id]||{b:0,due:0};b.b=result==="right"?Math.min(5,b.b+1):result==="close"?Math.max(1,b.b):1;b.due=Date.now()+GAPS[b.b]*DAY;S.box[q.id]=b}
+  return{xp,prevStreak};
+}
+function addXP(xp){const before=lvlFor(S.xp);S.xp+=xp;S.run.xp+=xp;const after=lvlFor(S.xp);if(after>before)levelUp(after)}
+
+/* ---------- fx ---------- */
+let actx=null;
+function beep(f,len){if(!S.sound)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(.12,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+len);o.connect(g).connect(actx.destination);o.start();o.stop(actx.currentTime+len)}catch(e){}}
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function burst(){if(reduce)return;const c=$("#fx"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;
+  const cs=getComputedStyle(document.documentElement),cols=[cs.getPropertyValue("--cap-a"),cs.getPropertyValue("--cap-b"),cs.getPropertyValue("--accent")];
+  const P=Array.from({length:90},()=>({x:innerWidth/2,y:innerHeight*0.32,vx:(Math.random()-.5)*12,vy:-Math.random()*11-3,w:6+Math.random()*7,c:pick(cols),r:Math.random()*6}));
+  let f=0;(function tick(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.15;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.w/4,p.w,p.w/2);x.restore()});if(++f<90)requestAnimationFrame(tick);else x.clearRect(0,0,c.width,c.height)})();}
+function levelUp(l){beep(660,.15);setTimeout(()=>beep(880,.25),130);burst();const t=document.createElement("div");t.className="toast";t.innerHTML=`Level up<b>Lv ${l} · ${esc(rank(l))}</b>`;document.body.appendChild(t);setTimeout(()=>t.remove(),1900)}
+
+/* ---------- render ---------- */
+function renderBar(){
+  const l=lvlFor(S.xp),cur=S.xp-need(l),span=need(l+1)-need(l),pct=Math.min(100,cur/span*100);
+  $("#lvlNum").textContent=`Lv ${l} · ${rank(l)}`;$("#xpText").textContent=`${cur} / ${span} XP`;
+  const fill=$("#xpFill");fill.style.width=pct+"%";fill.style.setProperty("--fullw",(pct?100/pct*100:100)+"%");
+  const sc=$("#streakChip");sc.textContent=`streak ${S.streak}`;sc.classList.toggle("hot",S.streak>=3);
+  const sb=$("#soundBtn");sb.textContent=S.sound?"Sound on":"Sound off";sb.setAttribute("aria-pressed",S.sound);
+  $("#tab-home").setAttribute("aria-selected",view!=="guide");$("#tab-guide").setAttribute("aria-selected",view==="guide");
+}
+function render(){renderBar();const app=$("#app");
+  if(view==="guide"){app.innerHTML="";app.appendChild($("#guideTpl").content.cloneNode(true));return}
+  if(view==="play"&&S.run){renderPlay(app);return}
+  view="home";renderHome(app);
+}
+function renderHome(app){
+  const rp=reviewPool().length,acc=S.answered?Math.round(S.right/S.answered*100):0;
+  const run=S.run;
+  app.innerHTML=`
+  <section class="hero">
+    <span class="label">Exam 1 · Friday · short essay</span>
+    <h1>Learn it one dose at a time.</h1>
+    <p>Every question is from Dr. Baker’s Week 1–2 lectures and slides. Hints are free. Wrong answers come back later until they stick.</p>
+    <div class="plan">
+      <div class="plan-box"><span class="label">Tonight</span><ol><li>Two quick runs</li><li>Play any unit under half full</li><li>Graph lab once</li><li>Write one boss essay by hand, then sleep</li></ol></div>
+      <div class="plan-box"><span class="label">Exam morning</span><ol><li>Review misses</li><li>Skim the evidence bank</li><li>One boss essay, 10 minutes</li></ol></div>
+    </div>
+  </section>
+  ${run?`<div class="resume"><b>Run paused at ${run.i+1} of ${run.items.length}</b><span class="muted" style="flex:1">${esc(run.mode==="unit"?(UNITS.find(u=>u.id===run.unit)||{}).name:{quick:"Quick run",boss:"Boss essays",review:"Review",lab:"Graph lab"}[run.mode])}</span><button class="btn btn-main" id="resume" type="button">Resume</button><button class="btn btn-quiet" id="drop" type="button">Discard</button></div>`:""}
+  <div class="modes">
+    <button class="mode primary" data-mode="quick" type="button"><b>Quick run</b><span>8 questions, mixed units, one graph problem</span></button>
+    <button class="mode" data-mode="boss" type="button"><b>Boss essays</b><span>3 exam-style prompts with a checklist</span></button>
+    <button class="mode" data-mode="lab" type="button"><b>Graph lab</b><span>ED50, LD50, TI and half-life math</span></button>
+    <button class="mode" data-mode="review" type="button" ${rp?"":"disabled"}><b>Review misses</b><span>${rp?rp+" waiting":"Nothing waiting yet"}</span></button>
+  </div>
+  <div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 style="font-size:22px">Units</h2><span class="label">Mastery</span></div>
+  <div class="units">${UNITS.map(u=>{const m=mastery(u.id);return`<div class="unit"><div class="unit-name">${esc(u.name)}<small>${esc(u.sub)}</small></div><div class="capsule" title="${Math.round(m*100)}% mastered"><i style="width:${m*100}%;--fullw:${m?100/m:100}%"></i></div><button class="btn btn-line" data-unit="${u.id}" type="button" style="padding:7px 14px">Play</button></div>`}).join("")}</div>
+  <div class="stats"><span>Answered <b>${S.answered}</b></span><span>Accuracy <b>${acc}%</b></span><span>Best streak <b>${S.best}</b></span><span>Total XP <b>${S.xp}</b></span>
+  ${S.answered?(confirmReset?`<span class="inline-confirm">Erase all progress? <button class="btn btn-quiet" id="resetYes" type="button" style="color:var(--bad)">Erase</button><button class="btn btn-quiet" id="resetNo" type="button">Keep</button></span>`:`<button class="btn btn-quiet" id="reset" type="button" style="padding:0">Reset progress</button>`):""}</div>`;
+  app.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>startRun(b.dataset.mode));
+  app.querySelectorAll("[data-unit]").forEach(b=>b.onclick=()=>startRun("unit",b.dataset.unit));
+  const r=$("#resume");if(r)r.onclick=()=>{view="play";render()};
+  const d=$("#drop");if(d)d.onclick=()=>{S.run=null;save();render()};
+  const rs=$("#reset");if(rs)rs.onclick=()=>{confirmReset=true;render()};
+  const ry=$("#resetYes");if(ry)ry.onclick=()=>{const snd=S.sound;S=blank();S.sound=snd;confirmReset=false;save();render()};
+  const rn=$("#resetNo");if(rn)rn.onclick=()=>{confirmReset=false;render()};
+}
+
+let phase="ask",last=null,hintOn=false;
+function renderPlay(app){
+  const run=S.run;
+  if(run.i>=run.items.length){renderEnd(app);return}
+  const q=curQ(),unitName=(UNITS.find(u=>u.id===q.u)||{}).name||"";
+  const pips=run.items.map((_,i)=>`<span class="pip ${run.res[i]||(i===run.i?"now":"")}"></span>`).join("");
+  const isBoss=q.t==="essay";
+  let body="";
+  if(q.t==="pick"){const opts=run.items[run.i].order||(run.items[run.i].order=shuffle(q.c));
+    body=`<div class="choices">${opts.map((c,i)=>`<button class="choice" data-c="${esc(c)}" type="button"><kbd>${i+1}</kbd><span>${esc(c)}</span></button>`).join("")}</div>`}
+  else if(q.t==="essay"){body=`<textarea class="answer" id="ans" placeholder="Write it like the exam: a claim, then evidence from class. Aim for 5+ points."></textarea>
+    <div class="actions"><button class="btn btn-main" id="go" type="button">Check against the rubric</button><button class="btn btn-quiet" id="skipWrite" type="button">Just show the rubric</button></div>`}
+  else{body=`<input class="answer" id="ans" autocomplete="off" ${q.t==="num"?'inputmode="decimal"':""} placeholder="${q.t==="num"?"Number"+(q.unit?" ("+q.unit+")":""):"Type your answer"}">
+    <div class="actions"><button class="btn btn-main" id="go" type="button">Check</button><button class="btn btn-line" id="hintBtn" type="button">Hint</button><button class="btn btn-quiet" id="skip" type="button">Skip</button></div>
+    <div class="hint" id="hint" ${hintOn?"":"hidden"}>${esc(q.t==="num"?(q.u==="dose"?(/TI|therapeutic/i.test(q.q)?"TI = LD50 ÷ ED50":"Across from 50%, then straight down"):"Halve once per half-life"):autoHint(q))}</div>`}
+  app.innerHTML=`<div class="pips">${pips}</div>
+  <article class="card ${isBoss?"boss":""}" id="card">
+    <div class="meta">${isBoss?'<span class="tag boss">Boss essay</span>':""}<span class="tag">${esc(unitName)}</span>${q.d===3?'<span class="tag d3">Hard</span>':""}${q.gen?'<span class="tag">Calculation</span>':""}</div>
+    <h2 class="prompt">${esc(q.q)}</h2>
+    ${q.svg?`<div class="chart-wrap">${q.svg}</div>`:""}
+    <div id="body">${body}</div>
+    <div id="fbArea"></div>
+  </article>
+  <div class="foot"><button class="btn btn-quiet" id="pause" type="button" style="padding:0">Take a break (saves your spot)</button><span class="mono">${run.i+1} / ${run.items.length} · +${run.xp} XP this run</span></div>`;
+  phase="ask";
+  $("#pause").onclick=()=>{view="home";hintOn=false;render()};
+  if(q.t==="pick"){app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>answerPick(b.dataset.c))}
+  else if(q.t==="essay"){$("#go").onclick=()=>essayRubric(false);$("#skipWrite").onclick=()=>essayRubric(true);setTimeout(()=>$("#ans")&&$("#ans").focus(),30)}
+  else{const inp=$("#ans");setTimeout(()=>inp.focus(),30);$("#go").onclick=answerType;$("#skip").onclick=()=>{inp.value="";answerType(true)};
+    $("#hintBtn").onclick=()=>{hintOn=true;$("#hint").hidden=false;inp.focus()};}
+}
+function showFeedback(q,result,xp,extra){
+  const fb=$("#fbArea");const title={right:"Nailed it",close:"Close: partial credit",miss:"Not this time"}[result];
+  fb.innerHTML=`<div class="fb ${result}" role="status"><div class="fb-head">${title}${xp?`<span class="xp-pop">+${xp} XP</span>`:""}</div>
+   ${extra||""}<p>${esc(q.x)}</p>
+   <div class="actions">${result!=="right"&&q.t!=="pick"?`<button class="btn btn-line" id="knew" type="button">I had it right</button>`:""}<button class="btn btn-main" id="next" type="button">${S.run.i+1===S.run.items.length?"Finish run":"Next"}</button></div></div>`;
+  $("#next").onclick=next;setTimeout(()=>$("#next").focus(),20);
+  const k=$("#knew");if(k)k.onclick=()=>override(q);
+  if(result==="miss"){$("#card").classList.remove("shake");void $("#card").offsetWidth;$("#card").classList.add("shake");beep(196,.18)}else beep(result==="right"?740:520,.12);
+  phase="feedback";renderBar();
+  const pipEl=document.querySelectorAll(".pip")[S.run.i];if(pipEl)pipEl.className="pip "+result;
+}
+function record(q,result){const {xp,prevStreak}=award(q,result);S.run.res[S.run.i]=result;last={q,result,xp,prevStreak};addXP(xp);save();return xp}
+function answerPick(choice){if(phase!=="ask")return;const q=curQ();const result=choice===q.ok?"right":"miss";
+  document.querySelectorAll(".choice").forEach(b=>{b.disabled=true;if(b.dataset.c===q.ok)b.classList.add("is-right");else if(b.dataset.c===choice)b.classList.add("is-wrong")});
+  showFeedback(q,result,record(q,result));}
+function answerType(skipped){if(phase!=="ask")return;const q=curQ(),inp=$("#ans"),v=inp.value.trim();
+  if(!v&&skipped!==true){inp.focus();return}
+  let result,extra="";
+  if(q.t==="num"){const m=v.replace(/,/g,"").match(/-?\d+(\.\d+)?/);const n=m?parseFloat(m[0]):NaN;result=!isNaN(n)&&Math.abs(n-q.ans)<=q.tol?"right":"miss";
+    extra=`<p class="model">Answer: <b class="mono">${+q.ans.toFixed(2)}${q.unit?" "+q.unit:""}</b></p>`;}
+  else{result=gradeText(q,v);if(q.a&&result!=="right")extra=`<p class="model">Answer: <b>${esc(q.a[0])}</b></p>`}
+  inp.disabled=true;document.querySelectorAll("#body .actions button").forEach(b=>b.disabled=true);
+  showFeedback(q,result,record(q,result),extra);}
+function override(q){if(!last||last.q!==q||last.result==="right")return;
+  const base={1:10,2:20,3:35}[q.d]||20;S.streak=last.prevStreak+1;S.best=Math.max(S.best,S.streak);S.right++;
+  const full=Math.round(base*(1+Math.min(1,Math.floor((S.streak-1)/3)*0.25)));const add=full-last.xp;
+  if(!q.gen){const b=S.box[q.id];b.b=Math.min(5,Math.max(b.b,(b.b||0)+1));b.due=Date.now()+GAPS[b.b]*DAY}
+  S.run.res[S.run.i]="right";last.result="right";addXP(add);save();
+  const fb=$("#fbArea .fb");fb.className="fb right";fb.querySelector(".fb-head").innerHTML=`Counted as right<span class="xp-pop">+${full} XP</span>`;$("#knew").remove();
+  const pipEl=document.querySelectorAll(".pip")[S.run.i];if(pipEl)pipEl.className="pip right";renderBar();}
+function essayRubric(skipped){if(phase!=="ask")return;const q=curQ(),txt=$("#ans").value,n=norm(txt);
+  $("#ans").readOnly=true;$("#body .actions").remove();
+  const found=q.pts.map(pt=>!skipped&&pt.k.some(w=>hasTerm(n,w)));
+  $("#fbArea").innerHTML=`<div class="fb close" style="border-color:var(--line);background:var(--paper)"><div class="fb-head">Rubric</div>
+   <p class="model">${skipped?"Tick each point you could explain from memory.":"Points your answer seems to cover are ticked. Untick any you only name-dropped; tick any you explained in other words."}</p>
+   <div class="check">${q.pts.map((pt,i)=>`<label class="${found[i]?"found":""}"><input type="checkbox" id="pt${i}" ${found[i]?"checked":""}><span>${esc(pt.p)}</span></label>`).join("")}</div>
+   <div class="actions"><button class="btn btn-main" id="claim" type="button">Score it</button></div></div>`;
+  phase="rubric";$("#claim").onclick=()=>{const got=q.pts.filter((_,i)=>$("#pt"+i).checked).length,ratio=got/q.pts.length;
+    const result=ratio>=0.6?"right":ratio>=0.3?"close":"miss";const {prevStreak}=award(q,result);
+    const xp=got*12+(result==="right"?30:0);S.run.res[S.run.i]=result;last={q,result,xp,prevStreak};addXP(xp);save();
+    phase="ask";showFeedback({...q,x:`You covered ${got} of ${q.pts.length} points. ${result==="right"?"That’s an exam-ready answer.":"Reread the unchecked points, then try this boss again later."}`,t:"pick"},result,xp);}}
+function next(){if(phase!=="feedback")return;S.run.i++;hintOn=false;save();render();window.scrollTo({top:0,behavior:reduce?"auto":"smooth"})}
+function renderEnd(app){const run=S.run,r=run.res.filter(x=>x==="right").length;
+  app.innerHTML=`<div class="card end"><span class="label">Run complete</span><div class="big mono">${r} / ${run.items.length}</div>
+  <p style="margin:0">+${run.xp} XP · Level ${lvlFor(S.xp)} · ${esc(rank(lvlFor(S.xp)))}</p>
+  <p class="muted" style="margin:0;max-width:46ch">${r===run.items.length?"Clean run. Those cards move further out in your review schedule.":"Misses go into Review. They’ll come back until they stick."}</p>
+  <div class="row" style="justify-content:center"><button class="btn btn-main" id="again" type="button">Another quick run</button><button class="btn btn-line" id="home" type="button">Back to units</button></div></div>`;
+  if(r===run.items.length)burst();
+  S.run=null;save();$("#again").onclick=()=>startRun("quick");$("#home").onclick=()=>{view="home";render()};}
+
+/* ---------- wiring ---------- */
+document.addEventListener("keydown",e=>{
+  if(view!=="play"||!S.run)return;
+  if(e.key==="Enter"&&!e.shiftKey){
+    if(phase==="feedback"){e.preventDefault();next();return}
+    if(phase==="ask"&&document.activeElement&&document.activeElement.id==="ans"&&document.activeElement.tagName==="INPUT"){e.preventDefault();answerType()}
+  }
+  if(phase==="ask"&&/^[1-4]$/.test(e.key)&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="TEXTAREA"){const b=document.querySelectorAll(".choice")[+e.key-1];if(b)b.click()}
+});
+$("#tab-home").onclick=()=>{view=S.run&&view==="play"?"play":"home";if(view!=="play")view="home";render()};
+$("#tab-guide").onclick=()=>{view="guide";render()};
+$("#soundBtn").onclick=()=>{S.sound=!S.sound;save();renderBar();beep(600,.1)};
+
+function boot(data){if(data&&data.S)S=Object.assign(blank(),data.S);render()}
+try{window.claude&&window.claude.hot&&typeof window.claude.hot.snapshot==="function"&&window.claude.hot.snapshot(()=>({S}))}catch(e){}
+if(window.claude&&window.claude.hot&&typeof window.claude.hot.ready==="function")window.claude.hot.ready(boot);else boot((window.claude&&window.claude.hot&&window.claude.hot.data)||{});
+</script>
+
+</body>
+</html>

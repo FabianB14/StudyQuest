@@ -26,6 +26,13 @@ This repo is the **V0 prototype** as scoped in the founding doc, plus early V1 f
 - **Solo Mode is the default and always will be.** A "Party Up" placeholder is
   shown but disabled — multiplayer is V2 territory per the founding doc.
 
+## Study game on GitHub Pages
+
+`docs/index.html` is **Dose Quest**, a standalone study guide and XP game for
+Psych 4110 Exam 1. It needs no server or API key, so GitHub Pages can host it.
+The root `index.html` forwards to it. The full StudyQuest app needs a server for
+its AI routes, so it deploys to Vercel instead (see `DEPLOY.md`).
+
 ## Stack
 
 - **Next.js 15** (App Router) + **React 19** + **TypeScript**
