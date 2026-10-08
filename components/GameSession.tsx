@@ -14,6 +14,7 @@ import {
 } from "@/lib/storage";
 import { Language } from "@/lib/language";
 import { SEED_CS_QUESTIONS } from "@/lib/seed-questions";
+import { buildPackRun, getPack } from "@/lib/packs";
 import { StatusBar } from "./StatusBar";
 import { QuestionCard } from "./QuestionCard";
 import { SetupScreen } from "./SetupScreen";
@@ -31,6 +32,8 @@ export function GameSession() {
   const [sourceNote, setSourceNote] = useState<string | null>(null);
   const [runStats, setRunStats] = useState({ correct: 0, total: 0, xp: 0 });
   const [initialGuide, setInitialGuide] = useState("");
+  const [lastPackId, setLastPackId] = useState("cpp-warmup");
+  const [setupNote, setSetupNote] = useState<string | null>(null);
   const [initialLanguageOverride, setInitialLanguageOverride] =
     useState<Language | null>(null);
 
@@ -48,6 +51,7 @@ export function GameSession() {
   async function startRun(guide: string, language: Language) {
     setLoading(true);
     setSourceNote(null);
+    setSetupNote(null);
     saveLastGuide(guide);
     setRunLanguage(language);
     try {
@@ -58,7 +62,10 @@ export function GameSession() {
       });
       const data = await res.json();
       const qs: Question[] = (data.questions || []).slice(0, 10);
-      if (qs.length === 0) throw new Error("No questions");
+      if (qs.length === 0) {
+        setSetupNote(data.note || "Couldn't generate questions from that guide. Try again in a moment.");
+        return;
+      }
       setQuestions(qs);
       setIndex(0);
       setRunStats({ correct: 0, total: 0, xp: 0 });
@@ -67,6 +74,10 @@ export function GameSession() {
       else if (data.source === "seed")
         setSourceNote("Using built-in C++ warm-up pack.");
     } catch {
+      if (language !== "cpp") {
+        setSetupNote("Couldn't reach the question generator. Check your connection, or play a built-in pack below.");
+        return;
+      }
       setSourceNote("Couldn't reach the API — using the built-in C++ warm-up.");
       setQuestions(SEED_CS_QUESTIONS.slice(0, 10));
       setRunLanguage("cpp");
@@ -78,11 +89,15 @@ export function GameSession() {
     }
   }
 
-  function startSeed() {
-    setQuestions(SEED_CS_QUESTIONS.slice(0, 10));
-    setRunLanguage("cpp");
+  function startPack(packId: string) {
+    const pack = getPack(packId);
+    if (!pack) return;
+    setLastPackId(packId);
+    setSetupNote(null);
+    setQuestions(buildPackRun(pack, progress.missed));
+    setRunLanguage(pack.language);
     setIndex(0);
-    setSourceNote("Built-in C++ warm-up — 10 questions on C++ basics.");
+    setSourceNote(`${pack.name}: ${pack.blurb}`);
     setRunStats({ correct: 0, total: 0, xp: 0 });
     setPhase("playing");
   }
@@ -151,7 +166,8 @@ export function GameSession() {
           initialLanguageOverride={initialLanguageOverride}
           loading={loading}
           onStart={startRun}
-          onStartSeed={startSeed}
+          onStartPack={startPack}
+          note={setupNote}
           onResetProgress={handleReset}
           onLanguageOverrideChange={handleLanguageOverrideChange}
         />
@@ -198,8 +214,8 @@ export function GameSession() {
             <button className="btn-primary" onClick={backToSetup}>
               🚀 New run
             </button>
-            <button className="btn-ghost" onClick={startSeed}>
-              ⚔️ One more warm-up
+            <button className="btn-ghost" onClick={() => startPack(lastPackId)}>
+              ⚔️ Another run of {getPack(lastPackId)?.name ?? "this pack"}
             </button>
           </div>
         </div>

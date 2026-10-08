@@ -6,6 +6,7 @@ import {
   LANGUAGE_LABELS,
   detectLanguage,
 } from "@/lib/language";
+import { PACKS } from "@/lib/packs";
 import { ParseError, parseFile } from "@/lib/parse";
 import { Progress } from "@/lib/types";
 import { rankTitle } from "@/lib/xp";
@@ -17,7 +18,8 @@ interface SetupScreenProps {
   initialLanguageOverride: Language | null;
   loading: boolean;
   onStart: (guide: string, language: Language) => void;
-  onStartSeed: () => void;
+  onStartPack: (packId: string) => void;
+  note: string | null;
   onResetProgress: () => void;
   onLanguageOverrideChange: (override: Language | null) => void;
 }
@@ -30,7 +32,8 @@ export function SetupScreen({
   initialLanguageOverride,
   loading,
   onStart,
-  onStartSeed,
+  onStartPack,
+  note,
   onResetProgress,
   onLanguageOverrideChange,
 }: SetupScreenProps) {
@@ -187,7 +190,7 @@ export function SetupScreen({
 
         <div className="mt-4 flex items-center gap-3 flex-wrap">
           <label htmlFor="language" className="text-sm text-sq-muted">
-            🧪 Language for code questions
+            🧪 Subject / code language
           </label>
           <select
             id="language"
@@ -219,13 +222,6 @@ export function SetupScreen({
             {loading ? "Generating…" : "🎮 Start solo session"}
           </button>
           <button
-            className="btn-ghost"
-            onClick={onStartSeed}
-            disabled={loading || parsing}
-          >
-            ⚡ Try a C++ warm-up
-          </button>
-          <button
             className="btn-ghost opacity-50 cursor-not-allowed"
             disabled
             title="Multiplayer Party Mode is planned for V2 — see the founding doc."
@@ -233,6 +229,30 @@ export function SetupScreen({
             👥 Party Up
             <span className="text-[10px] ml-1 chip">V2</span>
           </button>
+        </div>
+        {note && (
+          <div className="mt-3 text-sm text-amber-200 bg-amber-500/10 border border-amber-400/20 rounded-lg p-3">
+            {note}
+          </div>
+        )}
+      </div>
+
+      <div className="panel p-5 sm:p-6">
+        <div className="text-sm font-semibold mb-3">⚡ Built-in packs · no upload or API key needed</div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {PACKS.map((pack) => (
+            <button
+              key={pack.id}
+              type="button"
+              onClick={() => onStartPack(pack.id)}
+              disabled={loading || parsing}
+              className="text-left rounded-xl border border-white/10 bg-sq-panel2 hover:border-sq-accent/70 px-4 py-3 transition-colors disabled:opacity-50"
+            >
+              <div className="font-semibold">{pack.name}</div>
+              <div className="text-xs text-sq-muted mt-0.5">{pack.blurb}</div>
+              <div className="text-xs text-sq-muted mt-1">{pack.questions.length} questions</div>
+            </button>
+          ))}
         </div>
       </div>
 

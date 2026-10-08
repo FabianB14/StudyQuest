@@ -3,7 +3,8 @@ export type QuestionType =
   | "fill"         // Fill in the blank
   | "bug"          // Spot the bug
   | "recall"       // Quick recall
-  | "code";        // Write the code (LLM-graded partial credit)
+  | "code"         // Write the code (LLM-graded partial credit)
+  | "essay";       // Short essay graded against a rubric of key points
 
 export type Difficulty = "easy" | "medium" | "hard" | "boss";
 
@@ -25,6 +26,15 @@ export interface Question {
    * an AI roundtrip when the student's snippet hits all required pieces.
    */
   rubric?: string[];
+  /** Multiple-choice options. When present, the card renders buttons; `answer` is the correct option. */
+  choices?: string[];
+  /**
+   * Concept groups for free-text answers. Each inner array lists synonyms for
+   * one required idea. All groups hit = correct, at least half = partial.
+   */
+  keyGroups?: string[][];
+  /** For "essay" questions: the rubric of key points with detection keywords. */
+  points?: { p: string; k: string[] }[];
   /** Short explanation shown after the player answers. */
   explanation: string;
   /** Concept tag — used later for spaced repetition. */

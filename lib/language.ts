@@ -4,10 +4,11 @@
  * supported set, and the prompt-side hints sent to Claude.
  */
 
-export const LANGUAGES = ["cpp", "python", "java", "js", "csharp"] as const;
+export const LANGUAGES = ["none", "cpp", "python", "java", "js", "csharp"] as const;
 export type Language = (typeof LANGUAGES)[number];
 
 export const LANGUAGE_LABELS: Record<Language, string> = {
+  none: "No code (general subject)",
   cpp: "C++",
   python: "Python",
   java: "Java",
@@ -16,6 +17,7 @@ export const LANGUAGE_LABELS: Record<Language, string> = {
 };
 
 export const LANGUAGE_SHORT: Record<Language, string> = {
+  none: "General",
   cpp: "C++",
   python: "Python",
   java: "Java",
@@ -25,6 +27,7 @@ export const LANGUAGE_SHORT: Record<Language, string> = {
 
 /** Phrasing handed to Claude when generating questions for this language. */
 export const LANGUAGE_PROMPT_HINTS: Record<Language, string> = {
+  none: "not a programming subject",
   cpp: "C++ (use std:: namespace, #include headers, cout/cin or printf, modern C++ idioms)",
   python: "Python 3 (PEP 8 style, type hints when natural, no semicolons)",
   java: "Java (full class boilerplate where needed, System.out.println, modern Java idioms)",
@@ -38,6 +41,7 @@ interface Signal {
 }
 
 const SIGNALS: Record<Language, Signal[]> = {
+  none: [],
   cpp: [
     { weight: 5, pattern: /\bstd::/g },
     { weight: 4, pattern: /#include\s*<[^>]+>/g },
@@ -100,6 +104,7 @@ export interface DetectionResult {
 }
 
 const EMPTY_SCORES: Record<Language, number> = {
+  none: 0,
   cpp: 0,
   python: 0,
   java: 0,
@@ -109,7 +114,7 @@ const EMPTY_SCORES: Record<Language, number> = {
 
 export function detectLanguage(text: string): DetectionResult {
   if (!text || text.length < 20) {
-    return { language: "cpp", confidence: 0, scores: { ...EMPTY_SCORES }, detected: false };
+    return { language: "none", confidence: 0, scores: { ...EMPTY_SCORES }, detected: false };
   }
   const sample = text.slice(0, 30_000);
   const scores: Record<Language, number> = { ...EMPTY_SCORES };
@@ -122,7 +127,7 @@ export function detectLanguage(text: string): DetectionResult {
     scores[lang] = score;
   }
 
-  let best: Language = "cpp";
+  let best: Language = "none";
   let bestScore = 0;
   for (const lang of LANGUAGES) {
     if (scores[lang] > bestScore) {
@@ -131,11 +136,16 @@ export function detectLanguage(text: string): DetectionResult {
     }
   }
   if (bestScore < 4) {
-    // Too little signal — let the caller treat this as "no detection".
-    return { language: "cpp", confidence: 0, scores, detected: false };
+    // Too little code signal: treat the guide as a general (non-programming) subject.
+    return { language: "none", confidence: 0, scores, detected: false };
   }
   const sorted = Object.values(scores).sort((a, b) => b - a);
   const runnerUp = sorted[1] || 0;
   const confidence = Math.min(1, (bestScore - runnerUp) / Math.max(1, bestScore));
   return { language: best, confidence, scores, detected: true };
+}
+
+/** True when generated questions may include code, trace, or bug types. */
+export function isCodeLanguage(lang: Language): boolean {
+  return lang !== "none";
 }

@@ -14,6 +14,13 @@ This repo is the **V0 prototype** as scoped in the founding doc, plus early V1 f
   available. (Founding-doc Principle 2.)
 - AI generates 10 mixed-type questions per run (trace, fill, bug, recall, code),
   with multiple acceptable phrasings per question to avoid word-for-word grading.
+- **Non-coding subjects work too.** When a guide has no code, the detector picks
+  "No code (general subject)" and the AI writes recall, multiple-choice, scenario and
+  short-essay questions instead of code questions. Essays are graded against a
+  rubric of key points.
+- **Built-in topic packs** play with no upload or API key: Psych 4110 Exam 1
+  (psychopharmacology, 118 questions + 9 essays) and a C++ warm-up. Pack runs bring
+  back previously missed questions first.
 - XP / streak / level mechanics with level-up animation.
 - Seed CS question pack ships as a fallback so the app works with zero setup.
 - **Solo Mode is the default and always will be.** A "Party Up" placeholder is
@@ -73,6 +80,7 @@ lib/
   parse.ts                   # Browser-side PDF / DOCX / TXT extraction
   grade-local.ts             # Free, deterministic grading for short-answer questions
   seed-questions.ts          # 10-question C++ warm-up fallback pack
+  packs/                     # Built-in topic packs (index.ts registry + run builder)
   anthropic.ts               # Lazy SDK client + model name constants
 ```
 

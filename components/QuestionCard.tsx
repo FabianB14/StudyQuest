@@ -10,6 +10,7 @@ const TYPE_LABEL: Record<Question["type"], string> = {
   bug: "Spot the bug",
   recall: "Quick recall",
   code: "Write the code",
+  essay: "Short essay",
 };
 
 const DIFF_STYLE: Record<Question["difficulty"], string> = {
@@ -35,7 +36,11 @@ export function QuestionCard({ question, language, index, total, onSubmit, onNex
   const [xpGained, setXpGained] = useState(0);
   const [leveledUp, setLeveledUp] = useState(false);
   const [shake, setShake] = useState(false);
+  const [picked, setPicked] = useState<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isChoice = !!question.choices?.length;
+  const isEssay = question.type === "essay";
+  const multiline = question.type === "code" || isEssay;
 
   // Reset on question change.
   useEffect(() => {
@@ -44,13 +49,32 @@ export function QuestionCard({ question, language, index, total, onSubmit, onNex
     setXpGained(0);
     setLeveledUp(false);
     setShake(false);
+    setPicked(null);
     setTimeout(() => inputRef.current?.focus(), 80);
   }, [question.id]);
 
-  async function handleSubmit() {
-    if (!answer.trim() || submitting || grade) return;
+  // Keyboard for multiple choice: 1-4 picks an option, Enter moves on after feedback.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "TEXTAREA" || target.tagName === "INPUT")) return;
+      if (grade && e.key === "Enter") {
+        e.preventDefault();
+        onNext();
+      } else if (!grade && isChoice && /^[1-9]$/.test(e.key)) {
+        const option = question.choices?.[Number(e.key) - 1];
+        if (option) void handleSubmit(option);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  async function handleSubmit(value: string = answer) {
+    if (!value.trim() || submitting || grade) return;
     setSubmitting(true);
-    const result = await onSubmit(answer);
+    if (isChoice) setPicked(value);
+    const result = await onSubmit(value);
     setGrade(result.grade);
     setXpGained(result.xpGained);
     setLeveledUp(result.leveledUp);
@@ -66,7 +90,7 @@ export function QuestionCard({ question, language, index, total, onSubmit, onNex
       e.preventDefault();
       if (!grade) handleSubmit();
       else onNext();
-    } else if (e.key === "Enter" && !e.shiftKey && question.type !== "code") {
+    } else if (e.key === "Enter" && !e.shiftKey && !multiline) {
       e.preventDefault();
       if (!grade) handleSubmit();
       else onNext();
@@ -113,6 +137,32 @@ export function QuestionCard({ question, language, index, total, onSubmit, onNex
         </pre>
       )}
 
+      {isChoice ? (
+        <div className="grid gap-2">
+          {question.choices!.map((option, i) => {
+            const isAnswer = grade && option === question.answer;
+            const isWrongPick = grade && option === picked && option !== question.answer;
+            return (
+              <button
+                key={option}
+                type="button"
+                onClick={() => handleSubmit(option)}
+                disabled={!!grade || submitting}
+                className={`text-left flex gap-3 items-start rounded-xl border px-4 py-3 transition-colors ${
+                  isAnswer
+                    ? "border-emerald-400/60 bg-emerald-500/10"
+                    : isWrongPick
+                    ? "border-rose-400/60 bg-rose-500/10"
+                    : "border-white/10 bg-sq-panel2 hover:border-sq-accent/70"
+                }`}
+              >
+                <span className="kbd mt-0.5">{i + 1}</span>
+                <span>{option}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
       <textarea
         ref={inputRef}
         value={answer}
@@ -124,30 +174,41 @@ export function QuestionCard({ question, language, index, total, onSubmit, onNex
             ? "Write your code here…"
             : question.type === "trace"
             ? "What does it print?"
+            : isEssay
+            ? "Write it like the exam: a claim, then evidence and examples from class."
             : "Your answer…"
         }
-        rows={question.type === "code" ? 6 : 2}
-        className="input font-mono"
+        rows={isEssay ? 9 : question.type === "code" ? 6 : 2}
+        className={`input ${isEssay ? "font-sans leading-relaxed" : "font-mono"}`}
       />
+      )}
 
       <div className="flex items-center justify-between mt-3 gap-2 flex-wrap">
         <div className="text-xs text-sq-muted">
-          Press <span className="kbd">Enter</span> to submit
-          {question.type === "code" && (
+          {isChoice ? (
             <>
-              {" "}
-              or <span className="kbd">⌘/Ctrl + Enter</span>
+              Press <span className="kbd">1</span>–<span className="kbd">{question.choices!.length}</span> to answer
+            </>
+          ) : multiline ? (
+            <>
+              Press <span className="kbd">⌘/Ctrl + Enter</span> to submit
+            </>
+          ) : (
+            <>
+              Press <span className="kbd">Enter</span> to submit
             </>
           )}
         </div>
         {!grade ? (
+          !isChoice && (
           <button
             className="btn-primary"
-            onClick={handleSubmit}
+            onClick={() => handleSubmit()}
             disabled={submitting || !answer.trim()}
           >
             {submitting ? "Grading…" : "Submit"}
           </button>
+          )
         ) : (
           <button className="btn-good animate-pop" onClick={onNext}>
             {index + 1 === total ? "Finish run →" : "Next →"}
@@ -183,7 +244,17 @@ export function QuestionCard({ question, language, index, total, onSubmit, onNex
             )}
           </div>
           <p className="text-sm text-sq-ink/90">{grade.feedback}</p>
-          {!grade.correct && question.answer && (
+          {isEssay && question.points && (
+            <div className="mt-3">
+              <div className="text-xs font-semibold text-sq-muted mb-1">Rubric</div>
+              <ul className="list-disc list-inside text-sm space-y-0.5">
+                {question.points.map((pt) => (
+                  <li key={pt.p}>{pt.p}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {!grade.correct && !isChoice && !isEssay && question.answer && (
             <p className="mt-2 text-xs text-sq-muted">
               Expected:{" "}
               <span className="font-mono text-sq-ink">{question.answer}</span>
