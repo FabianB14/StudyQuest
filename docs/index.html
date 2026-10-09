@@ -206,8 +206,7 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
       <li><b>DEA schedules</b> run I (most restricted) to V (least). Schedule I means no accepted medical use plus high abuse potential.</li>
       <li>Cannabis is Schedule I because of history (Reefer Madness), not safety. That status blocks research.</li>
       <li>Alcohol isn't scheduled at all. In the UK harm study, alcohol caused the most harm to others. Heroin edged it out for harm to the user.</li>
-      <li>Labeling shapes perception. Wellbutrin and Zyban are the same drug, bupropion, sold for ADHD/depression and for quitting smoking. Its effects list matches other stimulants'.</li>
-      <li>Three policy approaches: legalize (often regulated), decriminalize, prohibit. Portugal decriminalized and expanded treatment. Oregon tried decriminalization. US alcohol Prohibition shows the costs of criminalizing a once-legal drug.</li>
+      <li>Three policy approaches: legalize (often regulated), decriminalize, prohibit. US alcohol Prohibition shows the costs of criminalizing a once-legal drug.</li>
     </ul>
   </details>
 
@@ -229,7 +228,6 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
       <li><b>Fat</b> matters. Lipid-soluble drugs store there and leak back into blood when blood levels fall, so they linger and have long half-lives. A blood test can miss drug still acting from tissue.</li>
       <li>Getting into a cell means crossing a lipid bilayer, so the drug needs lipid solubility unless a transporter exists. Albumin carries fat-soluble molecules through blood.</li>
       <li>SSRIs: about 5× more serotonin in the gut than the brain, so the main effect is GI distress. Prof: an SSRI is a gut drug that also acts on the brain, which is why nobody misuses them.</li>
-      <li>Large peptides (collagen supplements) get chopped into amino acids. You're paying for soy sauce.</li>
       <li><b>Blood-brain barrier</b> = brain capillaries with tight gaps + glial cells. A molecule crosses <b>4 membranes</b>: 2 through the capillary cell, 2 through the glial cell.</li>
       <li>Why it exists: neurons are lost daily and not replaced, so toxins must stay out. But the brain is energy- and oxygen-hungry, so nutrients must get in.</li>
     </ul>
@@ -256,7 +254,7 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
       <li>A drug binds every receptor it can, inside and outside the brain. “Side effects are just effects.”</li>
       <li>A drug never has a single effect, even at one receptor. Dopamine in the nucleus accumbens drives motivation, dopamine in motor circuits drives movement, so antipsychotics cause motor and facial side effects.</li>
       <li>Opioid pain relief and breathing suppression (brainstem) share receptors, so they can't be separated.</li>
-      <li>“The only clean drugs are new drugs.” We just haven't found the other targets yet. Report strange effects, since that's how warnings and even tainted generics get caught.</li>
+      <li>“The only clean drugs are new drugs.” We just haven't found the other targets yet.</li>
     </ul>
   </details>
 
@@ -339,7 +337,7 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
         <tr><td>Drugs have many effects</td><td>SSRIs and gut serotonin, antipsychotic motor effects, opioid breathing, “only clean drugs are new drugs”, multiple TIs</td></tr>
         <tr><td>Individual differences</td><td>CYP metabolizer types, sensitive vs resistant on the curve, palpitations before focus on ADHD meds</td></tr>
         <tr><td>How drugs move</td><td>Diffusion, leaky capillaries, fat storage, 4 membranes of the BBB, edible unpredictability, gas anesthetics</td></tr>
-        <tr><td>Labels and policy</td><td>Schedule I cannabis, unscheduled alcohol, UK harm study, Wellbutrin/Zyban, Portugal</td></tr>
+        <tr><td>Labels and policy</td><td>Schedule I cannabis, unscheduled alcohol, UK harm study, three policy approaches</td></tr>
         <tr><td>Defining addiction</td><td>DSM-5 counts, caffeine exclusion, missing biology, two definitions, gambling</td></tr>
       </tbody>
     </table></div>
@@ -349,7 +347,7 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
 
 <script>
 const UNITS=[
- {id:"pol",name:"Drugs, medicine & policy",sub:"Schedules, harm, Zyban, Portugal"},
+ {id:"pol",name:"Drugs, medicine & policy",sub:"Schedules, harm, policy"},
  {id:"in",name:"Getting in",sub:"Routes and absorption"},
  {id:"move",name:"Distribution & the BBB",sub:"Diffusion, fat, 4 membranes"},
  {id:"out",name:"Getting out",sub:"Liver, kidneys, CYP450, half-life"},
@@ -368,8 +366,6 @@ const Q=[
 {id:"pol2",u:"pol",t:"pick",d:1,q:"Where does alcohol sit on the DEA schedules?",c:["It isn’t scheduled","Schedule I","Schedule III","Schedule V"],ok:"It isn’t scheduled",x:"Alcohol isn’t scheduled, even though it tops the UK study for harm to others. Scheduling reflects history and familiarity, not only harm."},
 {id:"pol3",u:"pol",t:"pick",d:2,q:"In the UK harm study from lecture, which drug did the most harm to OTHERS?",c:["Alcohol","Heroin","Cannabis","LSD"],ok:"Alcohol",x:"Alcohol led on harm to others. Heroin slightly outpaced it on harm to the user."},
 {id:"pol4",u:"pol",t:"type",d:2,q:"According to lecture, why is cannabis Schedule I?",k:[["history","reefer","politic","propaganda","not safety","stigma","culture"]],x:"Its status traces to history and propaganda like Reefer Madness, not a safety finding. Schedule I status also makes it very hard to research."},
-{id:"pol5",u:"pol",t:"type",d:1,q:"Wellbutrin (bupropion) is also sold for quitting smoking under what brand name?",a:["zyban"],x:"Zyban. Same molecule, two names, two uses. Its side-effect list looks like any other stimulant’s, which shows how labeling shapes perception."},
-{id:"pol6",u:"pol",t:"pick",d:2,q:"Which country is the classic example of decriminalizing possession and expanding treatment?",c:["Portugal","Netherlands","Japan","Canada"],ok:"Portugal",x:"Portugal decriminalized possession and made treatment accessible. Oregon tried decriminalization in the US."},
 {id:"pol7",u:"pol",t:"type",d:2,q:"Name the three broad approaches to drug policy discussed in class.",k:[["legaliz","legal"],["decriminaliz"],["prohibit","criminaliz","illegal","ban","war on drugs"]],x:"Legalize (often regulated), decriminalize, or prohibit. US alcohol Prohibition is the case study for criminalizing a once-legal drug."},
 {id:"pol8",u:"pol",t:"type",d:3,q:"Why is it hard to define “drug” versus “medicine”?",k:[["overlap","same","connotation","context","depends","all medicines","every medicine","use","perception"]],x:"Every medicine is a drug. The label mostly reflects connotation and context of use (helpful vs harmful), not chemistry. Even food alters mood."},
 // in
@@ -393,7 +389,6 @@ const Q=[
 {id:"move6",u:"move",t:"type",d:2,q:"To get INSIDE a cell, what must a drug cross, and what property helps?",k:[["lipid","membrane","bilayer","fat"],["solub","lipophilic","dissolve"]],x:"A lipid bilayer. Unless a specific transporter exists (uncommon), the drug needs lipid solubility."},
 {id:"move7",u:"move",t:"type",d:2,q:"Which blood protein carries fat-soluble molecules through the bloodstream?",a:["albumin"],x:"Albumin. Drugs bind it, travel, then hopefully let go at the right time."},
 {id:"move8",u:"move",t:"type",d:2,q:"What’s the most common side effect of SSRIs, and why?",k:[["gi","gut","gastro","stomach","nausea","digest"],["serotonin","5 times","five times","receptor"]],x:"GI distress. There’s about 5× more serotonin in the gut than in the brain, so much of the binding happens there. An SSRI is mainly a gut drug that also acts on the brain."},
-{id:"move9",u:"move",t:"pick",d:2,q:"Collagen and other peptide supplements are poorly absorbed intact because they are:",c:["Too large, so the body breaks them into amino acids","Too lipid soluble","Blocked by the BBB","Exhaled by the lungs"],ok:"Too large, so the body breaks them into amino acids",x:"They’re big chains that get chopped into amino acids. The prof’s line: you could drink soy sauce."},
 {id:"move10",u:"move",t:"type",d:1,q:"Name the two components of the blood-brain barrier.",k:[["tight","capillar"],["glia","astrocyte"]],x:"Brain capillaries with tight gaps, and glial cells wrapped around them."},
 {id:"move11",u:"move",t:"pick",d:2,q:"How many membranes does a molecule cross to get from blood into the brain?",c:["4","2","1","6"],ok:"4",x:"Four. Two through the capillary cell (in and out) and two through the glial cell."},
 {id:"move12",u:"move",t:"type",d:2,q:"Why does the brain need a blood-brain barrier?",k:[["neuron","toxin","protect","replace","loss"]],x:"Neurons are lost daily and not replaced, so the brain must be shielded from toxins. It’s also energy- and oxygen-hungry, so nutrients still need a way in."},
@@ -420,7 +415,6 @@ const Q=[
 {id:"rec6",u:"rec",t:"type",d:2,q:"“The only clean drugs are ___ drugs.” Fill the blank.",a:["new"],x:"New. A drug only looks clean until we discover everything else it binds to."},
 {id:"rec7",u:"rec",t:"type",d:3,q:"Why do antipsychotics often cause motor side effects?",k:[["dopamine"],["motor","movement","nigro","basal","striat","face","facial"]],x:"Dopamine receptors drive motivation in the nucleus accumbens but also control movement in motor circuits. A dopamine drug hits both. A drug never has a single effect, even at one receptor type."},
 {id:"rec8",u:"rec",t:"type",d:3,q:"Why can’t we make an opioid that relieves pain without slowing breathing?",k:[["same","both","share"],["receptor","brainstem","respirat","breath"]],x:"The same receptors handle pain relief and respiration in the brainstem. It’s all one brain compartment, and the molecule binds wherever it can."},
-{id:"rec9",u:"rec",t:"type",d:2,q:"Why should patients report odd drug effects to their doctor?",k:[["unknown","discover","warning","nobody","no one","manufactur","new","report"]],x:"No one knows every effect of every drug. Reports surface new effects and even manufacturing problems like tainted generics."},
 // dose
 {id:"dose1",u:"dose",t:"pick",d:1,q:"As dose increases, what happens on a dose-response curve?",c:["Effect rises, then plateaus","Effect rises forever","Effect stays flat","Effect drops right away"],ok:"Effect rises, then plateaus",x:"More molecules bind more receptors until receptors or the behavior max out."},
 {id:"dose2",u:"dose",t:"type",d:2,q:"Why does a dose-response curve plateau?",k:[["receptor","limit","max","bound","all","ceiling"]],x:"There’s a limited number of receptors, and the behavior itself has a ceiling (a rat can only run so fast)."},
@@ -560,8 +554,7 @@ const Q=[
  {p:"Schedule I status blocks research",k:["research"]},
  {p:"Alcohol is unscheduled yet most harmful to others",k:["alcohol","unscheduled","not scheduled"]},
  {p:"UK harm study: heroin top for user harm",k:["uk","heroin","harm"]},
- {p:"Labels shape perception: Wellbutrin vs Zyban",k:["zyban","wellbutrin","bupropion","label"]},
- {p:"Policy options: legalize, decriminalize, prohibit (Portugal)",k:["portugal","decriminal","legaliz","prohibit"]}]}
+ {p:"Policy options: legalize, decriminalize, prohibit",k:["decriminal","legaliz","prohibit","criminaliz"]}]}
 ];
 const QBY=Object.fromEntries(Q.map(q=>[q.id,q]));
 
@@ -815,7 +808,7 @@ $("#tab-home").onclick=()=>{view=S.run&&view==="play"?"play":"home";if(view!=="p
 $("#tab-guide").onclick=()=>{view="guide";render()};
 $("#soundBtn").onclick=()=>{S.sound=!S.sound;save();renderBar();beep(600,.1)};
 
-function boot(data){if(data&&data.S)S=Object.assign(blank(),data.S);render()}
+function boot(data){if(data&&data.S)S=Object.assign(blank(),data.S);if(S.run){S.run.items=S.run.items.filter(it=>it.gen||QBY[it.id]);if(S.run.i>=S.run.items.length)S.run=null}render()}
 try{window.claude&&window.claude.hot&&typeof window.claude.hot.snapshot==="function"&&window.claude.hot.snapshot(()=>({S}))}catch(e){}
 if(window.claude&&window.claude.hot&&typeof window.claude.hot.ready==="function")window.claude.hot.ready(boot);else boot((window.claude&&window.claude.hot&&window.claude.hot.data)||{});
 </script>

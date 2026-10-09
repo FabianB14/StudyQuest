@@ -71,33 +71,6 @@ export const PSYCH4110_EXAM1: Question[] = [
     "tag": "Drugs, medicine & policy"
   },
   {
-    "id": "psy-pol5",
-    "type": "recall",
-    "difficulty": "easy",
-    "prompt": "Wellbutrin (bupropion) is also sold for quitting smoking under what brand name?",
-    "answer": "zyban",
-    "acceptable": [
-      "zyban"
-    ],
-    "explanation": "Zyban. Same molecule, two names, two uses. Its side-effect list looks like any other stimulant’s, which shows how labeling shapes perception.",
-    "tag": "Drugs, medicine & policy"
-  },
-  {
-    "id": "psy-pol6",
-    "type": "recall",
-    "difficulty": "medium",
-    "prompt": "Which country is the classic example of decriminalizing possession and expanding treatment?",
-    "choices": [
-      "Portugal",
-      "Netherlands",
-      "Japan",
-      "Canada"
-    ],
-    "answer": "Portugal",
-    "explanation": "Portugal decriminalized possession and made treatment accessible. Oregon tried decriminalization in the US.",
-    "tag": "Drugs, medicine & policy"
-  },
-  {
     "id": "psy-pol7",
     "type": "recall",
     "difficulty": "medium",
@@ -480,21 +453,6 @@ export const PSYCH4110_EXAM1: Question[] = [
       ]
     ],
     "explanation": "GI distress. There’s about 5× more serotonin in the gut than in the brain, so much of the binding happens there. An SSRI is mainly a gut drug that also acts on the brain.",
-    "tag": "Distribution & the BBB"
-  },
-  {
-    "id": "psy-move9",
-    "type": "recall",
-    "difficulty": "medium",
-    "prompt": "Collagen and other peptide supplements are poorly absorbed intact because they are:",
-    "choices": [
-      "Too large, so the body breaks them into amino acids",
-      "Too lipid soluble",
-      "Blocked by the BBB",
-      "Exhaled by the lungs"
-    ],
-    "answer": "Too large, so the body breaks them into amino acids",
-    "explanation": "They’re big chains that get chopped into amino acids. The prof’s line: you could drink soy sauce.",
     "tag": "Distribution & the BBB"
   },
   {
@@ -921,26 +879,6 @@ export const PSYCH4110_EXAM1: Question[] = [
       ]
     ],
     "explanation": "The same receptors handle pain relief and respiration in the brainstem. It’s all one brain compartment, and the molecule binds wherever it can.",
-    "tag": "Receptors & effects"
-  },
-  {
-    "id": "psy-rec9",
-    "type": "recall",
-    "difficulty": "medium",
-    "prompt": "Why should patients report odd drug effects to their doctor?",
-    "keyGroups": [
-      [
-        "unknown",
-        "discover",
-        "warning",
-        "nobody",
-        "no one",
-        "manufactur",
-        "new",
-        "report"
-      ]
-    ],
-    "explanation": "No one knows every effect of every drug. Reports surface new effects and even manufacturing problems like tainted generics.",
     "tag": "Receptors & effects"
   },
   {
@@ -2552,21 +2490,12 @@ export const PSYCH4110_EXAM1: Question[] = [
         ]
       },
       {
-        "p": "Labels shape perception: Wellbutrin vs Zyban",
+        "p": "Policy options: legalize, decriminalize, prohibit",
         "k": [
-          "zyban",
-          "wellbutrin",
-          "bupropion",
-          "label"
-        ]
-      },
-      {
-        "p": "Policy options: legalize, decriminalize, prohibit (Portugal)",
-        "k": [
-          "portugal",
           "decriminal",
           "legaliz",
-          "prohibit"
+          "prohibit",
+          "criminaliz"
         ]
       }
     ],
