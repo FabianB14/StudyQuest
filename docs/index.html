@@ -167,6 +167,18 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
 .inline-confirm{display:inline-flex;gap:8px;align-items:center}
 .toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 80px);transform:translateX(-50%);z-index:20;background:var(--ink);color:var(--paper);border-radius:18px;padding:16px 26px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.25);animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
 .toast b{display:block;font-family:var(--f-display);font-size:26px}
+/* study cards */
+.study-bar{display:grid;gap:10px;margin-bottom:14px}
+.study-bar select{font:inherit;font-size:15px;padding:8px 12px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:7px 14px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.ans-block{margin-top:6px;padding:14px 16px;border-radius:12px;background:var(--paper);border:1.5px solid var(--line);font-size:17px;line-height:1.9}
+.ans-key{font-family:var(--f-display);font-weight:800;font-size:19px;display:block;margin-bottom:4px;line-height:1.4}
+.ans-block ul{margin:0;padding-left:20px}
+.blank{display:inline-block;border:0;border-bottom:2.5px solid var(--cap-a);background:var(--sunk);color:transparent;border-radius:4px 4px 0 0;padding:0 2px;margin:0 1px;font:inherit;line-height:1.3;vertical-align:baseline;cursor:pointer;user-select:none}
+.blank.shown{color:var(--cap-a);background:transparent;font-weight:700}
+.study-count{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:19;width:100%;height:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -191,6 +203,7 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
     </div>
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-home" aria-selected="true" type="button">Quest</button>
+      <button class="tab" role="tab" id="tab-cards" aria-selected="false" type="button">Study cards</button>
       <button class="tab" role="tab" id="tab-guide" aria-selected="false" type="button">Study guide</button>
     </nav>
   </header>
@@ -654,7 +667,7 @@ const QBY=Object.fromEntries(Q.map(q=>[q.id,q]));
 
 /* ---------- state ---------- */
 const KEY="psych4110-dosequest-v1";
-const blank=()=>({xp:0,streak:0,best:0,answered:0,right:0,box:{},run:null,sound:false});
+const blank=()=>({xp:0,streak:0,best:0,answered:0,right:0,box:{},run:null,sound:false,study:null});
 function load(){try{const r=localStorage.getItem(KEY);return r?Object.assign(blank(),JSON.parse(r)):blank()}catch(e){return blank()}}
 let S=load();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
@@ -769,10 +782,11 @@ function renderBar(){
   const fill=$("#xpFill");fill.style.width=pct+"%";fill.style.setProperty("--fullw",(pct?100/pct*100:100)+"%");
   const sc=$("#streakChip");sc.textContent=`streak ${S.streak}`;sc.classList.toggle("hot",S.streak>=3);
   const sb=$("#soundBtn");sb.textContent=S.sound?"Sound on":"Sound off";sb.setAttribute("aria-pressed",S.sound);
-  $("#tab-home").setAttribute("aria-selected",view!=="guide");$("#tab-guide").setAttribute("aria-selected",view==="guide");
+  $("#tab-home").setAttribute("aria-selected",view==="home"||view==="play");$("#tab-guide").setAttribute("aria-selected",view==="guide");$("#tab-cards").setAttribute("aria-selected",view==="cards");
 }
 function render(){renderBar();const app=$("#app");
   if(view==="guide"){app.innerHTML="";app.appendChild($("#guideTpl").content.cloneNode(true));return}
+  if(view==="cards"){renderCards(app);return}
   if(view==="play"&&S.run){renderPlay(app);return}
   view="home";renderHome(app);
 }
@@ -785,13 +799,14 @@ function renderHome(app){
     <h1>Learn it one dose at a time.</h1>
     <p>Questions come from Dr. Baker’s Week 1–2 lectures and slides, plus the textbook’s Chapter 1–5 review exams. Hints are free. Wrong answers come back later until they stick.</p>
     <div class="plan">
-      <div class="plan-box"><span class="label">Tonight</span><ol><li>Two textbook review runs</li><li>Two quick runs</li><li>Play any unit under half full</li><li>Graph lab once</li><li>Write one boss essay by hand, then sleep</li></ol></div>
+      <div class="plan-box"><span class="label">Tonight</span><ol><li>Study cards: textbook section on 50%, then 30%</li><li>Two textbook review runs</li><li>Two quick runs</li><li>Play any unit under half full</li><li>Graph lab once</li><li>Write one boss essay by hand, then sleep</li></ol></div>
       <div class="plan-box"><span class="label">Exam morning</span><ol><li>One textbook review run</li><li>Review misses</li><li>Skim the evidence bank</li><li>One boss essay, 10 minutes</li></ol></div>
     </div>
   </section>
   ${run?`<div class="resume"><b>Run paused at ${run.i+1} of ${run.items.length}</b><span class="muted" style="flex:1">${esc(run.mode==="unit"?(UNITS.find(u=>u.id===run.unit)||{}).name:{quick:"Quick run",book:"Textbook review",boss:"Boss essays",review:"Review",lab:"Graph lab"}[run.mode])}</span><button class="btn btn-main" id="resume" type="button">Resume</button><button class="btn btn-quiet" id="drop" type="button">Discard</button></div>`:""}
   <div class="modes">
     <button class="mode primary wide" data-mode="book" type="button"><b>Textbook review · start here</b><span>10 of the book’s end-of-chapter review questions, weakest first</span></button>
+    <button class="mode wide" id="goCards" type="button"><b>Study cards</b><span>Read questions with answers: full, 50% or 30% shown. Fill in the blanks from memory.</span></button>
     <button class="mode" data-mode="quick" type="button"><b>Quick run</b><span>8 questions, mixed units, one graph problem</span></button>
     <button class="mode" data-mode="boss" type="button"><b>Boss essays</b><span>3 exam-style prompts with a checklist</span></button>
     <button class="mode" data-mode="lab" type="button"><b>Graph lab</b><span>ED50, LD50, TI and half-life math</span></button>
@@ -803,6 +818,7 @@ function renderHome(app){
   ${S.answered?(confirmReset?`<span class="inline-confirm">Erase all progress? <button class="btn btn-quiet" id="resetYes" type="button" style="color:var(--bad)">Erase</button><button class="btn btn-quiet" id="resetNo" type="button">Keep</button></span>`:`<button class="btn btn-quiet" id="reset" type="button" style="padding:0">Reset progress</button>`):""}</div>`;
   app.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>startRun(b.dataset.mode));
   app.querySelectorAll("[data-unit]").forEach(b=>b.onclick=()=>startRun("unit",b.dataset.unit));
+  $("#goCards").onclick=()=>{view="cards";render()};
   const r=$("#resume");if(r)r.onclick=()=>{view="play";render()};
   const d=$("#drop");if(d)d.onclick=()=>{S.run=null;save();render()};
   const rs=$("#reset");if(rs)rs.onclick=()=>{confirmReset=true;render()};
@@ -891,8 +907,82 @@ function renderEnd(app){const run=S.run,r=run.res.filter(x=>x==="right").length;
   if(r===run.items.length)burst();
   S.run=null;save();$("#again").onclick=()=>startRun("quick");$("#home").onclick=()=>{view="home";render()};}
 
+/* ---------- study cards ---------- */
+const STOP=new Set("a an the of to in on at by for and or but nor so as is are was were be been being it its this that these those with from into onto than then there their they them he she his her you your we our i me my not no do does did can will would should could has have had if when while which who whom what how why also only just very about over under up down out more most less much many each every both either any some such same other another all".split(" "));
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hashStr(str){let h=2166136261;for(const ch of str){h^=ch.codePointAt(0);h=Math.imul(h,16777619)}return h>>>0}
+/** Show `level`% of the meaningful words; the rest become tap-to-reveal blanks. */
+function maskText(text,level,seed){
+  if(level>=100)return esc(text);
+  const parts=String(text).split(/(\s+)/),cand=[];
+  parts.forEach((t,i)=>{const core=t.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}%]+$/gu,"");if(core&&!(core.length<2&&!/\d/.test(core))&&!STOP.has(core.toLowerCase()))cand.push(i)});
+  const r=rng(seed),order=cand.slice().sort(()=>r()-.5);
+  const keep=new Set(order.slice(0,Math.round(cand.length*level/100)));
+  return parts.map((t,i)=>{
+    if(!cand.includes(i)||keep.has(i))return esc(t);
+    const m=t.match(/^([^\p{L}\p{N}]*)(.*?)([^\p{L}\p{N}%]*)$/u);
+    return esc(m[1])+`<button type="button" class="blank" aria-label="Hidden word, tap to show">${esc(m[2])}</button>`+esc(m[3]);
+  }).join("");
+}
+function cardAnswer(q){
+  if(q.t==="essay")return{key:"",list:q.pts.map(p=>p.p)};
+  if(q.t==="pick")return{key:q.ok,body:q.x};
+  if(q.a)return{key:q.a[0],body:q.x};
+  return{key:"",body:q.x};
+}
+function cardPool(sec){return Q.filter(q=>sec==="all"?true:sec==="book"?q.u.startsWith("bk"):sec==="lecture"?!q.u.startsWith("bk"):q.u===sec)}
+function studyState(){if(!S.study)S.study={sec:"book",level:50,i:0,shuffle:false,salt:1};return S.study}
+function cardOrder(){const st=studyState();let pool=cardPool(st.sec);if(st.shuffle){const r=rng(st.salt);pool=pool.slice().sort(()=>r()-.5)}return pool}
+function cardStep(d){const st=studyState(),n=cardOrder().length;st.i=(st.i+d+n)%n;save();render()}
+function setLevel(l){studyState().level=l;save();render()}
+function revealAll(){const bl=document.querySelectorAll(".blank");const anyHidden=[...bl].some(b=>!b.classList.contains("shown"));bl.forEach(b=>b.classList.toggle("shown",anyHidden))}
+function renderCards(app){
+  const st=studyState(),pool=cardOrder();if(st.i>=pool.length)st.i=0;
+  const q=pool[st.i],unit=(UNITS.find(u=>u.id===q.u)||{}).name||"",A=cardAnswer(q),seed=hashStr(q.id)+st.salt*7919+st.level;
+  const box=S.box[q.id];
+  const opts=[["book","All textbook review questions"],["lecture","All lecture questions"],["all","Everything"]].concat(UNITS.map(u=>[u.id,u.name]));
+  const lv=st.level;
+  app.innerHTML=`<div class="study-bar">
+    <div class="row"><label class="label" for="secSel">Section</label><select id="secSel">${opts.map(([v,n])=>`<option value="${v}" ${v===st.sec?"selected":""}>${esc(n)} (${cardPool(v).length})</option>`).join("")}</select></div>
+    <div class="row"><span class="label">Answer shown</span><div class="seg" role="group" aria-label="How much of the answer to show">${[[100,"Full"],[50,"50%"],[30,"30%"]].map(([v,n])=>`<button type="button" data-lv="${v}" aria-pressed="${lv===v}">${n}</button>`).join("")}</div>
+      <button class="btn btn-quiet" id="shuf" type="button" style="padding:6px 8px">${st.shuffle?"Shuffled · reshuffle":"Shuffle"}</button></div>
+  </div>
+  <article class="card">
+    <div class="meta"><span class="tag">${esc(unit)}</span>${q.t==="essay"?'<span class="tag boss">Essay</span>':""}${box?`<span class="tag">${box.b>=3?"Strong":box.b>=1?"Learning":"New"}</span>`:""}</div>
+    <h2 class="prompt">${esc(q.q)}</h2>
+    <div class="ans-block">
+      ${A.key?`<span class="ans-key">${maskText(A.key,lv,seed+1)}</span>`:""}
+      ${A.list?`<ul>${A.list.map((p,i)=>`<li>${maskText(p,lv,seed+i*31)}</li>`).join("")}</ul>`:`<span>${maskText(A.body,lv,seed)}</span>`}
+    </div>
+    <div class="actions">
+      ${lv<100?`<button class="btn btn-line" id="revealAll" type="button">Show / hide blanks</button>`:""}
+      ${lv>30?`<button class="btn btn-quiet" id="harder" type="button">Hide more →</button>`:""}
+    </div>
+    <div class="actions" style="justify-content:space-between">
+      <button class="btn btn-line" id="prev" type="button">← Prev</button>
+      <span class="study-count">${st.i+1} / ${pool.length}</span>
+      <button class="btn btn-main" id="next" type="button">Next →</button>
+    </div>
+  </article>
+  <p class="muted" style="font-size:14px;margin-top:12px">Try saying each blank out loud before you tap it. Go through a section on Full, then 50%, then 30%. Keys: ← → to move, space to show blanks, 1/2/3 for Full/50%/30%.</p>`;
+  $("#secSel").onchange=e=>{st.sec=e.target.value;st.i=0;save();render()};
+  app.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>setLevel(+b.dataset.lv));
+  $("#shuf").onclick=()=>{st.shuffle=true;st.salt=(st.salt||1)+1;st.i=0;save();render()};
+  app.querySelectorAll(".blank").forEach(b=>b.onclick=()=>b.classList.toggle("shown"));
+  const ra=$("#revealAll");if(ra)ra.onclick=revealAll;
+  const h=$("#harder");if(h)h.onclick=()=>setLevel(lv===100?50:30);
+  $("#prev").onclick=()=>cardStep(-1);$("#next").onclick=()=>cardStep(1);
+}
+
 /* ---------- wiring ---------- */
 document.addEventListener("keydown",e=>{
+  if(view==="cards"&&!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){
+    if(e.key==="ArrowRight"){e.preventDefault();cardStep(1)}
+    else if(e.key==="ArrowLeft"){e.preventDefault();cardStep(-1)}
+    else if(e.key===" "){e.preventDefault();revealAll()}
+    else if(e.key==="1")setLevel(100);else if(e.key==="2")setLevel(50);else if(e.key==="3")setLevel(30);
+    return;
+  }
   if(view!=="play"||!S.run)return;
   if(e.key==="Enter"&&!e.shiftKey){
     if(phase==="feedback"){e.preventDefault();next();return}
@@ -902,6 +992,7 @@ document.addEventListener("keydown",e=>{
 });
 $("#tab-home").onclick=()=>{view=S.run&&view==="play"?"play":"home";if(view!=="play")view="home";render()};
 $("#tab-guide").onclick=()=>{view="guide";render()};
+$("#tab-cards").onclick=()=>{view="cards";render()};
 $("#soundBtn").onclick=()=>{S.sound=!S.sound;save();renderBar();beep(600,.1)};
 
 function boot(data){if(data&&data.S)S=Object.assign(blank(),data.S);if(S.run){S.run.items=S.run.items.filter(it=>it.gen||QBY[it.id]);if(S.run.i>=S.run.items.length)S.run=null}render()}
