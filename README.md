@@ -19,7 +19,7 @@ This repo is the **V0 prototype** as scoped in the founding doc, plus early V1 f
   short-essay questions instead of code questions. Essays are graded against a
   rubric of key points.
 - **Built-in topic packs** play with no upload or API key: Psych 4110 Exam 1
-  (psychopharmacology, 114 questions + 9 essays) and a C++ warm-up. Pack runs bring
+  (psychopharmacology, 188 questions + 9 essays, incl. textbook Ch 1–5 review questions) and a C++ warm-up. Pack runs bring
   back previously missed questions first.
 - XP / streak / level mechanics with level-up animation.
 - Seed CS question pack ships as a fallback so the app works with zero setup.

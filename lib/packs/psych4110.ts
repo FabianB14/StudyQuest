@@ -2,10 +2,1701 @@ import { Question } from "../types";
 
 /**
  * Psych 4110 (Psychopharmacology), Exam 1: Weeks 1–2.
- * Written from the course's Week 1–2 lecture slides and class sessions.
+ * Written from the Week 1–2 lecture slides and class sessions, plus the
+ * textbook's Chapter 1–5 end-of-chapter review questions.
  * The same bank powers the standalone "Dose Quest" study artifact.
  */
 export const PSYCH4110_EXAM1: Question[] = [
+  {
+    "id": "psy-b1-1",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What is the definition of a “drug”?",
+    "keyGroups": [
+      [
+        "chemical",
+        "substance",
+        "compound"
+      ],
+      [
+        "alter",
+        "change",
+        "affect",
+        "physiolog",
+        "function"
+      ]
+    ],
+    "explanation": "A chemical substance that, once in the body, alters some normal physiological function. Every medicine is a drug; the labels differ by connotation and context.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-2",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What is the general flowchart of events when a drug is taken?",
+    "keyGroups": [
+      [
+        "absor",
+        "administ",
+        "taken"
+      ],
+      [
+        "distribut",
+        "circulat",
+        "blood"
+      ],
+      [
+        "receptor",
+        "bind",
+        "effect",
+        "action"
+      ],
+      [
+        "liver",
+        "metabol",
+        "biotransform"
+      ],
+      [
+        "excret",
+        "kidney",
+        "urine",
+        "elimin"
+      ]
+    ],
+    "explanation": "Administration → absorption into blood → distribution (incl. across the BBB) → binding at receptors → biotransformation by the liver → excretion by the kidneys.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-3",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What is the difference between enteral and parenteral routes?",
+    "keyGroups": [
+      [
+        "gi",
+        "alimentary",
+        "digest",
+        "gut",
+        "stomach",
+        "swallow",
+        "oral"
+      ],
+      [
+        "other",
+        "bypass",
+        "not",
+        "outside",
+        "inject",
+        "everything else"
+      ]
+    ],
+    "explanation": "Enteral goes through the alimentary canal (GI tract). Parenteral is any route that bypasses the GI tract.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-4",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What are the major limitations of the enteral route?",
+    "keyGroups": [
+      [
+        "slow",
+        "variab",
+        "unpredict",
+        "food",
+        "time"
+      ],
+      [
+        "acid",
+        "enzyme",
+        "destroy",
+        "break",
+        "first pass",
+        "liver"
+      ]
+    ],
+    "explanation": "Slow and unpredictable absorption (food, ~20–30 min), stomach acid and enzymes can destroy drugs, large molecules get broken down, first-pass through the liver, hard-to-control dose.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-5",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · Name the three classes of parenteral routes.",
+    "keyGroups": [
+      [
+        "inject"
+      ],
+      [
+        "pulmon",
+        "inhal",
+        "lung"
+      ],
+      [
+        "topical",
+        "skin",
+        "sublingual",
+        "nasal"
+      ]
+    ],
+    "explanation": "Injection (IV, IM, subcutaneous), pulmonary (inhalation), topical (sublingual, intranasal, skin).",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-6",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What is the significance of a drug entering circulation?",
+    "keyGroups": [
+      [
+        "whole body",
+        "entire body",
+        "everywhere",
+        "all",
+        "every",
+        "throughout",
+        "brain"
+      ]
+    ],
+    "explanation": "Once in the blood, the drug reaches every compartment, including the brain.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-7",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What are the structural components of the cell membrane?",
+    "keyGroups": [
+      [
+        "lipid",
+        "phospholipid",
+        "fat",
+        "bilayer"
+      ],
+      [
+        "protein",
+        "receptor",
+        "channel",
+        "transport"
+      ]
+    ],
+    "explanation": "A phospholipid bilayer (double layer of fat) with embedded proteins: receptors, channels, transporters.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-8",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · Define “absorption.”",
+    "keyGroups": [
+      [
+        "time",
+        "rate",
+        "how long"
+      ],
+      [
+        "blood"
+      ]
+    ],
+    "explanation": "The time it takes for a population of drug to enter the blood after administration.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-9",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What is the difference between “bound” and “free” drug molecules?",
+    "keyGroups": [
+      [
+        "albumin",
+        "protein",
+        "attach",
+        "bound"
+      ],
+      [
+        "free",
+        "unattach",
+        "act",
+        "leave",
+        "diffus",
+        "active"
+      ]
+    ],
+    "explanation": "Bound molecules are attached to blood proteins like albumin; they can't leave the blood or act, so they're a reservoir. Free molecules can diffuse into tissue and produce effects.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-10",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What is “lipid solubility”?",
+    "keyGroups": [
+      [
+        "dissolve",
+        "solub",
+        "fat",
+        "lipid"
+      ]
+    ],
+    "explanation": "A molecule's ability to dissolve in fat. It lets drugs cross membranes and the BBB, and store in fat.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-11",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What is the blood-brain barrier, and how does it affect how drugs influence behavior?",
+    "keyGroups": [
+      [
+        "tight",
+        "capillar"
+      ],
+      [
+        "glia"
+      ],
+      [
+        "lipid",
+        "membrane",
+        "4",
+        "four",
+        "only",
+        "keep out",
+        "toxin"
+      ]
+    ],
+    "explanation": "Tight-gap brain capillaries plus glial cells; 4 membranes to cross. Only lipid-soluble drugs get in easily, so the BBB decides which drugs can change behavior.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-12",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What are the two steps in getting a drug out of the body?",
+    "keyGroups": [
+      [
+        "liver",
+        "biotransform",
+        "metabol"
+      ],
+      [
+        "kidney",
+        "urine",
+        "filter"
+      ]
+    ],
+    "explanation": "(1) Liver biotransformation into a less lipid-soluble form; (2) kidney filtering into urine.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-13",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · Name the family of enzymes that biotransform most drug molecules.",
+    "keyGroups": [
+      [
+        "p450",
+        "p 450",
+        "cyp",
+        "cytochrome"
+      ]
+    ],
+    "explanation": "Cytochrome P450 (CYP450). Six enzymes handle 90% of drugs.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-14",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What is the half-life of a drug, and why does it matter?",
+    "keyGroups": [
+      [
+        "half"
+      ],
+      [
+        "time",
+        "clear"
+      ],
+      [
+        "long",
+        "accumul",
+        "dose",
+        "94",
+        "how much",
+        "last"
+      ]
+    ],
+    "explanation": "The time to clear half a dose from the blood. ~4 half-lives clear 94%. It shows how long the drug acts and whether daily doses accumulate.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-15",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · Name the different types of drug receptors.",
+    "keyGroups": [
+      [
+        "neurotransmitter"
+      ],
+      [
+        "enzyme"
+      ],
+      [
+        "transport",
+        "reuptake"
+      ]
+    ],
+    "explanation": "Neurotransmitter receptors, enzymes, membrane transport mechanisms.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-16",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · What are the ways to express dose-response curves?",
+    "keyGroups": [
+      [
+        "intensity",
+        "effect",
+        "graded",
+        "magnitude",
+        "plateau"
+      ],
+      [
+        "frequency",
+        "distribut"
+      ],
+      [
+        "cumulative"
+      ]
+    ],
+    "explanation": "Effect intensity vs dose; frequency distribution of responders; cumulative percent of subjects responding.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-17",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What is the ED50 of a drug?",
+    "keyGroups": [
+      [
+        "dose"
+      ],
+      [
+        "50",
+        "half"
+      ]
+    ],
+    "explanation": "The dose at which 50% of the population shows the effect.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-18",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 1 · What is the LD50 of a drug?",
+    "keyGroups": [
+      [
+        "dose"
+      ],
+      [
+        "kill",
+        "lethal",
+        "death",
+        "die"
+      ],
+      [
+        "50",
+        "half"
+      ]
+    ],
+    "explanation": "The dose that kills 50% of subjects (from animal research).",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b1-19",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 1 · Book example: LD50 = 130. The attention effect has ED50 = 30; heart palpitations have ED50 = 70. Which TI is right for palpitations?",
+    "choices": [
+      "1.86 (130 ÷ 70)",
+      "4.3 (130 ÷ 30)",
+      "0.54 (70 ÷ 130)",
+      "100 (130 − 30)"
+    ],
+    "answer": "1.86 (130 ÷ 70)",
+    "explanation": "TI = LD50 ÷ ED50. Palpitations: 130/70 ≈ 1.86, closer to the lethal curve. Attention: 130/30 ≈ 4.3, the safer effect.",
+    "tag": "Textbook Ch 1 review"
+  },
+  {
+    "id": "psy-b2-1",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 2 · What is the difference between the CNS and the PNS?",
+    "keyGroups": [
+      [
+        "brain",
+        "spinal"
+      ],
+      [
+        "outside",
+        "peripher",
+        "nerves",
+        "rest",
+        "body"
+      ]
+    ],
+    "explanation": "CNS = brain and spinal cord. PNS = all nerves outside them (somatic and autonomic).",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-2",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 2 · What are the two divisions of the autonomic nervous system?",
+    "keyGroups": [
+      [
+        "sympathetic"
+      ],
+      [
+        "parasympathetic"
+      ]
+    ],
+    "explanation": "Sympathetic and parasympathetic.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-3",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 2 · What does the sympathetic division of the ANS do?",
+    "keyGroups": [
+      [
+        "fight",
+        "flight",
+        "arous",
+        "stress",
+        "heart",
+        "activat",
+        "emergenc"
+      ]
+    ],
+    "explanation": "Fight or flight: raises heart rate and blood pressure, dilates pupils, slows digestion. Parasympathetic = rest and digest.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-4",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 2 · What are the five basic neuroanatomical divisions of the brain?",
+    "keyGroups": [
+      [
+        "telencephalon"
+      ],
+      [
+        "diencephalon"
+      ],
+      [
+        "mesencephalon"
+      ],
+      [
+        "metencephalon"
+      ],
+      [
+        "myelencephalon"
+      ]
+    ],
+    "explanation": "Telencephalon, diencephalon, mesencephalon, metencephalon, myelencephalon.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-5",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 2 · Name a structure for each of the five divisions.",
+    "keyGroups": [
+      [
+        "cortex",
+        "basal",
+        "hippocamp",
+        "amygdala"
+      ],
+      [
+        "thalamus",
+        "hypothalamus"
+      ],
+      [
+        "nigra",
+        "vta",
+        "tegment",
+        "tectum"
+      ],
+      [
+        "pons",
+        "cerebellum"
+      ],
+      [
+        "medulla"
+      ]
+    ],
+    "explanation": "Tel: cortex/basal ganglia/hippocampus/amygdala. Di: thalamus/hypothalamus. Mes: substantia nigra/VTA. Met: pons/cerebellum. Myel: medulla.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-6",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 2 · What is the limbic system?",
+    "keyGroups": [
+      [
+        "emotion"
+      ]
+    ],
+    "explanation": "Interconnected nuclei that regulate emotion (not strictly one circuit).",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-7",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 2 · Describe one specific functional “system.”",
+    "keyGroups": [
+      [
+        "nigr",
+        "forebrain bundle",
+        "accumbens",
+        "vta",
+        "limbic"
+      ],
+      [
+        "coordinat",
+        "movement",
+        "choice",
+        "arous",
+        "reinforc",
+        "crav",
+        "want",
+        "emotion",
+        "basal"
+      ]
+    ],
+    "explanation": "E.g., nigrostriatal: substantia nigra → basal ganglia, coordinates behavior and choices (lost in Parkinson's). Or MFB (arousal, reinforcement) or VTA → NAc (craving, wanting).",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-8",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 2 · What are the components of the synapse?",
+    "keyGroups": [
+      [
+        "presynaptic",
+        "terminal",
+        "vesicle"
+      ],
+      [
+        "cleft",
+        "gap"
+      ],
+      [
+        "postsynaptic",
+        "receptor"
+      ]
+    ],
+    "explanation": "Presynaptic terminal (with vesicles), synaptic cleft, postsynaptic membrane with receptors.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-9",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 2 · What is a “vesicle”?",
+    "keyGroups": [
+      [
+        "sac",
+        "package",
+        "contain",
+        "store",
+        "bubble"
+      ],
+      [
+        "neurotransmitter"
+      ]
+    ],
+    "explanation": "A small membrane sac in the presynaptic terminal that stores neurotransmitter.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-10",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 2 · How does exocytosis occur?",
+    "keyGroups": [
+      [
+        "action potential",
+        "calcium",
+        "ca"
+      ],
+      [
+        "fuse",
+        "merge",
+        "vesicle"
+      ],
+      [
+        "release"
+      ]
+    ],
+    "explanation": "Action potential arrives → calcium flows in → vesicles fuse with the membrane → neurotransmitter is released into the cleft.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-11",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 2 · What are the ways a neuron recovers from exocytosis?",
+    "keyGroups": [
+      [
+        "reuptake",
+        "transporter"
+      ],
+      [
+        "enzyme",
+        "break",
+        "mao",
+        "degrad"
+      ],
+      [
+        "diffus",
+        "recycl",
+        "endocytosis"
+      ]
+    ],
+    "explanation": "Reuptake by transporters, enzymatic breakdown (e.g., MAO), diffusion away, and recycling vesicle membrane.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-12",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 2 · What are the classes of neurotransmitters?",
+    "keyGroups": [
+      [
+        "acetylcholine",
+        "ach"
+      ],
+      [
+        "monoamine",
+        "dopamine",
+        "serotonin"
+      ],
+      [
+        "amino",
+        "glutamate",
+        "gaba"
+      ],
+      [
+        "peptide",
+        "endorphin"
+      ],
+      [
+        "cannabinoid"
+      ]
+    ],
+    "explanation": "Acetylcholine; monoamines (DA, NE, 5-HT); amino acids (glutamate, GABA); peptides; endocannabinoids.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-13",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 2 · What is the difference between physical and psychological dependency?",
+    "keyGroups": [
+      [
+        "withdraw",
+        "abstinen",
+        "stop",
+        "physical"
+      ],
+      [
+        "crav",
+        "desire",
+        "seek",
+        "want"
+      ]
+    ],
+    "explanation": "Physical: abstinence syndrome when the drug stops (retrospective). Psychological: intense drug seeking from desire (e.g., cannabis).",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b2-14",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 2 · Define the factors “set” and “setting.”",
+    "keyGroups": [
+      [
+        "expect",
+        "mindset"
+      ],
+      [
+        "environment",
+        "place",
+        "surround"
+      ]
+    ],
+    "explanation": "Set = expectations. Setting = environment.",
+    "tag": "Textbook Ch 2 review"
+  },
+  {
+    "id": "psy-b3-1",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 3 · Define “tolerance.”",
+    "keyGroups": [
+      [
+        "less",
+        "reduced",
+        "more",
+        "higher",
+        "compensat",
+        "weaker",
+        "decreas"
+      ]
+    ],
+    "explanation": "Compensatory response so the drug has less effect with repeated use; more is needed for the same effect.",
+    "tag": "Textbook Ch 3 review"
+  },
+  {
+    "id": "psy-b3-2",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 3 · Define “metabolic tolerance.”",
+    "keyGroups": [
+      [
+        "liver"
+      ],
+      [
+        "enzyme",
+        "faster",
+        "more",
+        "break"
+      ]
+    ],
+    "explanation": "The liver makes more enzymes and clears the drug faster.",
+    "tag": "Textbook Ch 3 review"
+  },
+  {
+    "id": "psy-b3-3",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 3 · Define “physiological” tolerance.",
+    "keyGroups": [
+      [
+        "receptor",
+        "cell",
+        "neuron",
+        "synapse",
+        "sensitiv",
+        "adapt",
+        "brain"
+      ]
+    ],
+    "explanation": "Cellular adaptation of the nervous system (like pharmacodynamic tolerance): changes in receptor number or sensitivity.",
+    "tag": "Textbook Ch 3 review"
+  },
+  {
+    "id": "psy-b3-4",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 3 · Define “behavioral” tolerance.",
+    "keyGroups": [
+      [
+        "practic",
+        "learn",
+        "train",
+        "while"
+      ]
+    ],
+    "explanation": "Practicing a behavior while on the drug improves it on the drug (treadmill rats).",
+    "tag": "Textbook Ch 3 review"
+  },
+  {
+    "id": "psy-b3-5",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 3 · Define “learned” tolerance.",
+    "keyGroups": [
+      [
+        "cue",
+        "environment",
+        "context",
+        "room",
+        "setting"
+      ]
+    ],
+    "explanation": "Compensation triggered by environmental cues that predict the drug (morphine room; chemo rooms).",
+    "tag": "Textbook Ch 3 review"
+  },
+  {
+    "id": "psy-b3-6",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 3 · What is the “abstinence syndrome”?",
+    "keyGroups": [
+      [
+        "withdraw",
+        "opposite",
+        "stop"
+      ]
+    ],
+    "explanation": "Medical term for withdrawal: responses opposite to the drug's effects when chronic use stops.",
+    "tag": "Textbook Ch 3 review"
+  },
+  {
+    "id": "psy-b4-1",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 4 · According to Andrew Weil, what is the difference between set and setting?",
+    "keyGroups": [
+      [
+        "expect",
+        "mindset",
+        "mind"
+      ],
+      [
+        "environment",
+        "place",
+        "surround",
+        "social",
+        "physical"
+      ]
+    ],
+    "explanation": "Set = the person's expectations and mindset. Setting = the physical and social environment.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-2",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 4 · Define “placebo.”",
+    "keyGroups": [
+      [
+        "no",
+        "inert",
+        "sugar",
+        "decept",
+        "without",
+        "psycholog",
+        "fake"
+      ]
+    ],
+    "explanation": "Traditionally, a substance with no pharmacological effect given to placate a patient. Effects are robust, so it isn't truly inert.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-3",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · Characterize what is meant by “voluntary” behavior.",
+    "keyGroups": [
+      [
+        "conscious",
+        "choose",
+        "chose",
+        "decid",
+        "control",
+        "intent"
+      ]
+    ],
+    "explanation": "Consciously chosen behavior controlled by the frontal cortex; that same control can alter other brain circuits (the basis of placebo).",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-4",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · Describe one early demonstration of the placebo effect.",
+    "keyGroups": [
+      [
+        "surgery",
+        "heart",
+        "angina",
+        "beecher",
+        "soldier",
+        "war"
+      ]
+    ],
+    "explanation": "“Surgery as Placebo” (1950s): sham heart surgery for angina worked; expectation drove recovery. Beecher's WWII observations are another.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-5",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · What did the arthroscopic knee surgery study contribute?",
+    "keyGroups": [
+      [
+        "sham",
+        "fake",
+        "placebo"
+      ],
+      [
+        "same",
+        "equal",
+        "as well",
+        "improv",
+        "just as"
+      ]
+    ],
+    "explanation": "Sham knee surgery helped as much as real surgery, even years later: a procedure's benefit can be largely placebo.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-6",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · What two developments improved understanding of the placebo effect?",
+    "keyGroups": [
+      [
+        "double blind",
+        "blind",
+        "controlled",
+        "trial"
+      ],
+      [
+        "imaging",
+        "pet",
+        "fmri",
+        "scan"
+      ]
+    ],
+    "explanation": "Double-blind placebo-controlled trials, and brain imaging (PET, fMRI).",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-7",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · Which two brain systems have been the focus of placebo mechanism studies?",
+    "keyGroups": [
+      [
+        "reward",
+        "reinforc",
+        "dopamine",
+        "vta",
+        "accumbens"
+      ],
+      [
+        "pain"
+      ]
+    ],
+    "explanation": "The reward/reinforcement system and the pain-modulation system.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-8",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · What are the three principal brain areas of the midbrain reward system?",
+    "keyGroups": [
+      [
+        "vta",
+        "tegmental"
+      ],
+      [
+        "accumbens"
+      ],
+      [
+        "frontal",
+        "prefrontal"
+      ]
+    ],
+    "explanation": "VTA, nucleus accumbens, frontal cortex.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-9",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · Besides the frontal cortex and VTA, name two other inputs to the nucleus accumbens.",
+    "keyGroups": [
+      [
+        "hippocamp"
+      ],
+      [
+        "amygdala",
+        "thalamus"
+      ]
+    ],
+    "explanation": "Hippocampus and amygdala (thalamus also).",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-10",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · What is a possible role of dopamine in the nucleus accumbens?",
+    "keyGroups": [
+      [
+        "reward",
+        "expect",
+        "motivat",
+        "want",
+        "crav",
+        "predict",
+        "pleasure"
+      ]
+    ],
+    "explanation": "Signaling expected reward: motivation, wanting, craving.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-11",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · What is the significance of the frontal cortex in the placebo circuit?",
+    "keyGroups": [
+      [
+        "expect",
+        "belief",
+        "thought",
+        "conscious",
+        "mind",
+        "cognit"
+      ],
+      [
+        "reward",
+        "pain",
+        "control",
+        "alter",
+        "change",
+        "circuit"
+      ]
+    ],
+    "explanation": "It handles expectation and conscious thought and projects to reward and pain circuits, so beliefs physically change brain activity.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-12",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · Name two neurotransmitter systems integrated in the nucleus accumbens.",
+    "keyGroups": [
+      [
+        "dopamine"
+      ],
+      [
+        "glutamate",
+        "gaba",
+        "opioid",
+        "opiate",
+        "endorphin"
+      ]
+    ],
+    "explanation": "Dopamine and glutamate (GABA and endogenous opioids too).",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-13",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · Besides the frontal cortex, name two other cortical areas in the placebo effect.",
+    "keyGroups": [
+      [
+        "cingulate"
+      ],
+      [
+        "insula",
+        "orbitofrontal"
+      ]
+    ],
+    "explanation": "Anterior cingulate cortex and insula (orbitofrontal also cited). Check your book.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-14",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · What is the suspected cause of Parkinson's disease?",
+    "keyGroups": [
+      [
+        "dopamine"
+      ],
+      [
+        "nigra",
+        "loss",
+        "death",
+        "die",
+        "degenerat"
+      ]
+    ],
+    "explanation": "Loss of dopamine neurons in the substantia nigra (nigrostriatal pathway).",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-15",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · Deep brain stimulation of what area relieves Parkinson's symptoms?",
+    "keyGroups": [
+      [
+        "subthalamic",
+        "pallidus",
+        "stn"
+      ]
+    ],
+    "explanation": "Subthalamic nucleus (globus pallidus is another target). Check your book.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-16",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · Increased release of what transmitter enhances relief of Parkinson's symptoms?",
+    "answer": "dopamine",
+    "acceptable": [
+      "dopamine"
+    ],
+    "explanation": "Dopamine. Placebo can release dopamine in the striatum of Parkinson's patients.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-17",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · How would you explain placebo takers having changed brain patterns?",
+    "keyGroups": [
+      [
+        "expect",
+        "belief",
+        "frontal",
+        "mind"
+      ],
+      [
+        "dopamine",
+        "opioid",
+        "chemical",
+        "real",
+        "physiolog",
+        "circuit"
+      ]
+    ],
+    "explanation": "Expectation from the frontal cortex drives real changes (dopamine, endogenous opioids) in reward and pain circuits.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-18",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · Name one limitation of using only cognitive therapy to change brain circuitry.",
+    "keyGroups": [
+      [
+        "slow",
+        "time",
+        "effort",
+        "hard",
+        "motivat",
+        "severe",
+        "not everyone",
+        "practice",
+        "ability"
+      ]
+    ],
+    "explanation": "It's slow and effortful, depends on ability and motivation, and may not be strong enough alone for severe conditions.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-19",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 4 · Define the “nocebo” effect.",
+    "keyGroups": [
+      [
+        "negative",
+        "bad",
+        "harm",
+        "side effect",
+        "worse"
+      ]
+    ],
+    "explanation": "Negative expectations causing real harmful effects or side effects.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-20",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · How does Gabapentin (Neurontin) relate to the ethics of placebo?",
+    "keyGroups": [
+      [
+        "off label",
+        "off-label",
+        "placebo",
+        "barely",
+        "little",
+        "not much",
+        "no better"
+      ]
+    ],
+    "explanation": "Widely prescribed off-label where it barely beats placebo, raising the question of whether that's more ethical than an honest placebo. Check your book.",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b4-21",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 4 · What issue does the Balanced Placebo design address?",
+    "keyGroups": [
+      [
+        "expect",
+        "told",
+        "belief"
+      ],
+      [
+        "drug",
+        "pharmacolog",
+        "separate",
+        "effect"
+      ]
+    ],
+    "explanation": "Separates drug effect from expectation: told drug/placebo × got drug/placebo (2 × 2).",
+    "tag": "Textbook Ch 4 review"
+  },
+  {
+    "id": "psy-b5-1",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Name the five types of sedative/hypnotic.",
+    "keyGroups": [
+      [
+        "barbiturate"
+      ],
+      [
+        "benzo"
+      ],
+      [
+        "non barbiturate",
+        "nonbarbiturate",
+        "methaqualone",
+        "meprobamate",
+        "other"
+      ],
+      [
+        "ethanol",
+        "alcohol"
+      ],
+      [
+        "cannabis",
+        "marijuana"
+      ]
+    ],
+    "explanation": "Barbiturates, benzodiazepines, other non-barbiturates, ethanol, cannabis (the table also lists antihistamines).",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-2",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 5 · Valium and alprazolam are examples of which sedative type?",
+    "choices": [
+      "Benzodiazepines",
+      "Barbiturates",
+      "Non-barbiturates",
+      "Antihistamines"
+    ],
+    "answer": "Benzodiazepines",
+    "explanation": "Benzodiazepines: Valium, Librium, triazolam, alprazolam. Barbiturates: phenobarbital, secobarbital.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-2b",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 5 · Phenobarbital and secobarbital are:",
+    "choices": [
+      "Barbiturates",
+      "Benzodiazepines",
+      "Stimulants",
+      "Hydantoins"
+    ],
+    "answer": "Barbiturates",
+    "explanation": "Barbiturates. Phenobarbital also appears as an anti-epilepsy drug.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-3",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 5 · Name one naturally occurring opiate.",
+    "answer": "morphine",
+    "acceptable": [
+      "morphine",
+      "codeine"
+    ],
+    "explanation": "Morphine or codeine.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-4",
+    "type": "recall",
+    "difficulty": "hard",
+    "prompt": "Ch 5 · What is the difference between the two types of synthetic opiates?",
+    "keyGroups": [
+      [
+        "semi",
+        "modif",
+        "derived",
+        "from morphine",
+        "natural"
+      ],
+      [
+        "fully",
+        "entirely",
+        "lab",
+        "complete"
+      ]
+    ],
+    "explanation": "Semi-synthetic: chemically modified natural opiates (heroin from morphine). Fully synthetic: made entirely in the lab (methadone, Demerol).",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-5",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Which is a fully synthetic opiate?",
+    "choices": [
+      "Methadone",
+      "Morphine",
+      "Codeine",
+      "Heroin"
+    ],
+    "answer": "Methadone",
+    "explanation": "Methadone and Demerol are fully synthetic. Heroin is semi-synthetic (from morphine). Morphine and codeine are natural.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-6",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Name the five types of stimulants.",
+    "keyGroups": [
+      [
+        "amphetamine"
+      ],
+      [
+        "cocaine"
+      ],
+      [
+        "xanthine",
+        "caffeine"
+      ],
+      [
+        "hyperactiv",
+        "ritalin",
+        "adhd"
+      ],
+      [
+        "appetite",
+        "phenylpropanolamine",
+        "counter"
+      ]
+    ],
+    "explanation": "Amphetamines, cocaine, methylxanthines, hyperactivity drugs, OTC appetite suppressants.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-7",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 5 · Caffeine, theophylline and theobromine are:",
+    "choices": [
+      "Methylxanthines",
+      "Amphetamines",
+      "Hydantoins",
+      "Phenothiazines"
+    ],
+    "answer": "Methylxanthines",
+    "explanation": "Methylxanthines, a stimulant type.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-8",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 5 · Name the two main classes of drugs used to treat mental disorders.",
+    "keyGroups": [
+      [
+        "antidepress"
+      ],
+      [
+        "antipsych",
+        "neuroleptic",
+        "schizo"
+      ]
+    ],
+    "explanation": "Antidepressants and antipsychotics.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-9",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Name the antidepressant and antipsychotic subtypes.",
+    "keyGroups": [
+      [
+        "tricyclic"
+      ],
+      [
+        "heterocyclic",
+        "hetero"
+      ],
+      [
+        "mao",
+        "monoamine oxidase"
+      ],
+      [
+        "phenothiazine"
+      ],
+      [
+        "butyrophenone"
+      ]
+    ],
+    "explanation": "Antidepressants: tricyclics, heterocyclics, MAOIs. Antipsychotics: phenothiazines, butyrophenones.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-10a",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Haloperidol (Haldol) is a:",
+    "choices": [
+      "Butyrophenone",
+      "Phenothiazine",
+      "Tricyclic",
+      "MAO inhibitor"
+    ],
+    "answer": "Butyrophenone",
+    "explanation": "Butyrophenone antipsychotic. Phenothiazines: chlorpromazine (Thorazine), thioridazine (Mellaril).",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-10b",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Imipramine and amitriptyline are:",
+    "choices": [
+      "Tricyclic antidepressants",
+      "Heterocyclic antidepressants",
+      "MAO inhibitors",
+      "Phenothiazines"
+    ],
+    "answer": "Tricyclic antidepressants",
+    "explanation": "Tricyclics. Heterocyclics: fluoxetine (Prozac), trazodone. MAOI: tranylcypromine (Parnate).",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-10c",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Chlorpromazine (Thorazine) is a:",
+    "choices": [
+      "Phenothiazine",
+      "Butyrophenone",
+      "Heterocyclic",
+      "Hydantoin"
+    ],
+    "answer": "Phenothiazine",
+    "explanation": "Phenothiazine antipsychotic.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-10d",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Tranylcypromine (Parnate) is a:",
+    "choices": [
+      "MAO inhibitor",
+      "Tricyclic",
+      "Heterocyclic",
+      "Benzodiazepine"
+    ],
+    "answer": "MAO inhibitor",
+    "explanation": "Monoamine oxidase inhibitor.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-11",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · How are the types of hallucinogens different?",
+    "keyGroups": [
+      [
+        "serotonin"
+      ],
+      [
+        "norepinephrine",
+        "noradrenaline"
+      ],
+      [
+        "other",
+        "neither"
+      ]
+    ],
+    "explanation": "Grouped by structure: serotonin-like, norepinephrine-like, and other agents.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-12a",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · LSD and psilocin are hallucinogens structurally similar to:",
+    "choices": [
+      "Serotonin",
+      "Norepinephrine",
+      "Dopamine",
+      "GABA"
+    ],
+    "answer": "Serotonin",
+    "explanation": "Serotonin-like. Mescaline and MDMA are norepinephrine-like. Ibotenic acid and PCP are “other.”",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-12b",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Mescaline and MDMA are hallucinogens structurally similar to:",
+    "choices": [
+      "Norepinephrine",
+      "Serotonin",
+      "Acetylcholine",
+      "Glutamate"
+    ],
+    "answer": "Norepinephrine",
+    "explanation": "Norepinephrine-like.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-13",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Name the types of drugs used for anesthesia.",
+    "keyGroups": [
+      [
+        "gas",
+        "nitrous"
+      ],
+      [
+        "volatile",
+        "ether",
+        "halothane"
+      ],
+      [
+        "parenter",
+        "inject",
+        "ketamine",
+        "barbiturate"
+      ]
+    ],
+    "explanation": "Gaseous (nitrous oxide), volatile (ether, halothane), parenteral (barbiturates, ketamine).",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-14",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Name the types of drugs used to treat epilepsy.",
+    "keyGroups": [
+      [
+        "hydantoin",
+        "dilantin"
+      ],
+      [
+        "barbiturate",
+        "phenobarbital"
+      ],
+      [
+        "carbamazepine",
+        "carbomazepine"
+      ],
+      [
+        "valpro"
+      ]
+    ],
+    "explanation": "Hydantoins (Dilantin), barbiturates (phenobarbital), carbamazepine, valproic acid.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-15",
+    "type": "recall",
+    "difficulty": "easy",
+    "prompt": "Ch 5 · What are the criteria for Schedule I?",
+    "keyGroups": [
+      [
+        "abuse"
+      ],
+      [
+        "no",
+        "not"
+      ],
+      [
+        "medical"
+      ]
+    ],
+    "explanation": "High abuse potential, no accepted medical use, not accepted as safe under medical supervision.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-16",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · What are the criteria for Schedule II?",
+    "keyGroups": [
+      [
+        "abuse"
+      ],
+      [
+        "medical",
+        "accepted"
+      ]
+    ],
+    "explanation": "High abuse potential but an accepted medical use (often restricted); abuse can cause severe dependence.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-17",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · Which pair is Schedule I then Schedule II?",
+    "choices": [
+      "Heroin, then cocaine",
+      "Cocaine, then heroin",
+      "Alcohol, then caffeine",
+      "Valium, then LSD"
+    ],
+    "answer": "Heroin, then cocaine",
+    "explanation": "Schedule I: heroin, LSD, cannabis (federally), MDMA. Schedule II: cocaine, methamphetamine, morphine, fentanyl, Ritalin.",
+    "tag": "Textbook Ch 5 review"
+  },
+  {
+    "id": "psy-b5-18",
+    "type": "recall",
+    "difficulty": "medium",
+    "prompt": "Ch 5 · What is the difference in criteria between Schedule III and IV?",
+    "keyGroups": [
+      [
+        "moderate",
+        "less than",
+        "iii",
+        "3"
+      ],
+      [
+        "low",
+        "limited",
+        "iv",
+        "4"
+      ]
+    ],
+    "explanation": "III: abuse potential below I/II; moderate to low physical or high psychological dependence (ketamine, steroids). IV: low abuse potential relative to III, limited dependence (benzodiazepines).",
+    "tag": "Textbook Ch 5 review"
+  },
   {
     "id": "psy-pol1",
     "type": "recall",

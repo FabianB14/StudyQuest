@@ -83,6 +83,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .mode:hover{border-color:var(--accent)}
 .mode b{font-family:var(--f-display);font-size:19px}
 .mode span{color:var(--muted);font-size:14px}
+.mode.wide{grid-column:1/-1}
 .mode.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .mode.primary span{color:inherit;opacity:.85}
 .resume{background:var(--close-bg);border:2px solid var(--close);border-radius:var(--r);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
@@ -347,6 +348,11 @@ th{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute
 
 <script>
 const UNITS=[
+ {id:"bk1",name:"Textbook Ch 1 review",sub:"Basic pharmacology · 19 questions",book:1},
+ {id:"bk2",name:"Textbook Ch 2 review",sub:"Nervous system and synapse · 14 questions",book:1},
+ {id:"bk3",name:"Textbook Ch 3 review",sub:"Tolerance and dependence · 6 questions",book:1},
+ {id:"bk4",name:"Textbook Ch 4 review",sub:"Placebo and expectation · 21 questions",book:1},
+ {id:"bk5",name:"Textbook Ch 5 review",sub:"Drug classification and schedules · 23 questions",book:1},
  {id:"pol",name:"Drugs, medicine & policy",sub:"Schedules, harm, policy"},
  {id:"in",name:"Getting in",sub:"Routes and absorption"},
  {id:"move",name:"Distribution & the BBB",sub:"Diffusion, fat, 4 membranes"},
@@ -361,6 +367,94 @@ const UNITS=[
 ];
 
 const Q=[
+// textbook review exam questions
+{id:"b1-1",u:"bk1",t:"type",d:1,q:"Ch 1 · What is the definition of a “drug”?",k:[["chemical","substance","compound"],["alter","change","affect","physiolog","function"]],x:"A chemical substance that, once in the body, alters some normal physiological function. Every medicine is a drug; the labels differ by connotation and context."},
+{id:"b1-2",u:"bk1",t:"type",d:2,q:"Ch 1 · What is the general flowchart of events when a drug is taken?",k:[["absor","administ","taken"],["distribut","circulat","blood"],["receptor","bind","effect","action"],["liver","metabol","biotransform"],["excret","kidney","urine","elimin"]],x:"Administration → absorption into blood → distribution (incl. across the BBB) → binding at receptors → biotransformation by the liver → excretion by the kidneys."},
+{id:"b1-3",u:"bk1",t:"type",d:1,q:"Ch 1 · What is the difference between enteral and parenteral routes?",k:[["gi","alimentary","digest","gut","stomach","swallow","oral"],["other","bypass","not","outside","inject","everything else"]],x:"Enteral goes through the alimentary canal (GI tract). Parenteral is any route that bypasses the GI tract."},
+{id:"b1-4",u:"bk1",t:"type",d:2,q:"Ch 1 · What are the major limitations of the enteral route?",k:[["slow","variab","unpredict","food","time"],["acid","enzyme","destroy","break","first pass","liver"]],x:"Slow and unpredictable absorption (food, ~20–30 min), stomach acid and enzymes can destroy drugs, large molecules get broken down, first-pass through the liver, hard-to-control dose."},
+{id:"b1-5",u:"bk1",t:"type",d:1,q:"Ch 1 · Name the three classes of parenteral routes.",k:[["inject"],["pulmon","inhal","lung"],["topical","skin","sublingual","nasal"]],x:"Injection (IV, IM, subcutaneous), pulmonary (inhalation), topical (sublingual, intranasal, skin)."},
+{id:"b1-6",u:"bk1",t:"type",d:1,q:"Ch 1 · What is the significance of a drug entering circulation?",k:[["whole body","entire body","everywhere","all","every","throughout","brain"]],x:"Once in the blood, the drug reaches every compartment, including the brain."},
+{id:"b1-7",u:"bk1",t:"type",d:2,q:"Ch 1 · What are the structural components of the cell membrane?",k:[["lipid","phospholipid","fat","bilayer"],["protein","receptor","channel","transport"]],x:"A phospholipid bilayer (double layer of fat) with embedded proteins: receptors, channels, transporters."},
+{id:"b1-8",u:"bk1",t:"type",d:1,q:"Ch 1 · Define “absorption.”",k:[["time","rate","how long"],["blood"]],x:"The time it takes for a population of drug to enter the blood after administration."},
+{id:"b1-9",u:"bk1",t:"type",d:2,q:"Ch 1 · What is the difference between “bound” and “free” drug molecules?",k:[["albumin","protein","attach","bound"],["free","unattach","act","leave","diffus","active"]],x:"Bound molecules are attached to blood proteins like albumin; they can't leave the blood or act, so they're a reservoir. Free molecules can diffuse into tissue and produce effects."},
+{id:"b1-10",u:"bk1",t:"type",d:1,q:"Ch 1 · What is “lipid solubility”?",k:[["dissolve","solub","fat","lipid"]],x:"A molecule's ability to dissolve in fat. It lets drugs cross membranes and the BBB, and store in fat."},
+{id:"b1-11",u:"bk1",t:"type",d:2,q:"Ch 1 · What is the blood-brain barrier, and how does it affect how drugs influence behavior?",k:[["tight","capillar"],["glia"],["lipid","membrane","4","four","only","keep out","toxin"]],x:"Tight-gap brain capillaries plus glial cells; 4 membranes to cross. Only lipid-soluble drugs get in easily, so the BBB decides which drugs can change behavior."},
+{id:"b1-12",u:"bk1",t:"type",d:1,q:"Ch 1 · What are the two steps in getting a drug out of the body?",k:[["liver","biotransform","metabol"],["kidney","urine","filter"]],x:"(1) Liver biotransformation into a less lipid-soluble form; (2) kidney filtering into urine."},
+{id:"b1-13",u:"bk1",t:"type",d:1,q:"Ch 1 · Name the family of enzymes that biotransform most drug molecules.",k:[["p450","p 450","cyp","cytochrome"]],x:"Cytochrome P450 (CYP450). Six enzymes handle 90% of drugs."},
+{id:"b1-14",u:"bk1",t:"type",d:2,q:"Ch 1 · What is the half-life of a drug, and why does it matter?",k:[["half"],["time","clear"],["long","accumul","dose","94","how much","last"]],x:"The time to clear half a dose from the blood. ~4 half-lives clear 94%. It shows how long the drug acts and whether daily doses accumulate."},
+{id:"b1-15",u:"bk1",t:"type",d:1,q:"Ch 1 · Name the different types of drug receptors.",k:[["neurotransmitter"],["enzyme"],["transport","reuptake"]],x:"Neurotransmitter receptors, enzymes, membrane transport mechanisms."},
+{id:"b1-16",u:"bk1",t:"type",d:2,q:"Ch 1 · What are the ways to express dose-response curves?",k:[["intensity","effect","graded","magnitude","plateau"],["frequency","distribut"],["cumulative"]],x:"Effect intensity vs dose; frequency distribution of responders; cumulative percent of subjects responding."},
+{id:"b1-17",u:"bk1",t:"type",d:1,q:"Ch 1 · What is the ED50 of a drug?",k:[["dose"],["50","half"]],x:"The dose at which 50% of the population shows the effect."},
+{id:"b1-18",u:"bk1",t:"type",d:1,q:"Ch 1 · What is the LD50 of a drug?",k:[["dose"],["kill","lethal","death","die"],["50","half"]],x:"The dose that kills 50% of subjects (from animal research)."},
+{id:"b1-19",u:"bk1",t:"pick",d:2,q:"Ch 1 · Book example: LD50 = 130. The attention effect has ED50 = 30; heart palpitations have ED50 = 70. Which TI is right for palpitations?",c:["1.86 (130 ÷ 70)","4.3 (130 ÷ 30)","0.54 (70 ÷ 130)","100 (130 − 30)"],ok:"1.86 (130 ÷ 70)",x:"TI = LD50 ÷ ED50. Palpitations: 130/70 ≈ 1.86, closer to the lethal curve. Attention: 130/30 ≈ 4.3, the safer effect."},
+// ch2
+{id:"b2-1",u:"bk2",t:"type",d:1,q:"Ch 2 · What is the difference between the CNS and the PNS?",k:[["brain","spinal"],["outside","peripher","nerves","rest","body"]],x:"CNS = brain and spinal cord. PNS = all nerves outside them (somatic and autonomic)."},
+{id:"b2-2",u:"bk2",t:"type",d:1,q:"Ch 2 · What are the two divisions of the autonomic nervous system?",k:[["sympathetic"],["parasympathetic"]],x:"Sympathetic and parasympathetic."},
+{id:"b2-3",u:"bk2",t:"type",d:1,q:"Ch 2 · What does the sympathetic division of the ANS do?",k:[["fight","flight","arous","stress","heart","activat","emergenc"]],x:"Fight or flight: raises heart rate and blood pressure, dilates pupils, slows digestion. Parasympathetic = rest and digest."},
+{id:"b2-4",u:"bk2",t:"type",d:2,q:"Ch 2 · What are the five basic neuroanatomical divisions of the brain?",k:[["telencephalon"],["diencephalon"],["mesencephalon"],["metencephalon"],["myelencephalon"]],x:"Telencephalon, diencephalon, mesencephalon, metencephalon, myelencephalon."},
+{id:"b2-5",u:"bk2",t:"type",d:3,q:"Ch 2 · Name a structure for each of the five divisions.",k:[["cortex","basal","hippocamp","amygdala"],["thalamus","hypothalamus"],["nigra","vta","tegment","tectum"],["pons","cerebellum"],["medulla"]],x:"Tel: cortex/basal ganglia/hippocampus/amygdala. Di: thalamus/hypothalamus. Mes: substantia nigra/VTA. Met: pons/cerebellum. Myel: medulla."},
+{id:"b2-6",u:"bk2",t:"type",d:1,q:"Ch 2 · What is the limbic system?",k:[["emotion"]],x:"Interconnected nuclei that regulate emotion (not strictly one circuit)."},
+{id:"b2-7",u:"bk2",t:"type",d:2,q:"Ch 2 · Describe one specific functional “system.”",k:[["nigr","forebrain bundle","accumbens","vta","limbic"],["coordinat","movement","choice","arous","reinforc","crav","want","emotion","basal"]],x:"E.g., nigrostriatal: substantia nigra → basal ganglia, coordinates behavior and choices (lost in Parkinson's). Or MFB (arousal, reinforcement) or VTA → NAc (craving, wanting)."},
+{id:"b2-8",u:"bk2",t:"type",d:2,q:"Ch 2 · What are the components of the synapse?",k:[["presynaptic","terminal","vesicle"],["cleft","gap"],["postsynaptic","receptor"]],x:"Presynaptic terminal (with vesicles), synaptic cleft, postsynaptic membrane with receptors."},
+{id:"b2-9",u:"bk2",t:"type",d:1,q:"Ch 2 · What is a “vesicle”?",k:[["sac","package","contain","store","bubble"],["neurotransmitter"]],x:"A small membrane sac in the presynaptic terminal that stores neurotransmitter."},
+{id:"b2-10",u:"bk2",t:"type",d:2,q:"Ch 2 · How does exocytosis occur?",k:[["action potential","calcium","ca"],["fuse","merge","vesicle"],["release"]],x:"Action potential arrives → calcium flows in → vesicles fuse with the membrane → neurotransmitter is released into the cleft."},
+{id:"b2-11",u:"bk2",t:"type",d:3,q:"Ch 2 · What are the ways a neuron recovers from exocytosis?",k:[["reuptake","transporter"],["enzyme","break","mao","degrad"],["diffus","recycl","endocytosis"]],x:"Reuptake by transporters, enzymatic breakdown (e.g., MAO), diffusion away, and recycling vesicle membrane."},
+{id:"b2-12",u:"bk2",t:"type",d:2,q:"Ch 2 · What are the classes of neurotransmitters?",k:[["acetylcholine","ach"],["monoamine","dopamine","serotonin"],["amino","glutamate","gaba"],["peptide","endorphin"],["cannabinoid"]],x:"Acetylcholine; monoamines (DA, NE, 5-HT); amino acids (glutamate, GABA); peptides; endocannabinoids."},
+{id:"b2-13",u:"bk2",t:"type",d:2,q:"Ch 2 · What is the difference between physical and psychological dependency?",k:[["withdraw","abstinen","stop","physical"],["crav","desire","seek","want"]],x:"Physical: abstinence syndrome when the drug stops (retrospective). Psychological: intense drug seeking from desire (e.g., cannabis)."},
+{id:"b2-14",u:"bk2",t:"type",d:1,q:"Ch 2 · Define the factors “set” and “setting.”",k:[["expect","mindset"],["environment","place","surround"]],x:"Set = expectations. Setting = environment."},
+// ch3
+{id:"b3-1",u:"bk3",t:"type",d:1,q:"Ch 3 · Define “tolerance.”",k:[["less","reduced","more","higher","compensat","weaker","decreas"]],x:"Compensatory response so the drug has less effect with repeated use; more is needed for the same effect."},
+{id:"b3-2",u:"bk3",t:"type",d:1,q:"Ch 3 · Define “metabolic tolerance.”",k:[["liver"],["enzyme","faster","more","break"]],x:"The liver makes more enzymes and clears the drug faster."},
+{id:"b3-3",u:"bk3",t:"type",d:2,q:"Ch 3 · Define “physiological” tolerance.",k:[["receptor","cell","neuron","synapse","sensitiv","adapt","brain"]],x:"Cellular adaptation of the nervous system (like pharmacodynamic tolerance): changes in receptor number or sensitivity."},
+{id:"b3-4",u:"bk3",t:"type",d:2,q:"Ch 3 · Define “behavioral” tolerance.",k:[["practic","learn","train","while"]],x:"Practicing a behavior while on the drug improves it on the drug (treadmill rats)."},
+{id:"b3-5",u:"bk3",t:"type",d:2,q:"Ch 3 · Define “learned” tolerance.",k:[["cue","environment","context","room","setting"]],x:"Compensation triggered by environmental cues that predict the drug (morphine room; chemo rooms)."},
+{id:"b3-6",u:"bk3",t:"type",d:1,q:"Ch 3 · What is the “abstinence syndrome”?",k:[["withdraw","opposite","stop"]],x:"Medical term for withdrawal: responses opposite to the drug's effects when chronic use stops."},
+// ch4
+{id:"b4-1",u:"bk4",t:"type",d:1,q:"Ch 4 · According to Andrew Weil, what is the difference between set and setting?",k:[["expect","mindset","mind"],["environment","place","surround","social","physical"]],x:"Set = the person's expectations and mindset. Setting = the physical and social environment."},
+{id:"b4-2",u:"bk4",t:"type",d:1,q:"Ch 4 · Define “placebo.”",k:[["no","inert","sugar","decept","without","psycholog","fake"]],x:"Traditionally, a substance with no pharmacological effect given to placate a patient. Effects are robust, so it isn't truly inert."},
+{id:"b4-3",u:"bk4",t:"type",d:2,q:"Ch 4 · Characterize what is meant by “voluntary” behavior.",k:[["conscious","choose","chose","decid","control","intent"]],x:"Consciously chosen behavior controlled by the frontal cortex; that same control can alter other brain circuits (the basis of placebo)."},
+{id:"b4-4",u:"bk4",t:"type",d:2,q:"Ch 4 · Describe one early demonstration of the placebo effect.",k:[["surgery","heart","angina","beecher","soldier","war"]],x:"“Surgery as Placebo” (1950s): sham heart surgery for angina worked; expectation drove recovery. Beecher's WWII observations are another."},
+{id:"b4-5",u:"bk4",t:"type",d:2,q:"Ch 4 · What did the arthroscopic knee surgery study contribute?",k:[["sham","fake","placebo"],["same","equal","as well","improv","just as"]],x:"Sham knee surgery helped as much as real surgery, even years later: a procedure's benefit can be largely placebo."},
+{id:"b4-6",u:"bk4",t:"type",d:3,q:"Ch 4 · What two developments improved understanding of the placebo effect?",k:[["double blind","blind","controlled","trial"],["imaging","pet","fmri","scan"]],x:"Double-blind placebo-controlled trials, and brain imaging (PET, fMRI)."},
+{id:"b4-7",u:"bk4",t:"type",d:2,q:"Ch 4 · Which two brain systems have been the focus of placebo mechanism studies?",k:[["reward","reinforc","dopamine","vta","accumbens"],["pain"]],x:"The reward/reinforcement system and the pain-modulation system."},
+{id:"b4-8",u:"bk4",t:"type",d:2,q:"Ch 4 · What are the three principal brain areas of the midbrain reward system?",k:[["vta","tegmental"],["accumbens"],["frontal","prefrontal"]],x:"VTA, nucleus accumbens, frontal cortex."},
+{id:"b4-9",u:"bk4",t:"type",d:3,q:"Ch 4 · Besides the frontal cortex and VTA, name two other inputs to the nucleus accumbens.",k:[["hippocamp"],["amygdala","thalamus"]],x:"Hippocampus and amygdala (thalamus also)."},
+{id:"b4-10",u:"bk4",t:"type",d:2,q:"Ch 4 · What is a possible role of dopamine in the nucleus accumbens?",k:[["reward","expect","motivat","want","crav","predict","pleasure"]],x:"Signaling expected reward: motivation, wanting, craving."},
+{id:"b4-11",u:"bk4",t:"type",d:3,q:"Ch 4 · What is the significance of the frontal cortex in the placebo circuit?",k:[["expect","belief","thought","conscious","mind","cognit"],["reward","pain","control","alter","change","circuit"]],x:"It handles expectation and conscious thought and projects to reward and pain circuits, so beliefs physically change brain activity."},
+{id:"b4-12",u:"bk4",t:"type",d:2,q:"Ch 4 · Name two neurotransmitter systems integrated in the nucleus accumbens.",k:[["dopamine"],["glutamate","gaba","opioid","opiate","endorphin"]],x:"Dopamine and glutamate (GABA and endogenous opioids too)."},
+{id:"b4-13",u:"bk4",t:"type",d:3,q:"Ch 4 · Besides the frontal cortex, name two other cortical areas in the placebo effect.",k:[["cingulate"],["insula","orbitofrontal"]],x:"Anterior cingulate cortex and insula (orbitofrontal also cited). Check your book."},
+{id:"b4-14",u:"bk4",t:"type",d:2,q:"Ch 4 · What is the suspected cause of Parkinson's disease?",k:[["dopamine"],["nigra","loss","death","die","degenerat"]],x:"Loss of dopamine neurons in the substantia nigra (nigrostriatal pathway)."},
+{id:"b4-15",u:"bk4",t:"type",d:3,q:"Ch 4 · Deep brain stimulation of what area relieves Parkinson's symptoms?",k:[["subthalamic","pallidus","stn"]],x:"Subthalamic nucleus (globus pallidus is another target). Check your book."},
+{id:"b4-16",u:"bk4",t:"type",d:2,q:"Ch 4 · Increased release of what transmitter enhances relief of Parkinson's symptoms?",a:["dopamine"],x:"Dopamine. Placebo can release dopamine in the striatum of Parkinson's patients."},
+{id:"b4-17",u:"bk4",t:"type",d:3,q:"Ch 4 · How would you explain placebo takers having changed brain patterns?",k:[["expect","belief","frontal","mind"],["dopamine","opioid","chemical","real","physiolog","circuit"]],x:"Expectation from the frontal cortex drives real changes (dopamine, endogenous opioids) in reward and pain circuits."},
+{id:"b4-18",u:"bk4",t:"type",d:3,q:"Ch 4 · Name one limitation of using only cognitive therapy to change brain circuitry.",k:[["slow","time","effort","hard","motivat","severe","not everyone","practice","ability"]],x:"It's slow and effortful, depends on ability and motivation, and may not be strong enough alone for severe conditions."},
+{id:"b4-19",u:"bk4",t:"type",d:2,q:"Ch 4 · Define the “nocebo” effect.",k:[["negative","bad","harm","side effect","worse"]],x:"Negative expectations causing real harmful effects or side effects."},
+{id:"b4-20",u:"bk4",t:"type",d:3,q:"Ch 4 · How does Gabapentin (Neurontin) relate to the ethics of placebo?",k:[["off label","off-label","placebo","barely","little","not much","no better"]],x:"Widely prescribed off-label where it barely beats placebo, raising the question of whether that's more ethical than an honest placebo. Check your book."},
+{id:"b4-21",u:"bk4",t:"type",d:3,q:"Ch 4 · What issue does the Balanced Placebo design address?",k:[["expect","told","belief"],["drug","pharmacolog","separate","effect"]],x:"Separates drug effect from expectation: told drug/placebo × got drug/placebo (2 × 2)."},
+// ch5
+{id:"b5-1",u:"bk5",t:"type",d:2,q:"Ch 5 · Name the five types of sedative/hypnotic.",k:[["barbiturate"],["benzo"],["non barbiturate","nonbarbiturate","methaqualone","meprobamate","other"],["ethanol","alcohol"],["cannabis","marijuana"]],x:"Barbiturates, benzodiazepines, other non-barbiturates, ethanol, cannabis (the table also lists antihistamines)."},
+{id:"b5-2",u:"bk5",t:"pick",d:1,q:"Ch 5 · Valium and alprazolam are examples of which sedative type?",c:["Benzodiazepines","Barbiturates","Non-barbiturates","Antihistamines"],ok:"Benzodiazepines",x:"Benzodiazepines: Valium, Librium, triazolam, alprazolam. Barbiturates: phenobarbital, secobarbital."},
+{id:"b5-2b",u:"bk5",t:"pick",d:1,q:"Ch 5 · Phenobarbital and secobarbital are:",c:["Barbiturates","Benzodiazepines","Stimulants","Hydantoins"],ok:"Barbiturates",x:"Barbiturates. Phenobarbital also appears as an anti-epilepsy drug."},
+{id:"b5-3",u:"bk5",t:"type",d:1,q:"Ch 5 · Name one naturally occurring opiate.",a:["morphine","codeine"],x:"Morphine or codeine."},
+{id:"b5-4",u:"bk5",t:"type",d:3,q:"Ch 5 · What is the difference between the two types of synthetic opiates?",k:[["semi","modif","derived","from morphine","natural"],["fully","entirely","lab","complete"]],x:"Semi-synthetic: chemically modified natural opiates (heroin from morphine). Fully synthetic: made entirely in the lab (methadone, Demerol)."},
+{id:"b5-5",u:"bk5",t:"pick",d:2,q:"Ch 5 · Which is a fully synthetic opiate?",c:["Methadone","Morphine","Codeine","Heroin"],ok:"Methadone",x:"Methadone and Demerol are fully synthetic. Heroin is semi-synthetic (from morphine). Morphine and codeine are natural."},
+{id:"b5-6",u:"bk5",t:"type",d:2,q:"Ch 5 · Name the five types of stimulants.",k:[["amphetamine"],["cocaine"],["xanthine","caffeine"],["hyperactiv","ritalin","adhd"],["appetite","phenylpropanolamine","counter"]],x:"Amphetamines, cocaine, methylxanthines, hyperactivity drugs, OTC appetite suppressants."},
+{id:"b5-7",u:"bk5",t:"pick",d:1,q:"Ch 5 · Caffeine, theophylline and theobromine are:",c:["Methylxanthines","Amphetamines","Hydantoins","Phenothiazines"],ok:"Methylxanthines",x:"Methylxanthines, a stimulant type."},
+{id:"b5-8",u:"bk5",t:"type",d:1,q:"Ch 5 · Name the two main classes of drugs used to treat mental disorders.",k:[["antidepress"],["antipsych","neuroleptic","schizo"]],x:"Antidepressants and antipsychotics."},
+{id:"b5-9",u:"bk5",t:"type",d:2,q:"Ch 5 · Name the antidepressant and antipsychotic subtypes.",k:[["tricyclic"],["heterocyclic","hetero"],["mao","monoamine oxidase"],["phenothiazine"],["butyrophenone"]],x:"Antidepressants: tricyclics, heterocyclics, MAOIs. Antipsychotics: phenothiazines, butyrophenones."},
+{id:"b5-10a",u:"bk5",t:"pick",d:2,q:"Ch 5 · Haloperidol (Haldol) is a:",c:["Butyrophenone","Phenothiazine","Tricyclic","MAO inhibitor"],ok:"Butyrophenone",x:"Butyrophenone antipsychotic. Phenothiazines: chlorpromazine (Thorazine), thioridazine (Mellaril)."},
+{id:"b5-10b",u:"bk5",t:"pick",d:2,q:"Ch 5 · Imipramine and amitriptyline are:",c:["Tricyclic antidepressants","Heterocyclic antidepressants","MAO inhibitors","Phenothiazines"],ok:"Tricyclic antidepressants",x:"Tricyclics. Heterocyclics: fluoxetine (Prozac), trazodone. MAOI: tranylcypromine (Parnate)."},
+{id:"b5-10c",u:"bk5",t:"pick",d:2,q:"Ch 5 · Chlorpromazine (Thorazine) is a:",c:["Phenothiazine","Butyrophenone","Heterocyclic","Hydantoin"],ok:"Phenothiazine",x:"Phenothiazine antipsychotic."},
+{id:"b5-10d",u:"bk5",t:"pick",d:2,q:"Ch 5 · Tranylcypromine (Parnate) is a:",c:["MAO inhibitor","Tricyclic","Heterocyclic","Benzodiazepine"],ok:"MAO inhibitor",x:"Monoamine oxidase inhibitor."},
+{id:"b5-11",u:"bk5",t:"type",d:2,q:"Ch 5 · How are the types of hallucinogens different?",k:[["serotonin"],["norepinephrine","noradrenaline"],["other","neither"]],x:"Grouped by structure: serotonin-like, norepinephrine-like, and other agents."},
+{id:"b5-12a",u:"bk5",t:"pick",d:2,q:"Ch 5 · LSD and psilocin are hallucinogens structurally similar to:",c:["Serotonin","Norepinephrine","Dopamine","GABA"],ok:"Serotonin",x:"Serotonin-like. Mescaline and MDMA are norepinephrine-like. Ibotenic acid and PCP are “other.”"},
+{id:"b5-12b",u:"bk5",t:"pick",d:2,q:"Ch 5 · Mescaline and MDMA are hallucinogens structurally similar to:",c:["Norepinephrine","Serotonin","Acetylcholine","Glutamate"],ok:"Norepinephrine",x:"Norepinephrine-like."},
+{id:"b5-13",u:"bk5",t:"type",d:2,q:"Ch 5 · Name the types of drugs used for anesthesia.",k:[["gas","nitrous"],["volatile","ether","halothane"],["parenter","inject","ketamine","barbiturate"]],x:"Gaseous (nitrous oxide), volatile (ether, halothane), parenteral (barbiturates, ketamine)."},
+{id:"b5-14",u:"bk5",t:"type",d:2,q:"Ch 5 · Name the types of drugs used to treat epilepsy.",k:[["hydantoin","dilantin"],["barbiturate","phenobarbital"],["carbamazepine","carbomazepine"],["valpro"]],x:"Hydantoins (Dilantin), barbiturates (phenobarbital), carbamazepine, valproic acid."},
+{id:"b5-15",u:"bk5",t:"type",d:1,q:"Ch 5 · What are the criteria for Schedule I?",k:[["abuse"],["no","not"],["medical"]],x:"High abuse potential, no accepted medical use, not accepted as safe under medical supervision."},
+{id:"b5-16",u:"bk5",t:"type",d:2,q:"Ch 5 · What are the criteria for Schedule II?",k:[["abuse"],["medical","accepted"]],x:"High abuse potential but an accepted medical use (often restricted); abuse can cause severe dependence."},
+{id:"b5-17",u:"bk5",t:"pick",d:2,q:"Ch 5 · Which pair is Schedule I then Schedule II?",c:["Heroin, then cocaine","Cocaine, then heroin","Alcohol, then caffeine","Valium, then LSD"],ok:"Heroin, then cocaine",x:"Schedule I: heroin, LSD, cannabis (federally), MDMA. Schedule II: cocaine, methamphetamine, morphine, fentanyl, Ritalin."},
+{id:"b5-18",u:"bk5",t:"type",d:2,q:"Ch 5 · What is the difference in criteria between Schedule III and IV?",k:[["moderate","less than","iii","3"],["low","limited","iv","4"]],x:"III: abuse potential below I/II; moderate to low physical or high psychological dependence (ketamine, steroids). IV: low abuse potential relative to III, limited dependence (benzodiazepines)."},
 // policy
 {id:"pol1",u:"pol",t:"pick",d:1,q:"Which DEA schedule is for drugs with no accepted medical use and high abuse potential?",c:["Schedule I","Schedule II","Schedule III","Schedule V"],ok:"Schedule I",x:"Schedules run from I (most restricted) to V (least). Schedule I means no accepted medical use plus high abuse potential."},
 {id:"pol2",u:"pol",t:"pick",d:1,q:"Where does alcohol sit on the DEA schedules?",c:["It isn’t scheduled","Schedule I","Schedule III","Schedule V"],ok:"It isn’t scheduled",x:"Alcohol isn’t scheduled, even though it tops the UK study for harm to others. Scheduling reflects history and familiarity, not only harm."},
@@ -629,13 +723,14 @@ function genProblem(kind){
 function startRun(mode,unit){
   let items=[];
   const nonEssay=Q.filter(q=>q.t!=="essay");
-  if(mode==="quick"){const sorted=nonEssay.slice().sort((a,b)=>prio(a)-prio(b));const used=new Set(),out=[];
+  if(mode==="quick"){const sorted=nonEssay.filter(q=>!q.u.startsWith("bk")).sort((a,b)=>prio(a)-prio(b));const used=new Set(),out=[];
     for(const q of sorted){if(out.length>=7)break;if(used.has(q.u)&&out.length<5)continue;used.add(q.u);out.push({id:q.id})}
     items=shuffle(out);items.splice(1+Math.floor(Math.random()*5),0,{gen:genProblem()});}
   else if(mode==="unit"){items=shuffle(nonEssay.filter(q=>q.u===unit).sort((a,b)=>prio(a)-prio(b)).slice(0,8).map(q=>({id:q.id})));
     if(unit==="dose")items.push({gen:genProblem("ed")},{gen:genProblem(pick(["ti","tinum"]))});
     if(unit==="out")items.push({gen:genProblem(pick(["hl1","hl2","hl3"]))});
     const boss=Q.find(q=>q.t==="essay"&&q.u===unit);if(boss)items.push({id:boss.id});}
+  else if(mode==="book"){items=shuffle(nonEssay.filter(q=>q.u.startsWith("bk")).sort((a,b)=>prio(a)-prio(b)).slice(0,10)).map(q=>({id:q.id}))}
   else if(mode==="boss"){items=Q.filter(q=>q.t==="essay").sort((a,b)=>prio(a)-prio(b)).slice(0,3).map(q=>({id:q.id}))}
   else if(mode==="review"){items=shuffle(reviewPool()).slice(0,10).map(q=>({id:q.id}))}
   else if(mode==="lab"){items=["ed","ti","hl1","tinum","ld","hl2"].map(k=>({gen:genProblem(k)}))}
@@ -688,15 +783,16 @@ function renderHome(app){
   <section class="hero">
     <span class="label">Exam 1 · Friday · short essay</span>
     <h1>Learn it one dose at a time.</h1>
-    <p>Every question is from Dr. Baker’s Week 1–2 lectures and slides. Hints are free. Wrong answers come back later until they stick.</p>
+    <p>Questions come from Dr. Baker’s Week 1–2 lectures and slides, plus the textbook’s Chapter 1–5 review exams. Hints are free. Wrong answers come back later until they stick.</p>
     <div class="plan">
-      <div class="plan-box"><span class="label">Tonight</span><ol><li>Two quick runs</li><li>Play any unit under half full</li><li>Graph lab once</li><li>Write one boss essay by hand, then sleep</li></ol></div>
-      <div class="plan-box"><span class="label">Exam morning</span><ol><li>Review misses</li><li>Skim the evidence bank</li><li>One boss essay, 10 minutes</li></ol></div>
+      <div class="plan-box"><span class="label">Tonight</span><ol><li>Two textbook review runs</li><li>Two quick runs</li><li>Play any unit under half full</li><li>Graph lab once</li><li>Write one boss essay by hand, then sleep</li></ol></div>
+      <div class="plan-box"><span class="label">Exam morning</span><ol><li>One textbook review run</li><li>Review misses</li><li>Skim the evidence bank</li><li>One boss essay, 10 minutes</li></ol></div>
     </div>
   </section>
-  ${run?`<div class="resume"><b>Run paused at ${run.i+1} of ${run.items.length}</b><span class="muted" style="flex:1">${esc(run.mode==="unit"?(UNITS.find(u=>u.id===run.unit)||{}).name:{quick:"Quick run",boss:"Boss essays",review:"Review",lab:"Graph lab"}[run.mode])}</span><button class="btn btn-main" id="resume" type="button">Resume</button><button class="btn btn-quiet" id="drop" type="button">Discard</button></div>`:""}
+  ${run?`<div class="resume"><b>Run paused at ${run.i+1} of ${run.items.length}</b><span class="muted" style="flex:1">${esc(run.mode==="unit"?(UNITS.find(u=>u.id===run.unit)||{}).name:{quick:"Quick run",book:"Textbook review",boss:"Boss essays",review:"Review",lab:"Graph lab"}[run.mode])}</span><button class="btn btn-main" id="resume" type="button">Resume</button><button class="btn btn-quiet" id="drop" type="button">Discard</button></div>`:""}
   <div class="modes">
-    <button class="mode primary" data-mode="quick" type="button"><b>Quick run</b><span>8 questions, mixed units, one graph problem</span></button>
+    <button class="mode primary wide" data-mode="book" type="button"><b>Textbook review · start here</b><span>10 of the book’s end-of-chapter review questions, weakest first</span></button>
+    <button class="mode" data-mode="quick" type="button"><b>Quick run</b><span>8 questions, mixed units, one graph problem</span></button>
     <button class="mode" data-mode="boss" type="button"><b>Boss essays</b><span>3 exam-style prompts with a checklist</span></button>
     <button class="mode" data-mode="lab" type="button"><b>Graph lab</b><span>ED50, LD50, TI and half-life math</span></button>
     <button class="mode" data-mode="review" type="button" ${rp?"":"disabled"}><b>Review misses</b><span>${rp?rp+" waiting":"Nothing waiting yet"}</span></button>

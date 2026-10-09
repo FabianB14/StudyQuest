@@ -16,7 +16,7 @@ export const PACKS: TopicPack[] = [
   {
     id: "psych4110-exam1",
     name: "Psych 4110 · Exam 1",
-    blurb: "Psychopharmacology, Weeks 1–2: routes, half-life, dose-response, tolerance, addiction, placebo",
+    blurb: "Psychopharmacology, Weeks 1–2 lectures plus textbook Ch 1–5 review questions",
     language: "none",
     questions: PSYCH4110_EXAM1,
   },
